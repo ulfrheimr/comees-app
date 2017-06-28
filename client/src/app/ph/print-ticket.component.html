@@ -1,0 +1,67 @@
+<div class="top-container">
+  <div>
+    Impresión de comprobante
+  </div>
+  <br />
+  <button (click)="print()" class="waves-effect waves-light btn">Imprimir</button>
+  <br /><br />
+  <div *ngIf="sale" id="ticket">
+    <div class="ticket-container">
+      <div class="span-container">
+        <img class="logo" src="/assets/images//logo.png" />
+      </div>
+
+      <span class="enhaced">Fecha:</span> <span>{{sale.timestamp | date: 'dd/MM/yyyy hh:mm' }}</span>
+      <div class="span-container">
+        <img class="logo" src="/assets/images/line.png" />
+      </div>
+      <table class="ticket-container">
+        <tr *ngFor="let d of sale.drugs">
+          <td class="qty-container">
+            {{d.qty}}
+          </td>
+          <td class="mi-container">
+            {{d.name}}
+          </td>
+          <td class="price-container">
+             {{d.desc}}
+          </td>
+          <td class="price-container">
+             $${{d.price_discount}}
+          </td>
+        </tr>
+      </table>
+      <div class="totals">
+        <table>
+          <tr>
+            <td class="total-span">
+            </td>
+            <td>
+              Total:
+            </td>
+            <td>
+              <span class="enhaced">$ {{getSaleTotal()}}</span>
+            </td>
+          </tr>
+          <tr *ngIf="hasDiscount">
+            <td class="total-span">
+
+            </td>
+            <td>
+              Usted ahorró:
+            </td>
+            <td class="total-last">
+              <span class="enhaced">$ {{ getSaleNoDiscount()-getSaleTotal()}}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="span-container">
+        <img class="logo" src="/assets/images/line.png" />
+      </div>
+      <div class="slogan">
+        "Queremos darte el servicio que mereces <br /> a un precio justo."
+      </div>
+    </div>
+  </div>
+</div>

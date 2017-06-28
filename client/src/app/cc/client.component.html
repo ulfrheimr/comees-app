@@ -1,0 +1,159 @@
+<div class="top-container">
+
+  <div class="client-selection">
+    Selección de cliente
+
+    <p>
+      <input type="checkbox" class="filled-in" id="m-client-toggler" [(ngModel)]="pageModel.toggleClient" checked="checked" (ngModelChange)="pageModel.specifyClient = !$event" />
+      <label for="m-client-toggler">Venta de mostrador</label>
+    </p>
+    <div class="coMeEs_sentence_small right" *ngIf="!pageModel.specifyClient">
+      Si desea especificar un cliente para facturación selección el control.
+    </div>
+
+  </div>
+  <div *ngIf="pageModel.specifyClient">
+    <div class="search-container">
+      <table style="width:100%">
+        <tr>
+          <td style="width:50%">
+            ¿Buscar por?
+          </td>
+          <td>
+            Criterio
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <input name="client-type-search" type="radio" [(ngModel)]="pageModel.clientTypeSearch" value="rfc" id="m-type-client-rfc" />
+              <label for="m-type-client-rfc">RFC</label>
+            </p>
+            <p>
+              <input name="client-type-search" type="radio" [(ngModel)]="pageModel.clientTypeSearch" value="name" id="m-type-client-name" />
+              <label for="m-type-client-name">Nombre</label>
+            </p>
+          </td>
+          <td>
+            <input class="hint" [(ngModel)]="pageModel.hint" (keyup.enter)="getClients()" placeholder="Buscar" />
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="grid-container">
+      <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
+      </ag-grid-angular>
+    </div>
+
+    <div class="confirm-container right">
+      <p class="coMeEs_sentence_small">¿No encuentras al cliente para facturar? Regístralo.</p>
+      <button (click)="pageModel.showClientRegistration = true; pageModel.specifyClient = false;" class="waves-effect waves-light btn">Registrar nuevo cliente</button>
+    </div>
+  </div>
+
+  <div class="search-container" *ngIf="pageModel.showClientRegistration">
+    Por favor registra los datos del cliente.
+
+    <table style="width:100%">
+      <tr>
+        <td style="width:30%">
+          RFC:
+        </td>
+        <td>
+          <input class="hint" [(ngModel)]="clientModel.rfc" placeholder="RFC" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Nombre:
+        </td>
+        <td>
+          <input class="hint" [(ngModel)]="clientModel.name" placeholder="Nombre" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Teléfono:
+        </td>
+        <td>
+          <input class="hint" [(ngModel)]="clientModel.phone" placeholder="Teléfono" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Correo electrónico:
+        </td>
+        <td>
+          <input class="hint" [(ngModel)]="clientModel.mail" placeholder="Correo Electrónico" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dirección:
+        </td>
+        <td>
+          <input class="hint" [(ngModel)]="clientModel.address" placeholder="Dirección" />
+        </td>
+      </tr>
+    </table>
+    <div class="right">
+      <button (click)="registerNewClient()" class="waves-effect waves-light btn">REGISTRAR CLIENTE</button>
+    </div>
+
+  </div>
+
+  <br />
+  <div class="confirm-rfc" *ngIf="selectedClient">
+    <div class="coMeES_sentence">
+      Por favor revise la información del cliente.<br /> Si ésta es correcta oprima REGISTRO PARA FACTURAR
+    </div>
+    <div>
+      <table>
+        <tr>
+          <td class="info">
+            RFC:
+          </td>
+          <td>
+            {{selectedClient.rfc}}
+          </td>
+        </tr>
+        <tr>
+          <td class="info">
+            Nombre:
+          </td>
+          <td>
+            {{selectedClient.name}}
+          </td>
+        </tr>
+        <tr>
+          <td class="info">
+            Teléfono:
+          </td>
+          <td>
+            {{selectedClient.phone}}
+          </td>
+        </tr>
+        <tr>
+          <td class="info">
+            Correo electrónico:
+          </td>
+          <td>
+            {{selectedClient.mail}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Dirección:
+          </td>
+          <td>
+            {{selectedClient.address}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="right">
+      <button (click)="registerToInvoice()" class="waves-effect waves-light btn">REGISTRAR PARA FACTURAR</button>
+    </div>
+  </div>
+
+</div>

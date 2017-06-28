@@ -1,0 +1,46 @@
+<div>
+  <div class="search-container">
+    <div>
+      Búsqueda de medicamento<br />
+      <p>
+        <input name="searchField" type="radio" [(ngModel)]="pageModel.searchType" value="substance" id="m-search-substance" />
+        <label for="m-search-substance">Sustancia</label>
+      </p>
+      <p>
+        <input name="searchField" type="radio" [(ngModel)]="pageModel.searchType" value="name" id="m-search-name" />
+        <label for="m-search-name">Nombre</label>
+      </p>
+
+      <br />
+      <input [(ngModel)]="pageModel.hint" class="hint" (keyup.enter)="searchDrug()" placeholder="Medicamento" />
+    </div>
+
+    <div class="grid-container">
+      <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
+      </ag-grid-angular>
+    </div>
+  </div>
+
+  <div *ngIf="selectedDrug">
+    Medicamento seleccionado:
+
+    <div>
+      Nombre: {{selectedDrug.name}}
+    </div>
+    <div>
+      Sustancia: {{selectedDrug.substance}}
+    </div>
+    <div>
+      Descripción: {{selectedDrug.pres_desc}}- {{selectedDrug.desc}}
+    </div>
+    <div>
+      Laboratorio: {{selectedDrug.lab}}
+    </div>
+    <div>
+      Precio de venta: {{selectedDrug.sale_price}}
+    </div>
+
+    <button (click)="addToSale()" class="waves-effect waves-light btn">Agregar a la venta</button>
+  </div>
+
+</div>

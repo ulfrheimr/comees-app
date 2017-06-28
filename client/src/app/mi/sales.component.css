@@ -1,0 +1,27 @@
+.selected_mi {
+  width: 60%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.selected_mi .info {
+  font-weight: bold;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.enhaced_discount {
+  font-size: 1.2em;
+  color: #bf3330;
+  font-weight: bold;
+}
+
+.enhaced_price {
+  font-size: 1.2em;
+  color: #438bca;
+  font-weight: bold;
+}

@@ -1,0 +1,20 @@
+.client-selection {
+  width: 80%;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.confirm-rfc {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.confirm-rfc table {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.confirm-rfc .info {
+  width: 30%;
+  font-weight: bold;
+}

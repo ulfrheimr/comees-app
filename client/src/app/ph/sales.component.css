@@ -1,0 +1,13 @@
+.sale-total {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.sale-total>span {
+  color: #125996;
+}
+
+td{
+  padding: 0px;
+  text-align: center;
+}

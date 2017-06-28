@@ -1,0 +1,102 @@
+<div class="top-container">
+
+  <div *ngIf="pageModel.showGridSale">
+    <div class="search-container">
+      <div>
+        <table>
+          <tr>
+            <td>
+              Buscar por código de medicamento<br />
+            </td>
+            <td>
+              ¿No encontraste el medicamento? Búscalo por nombre<br />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input [(ngModel)]="pageModel.hint" class="hint" (keyup.enter)="findDrug()" placeholder="Código" />
+            </td>
+            <td>
+              <button (click)="searchDrug()" class="waves-effect waves-light btn">Buscar</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <br />
+
+    </div>
+
+    <div class="grid-container">
+      <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
+      </ag-grid-angular>
+    </div>
+
+    <div class="confirm-container">
+      <div class="sale-total">
+        Total:<span>$ {{getTotal()}}</span>
+      </div>
+      <button (click)="confirmSale()" class="waves-effect waves-light btn">Vender</button>
+    </div>
+  </div>
+  <div *ngIf="sale?.length > 0">
+    <div class="coMeEs_sentence">
+      Por favor confirme los productos. <br /> Si la venta es correcta oprima "CONFIRMAR", si desea modificarla oprima "REGRESAR".
+    </div>
+    <br />
+    <div>
+      <span class="enhaced">Productos</span>
+
+      <div class="info">
+        <ul>
+          <li *ngFor="let s of sale">
+            <table>
+              <thead>
+                <td>
+                  Cantidad
+                </td>
+                <td>
+                  Nombre
+                </td>
+                <td>
+                  Descripición
+                </td>
+                <td>
+                  Precio de venta
+                </td>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{s.qty}}
+                  </td>
+                  <td>
+                    {{s.name}}
+                  </td>
+                  <td>
+                    {{s.desc_sale}}
+                  </td>
+                  <td>
+                    {{s.sale_price}}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </li>
+        </ul>
+
+      </div>
+      <br />
+    </div>
+
+    <div class="confirm-container">
+      <div class="total">
+        Total: <span>$ {{getTotal()}}</span>
+      </div>
+      <br />
+      <button (click)="makeSale()" class="waves-effect waves-light btn">CONFIRMAR</button>
+    </div>
+
+
+  </div>
+</div>

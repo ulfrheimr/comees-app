@@ -1,0 +1,15 @@
+.app-container {
+  margin: 0 auto;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 20px;
+}
+
+.menu-container {
+  text-align: center;
+}
+
+.menu-item {
+  display: inline-block;
+  width: 200px;
+}
