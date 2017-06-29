@@ -2,66 +2,177 @@
   <div>
     Impresión de comprobante
   </div>
-  <br />
-  <button (click)="print()" class="waves-effect waves-light btn">Imprimir</button>
-  <br /><br />
-  <div *ngIf="sale" id="ticket">
-    <div class="ticket-container">
-      <div class="span-container">
-        <img class="logo" src="/assets/images//logo.png" />
-      </div>
 
-      <span class="enhaced">Fecha:</span> <span>{{sale.timestamp | date: 'dd/MM/yyyy hh:mm' }}</span>
-      <div class="span-container">
-        <img class="logo" src="/assets/images/line.png" />
-      </div>
-      <table class="ticket-container">
-        <tr *ngFor="let d of sale.drugs">
-          <td class="qty-container">
-            {{d.qty}}
-          </td>
-          <td class="mi-container">
-            {{d.name}}
-          </td>
-          <td class="price-container">
-             {{d.desc}}
-          </td>
-          <td class="price-container">
-             $${{d.price_discount}}
-          </td>
-        </tr>
-      </table>
-      <div class="totals">
-        <table>
-          <tr>
-            <td class="total-span">
-            </td>
-            <td>
-              Total:
-            </td>
-            <td>
-              <span class="enhaced">$ {{getSaleTotal()}}</span>
-            </td>
-          </tr>
-          <tr *ngIf="hasDiscount">
-            <td class="total-span">
+  <div class="container">
+    <div *ngIf="sale" id="ticket">
+      <div class="ticket-container">
+        <div class="main-span-ticket">
 
-            </td>
-            <td>
-              Usted ahorró:
-            </td>
-            <td class="total-last">
-              <span class="enhaced">$ {{ getSaleNoDiscount()-getSaleTotal()}}</span>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="span-container">
-        <img class="logo" src="/assets/images/line.png" />
-      </div>
-      <div class="slogan">
-        "Queremos darte el servicio que mereces <br /> a un precio justo."
+          <div class="logo-container">
+            <img class="logo" src="/assets/images/logo.png" />
+            <br />
+            <p class="enhaced-ticket bold">
+              {{getAsset("name")}}
+              <br />
+              {{getAsset("desc")}}
+            </p>
+          </div>
+          <div class="top-container">
+            {{getAsset("invoice").address}}<br /> CP: {{getAsset("invoice").cp}} RFC: {{getAsset("invoice").rfc}}
+            <br />
+          </div>
+          <hr />
+          <div class="right">
+            <span class="enhaced-ticket">{{sale.timestamp | date: 'dd/MM/yyyy hh:mm' }}</span>
+          </div>
+          <div>
+            <table class="client-opts">
+              <tr>
+                <td class="bold">
+                  Cliente:
+                </td>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <td class="bold">
+                  Pago:
+                </td>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <td class="bold">
+                  Cajero:
+                </td>
+                <td>
+
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br />
+          <hr />
+
+          <table class="sale">
+            <thead>
+              <td class="col1">
+                Cant
+              </td>
+              <td class="col2">
+                Desc<br /> $$ desc
+              </td>
+              <td class="col3 bold">
+                prec<br />imp
+              </td>
+            </thead>
+            <tbody>
+            </tbody>
+            <tr *ngFor="let d of sale.drugs">
+              <td>
+                {{d.qty}}
+              </td>
+              <td>
+                {{d.name}} - {{d.desc}}<br /> <br /> otra cosa
+              </td>
+              <td class="bold">
+                ${{d.price_discount}}<br /> <br /> $ otra cosa
+              </td>
+            </tr>
+          </table>
+
+          <div class="totals right">
+            <div>
+              <hr />
+              <table>
+                <tr>
+                  <td>
+                    Subtotal:
+                  </td>
+                  <td>
+                    <span class="enhaced bold">$ {{getSaleTotal()}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Ahorro:
+                  </td>
+                  <td>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Redondeo:
+                  </td>
+                  <td>
+
+                  </td>
+                </tr>
+              </table>
+              <hr />
+              <table>
+                <tr>
+                  <td>
+                    Total:
+                  </td>
+                  <td>
+
+                  </td>
+                </tr>
+
+              </table>
+              <hr />
+              <table>
+                <tr>
+                  <td>
+                    Su pago:
+                  </td>
+                  <td>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Cambio:
+                  </td>
+                  <td>
+
+                  </td>
+                </tr>
+              </table>
+              <hr />
+            </div>
+          </div>
+
+          <div class="text-total">
+            son: {{getSaleTotal()}}
+            <br /> Total de artículos:
+          </div>
+
+          <hr />
+          <div class="top-container">
+            {{getAsset("local").address}}<br /> CP: {{getAsset("local").cp}}<br /> tels: {{getAsset("local").tel}}
+          </div>
+          <hr />
+
+          <div class="slogan enhaced-ticket">
+            "Queremos darte el servicio que mereces a un precio justo."
+          </div>
+          <br />
+          <div class="slogan enhaced-ticket">
+            Gracias por su compra
+          </div>
+          <br /><br />
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="right">
+    <button (click)="print()" class="waves-effect waves-light btn">Imprimir</button>
+  </div>
+
 </div>

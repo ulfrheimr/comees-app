@@ -19,7 +19,13 @@ import { DeleteComponent } from './delete.component';
 
 import { StoredSale } from './ph/stored-sale';
 
+import { Config } from './services/config';
+
 import {AppRoutingModule} from './app-routing.module';
+
+
+import { UsrActivate } from './guard/usr-activate';
+import { UsrService } from './services/usr-service';
 
 @NgModule({
   declarations: [
@@ -45,7 +51,7 @@ import {AppRoutingModule} from './app-routing.module';
         DeleteComponent]
     )
   ],
-  providers: [StoredSale],
+  providers: [StoredSale, Config, UsrActivate, UsrService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

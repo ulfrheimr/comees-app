@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import {Headers, Http, Response} from '@angular/http';
 import {Observable} from 'rxjs';
 
@@ -6,13 +6,18 @@ import 'rxjs/add/operator/mergeMap';
 
 import { Client } from '../prots/client';
 
+
 @Injectable()
-export class ClientService {
+export class ClientService implements OnInit {
   private uri = 'http://localhost:3000/clients';
 
   constructor(
     private http: Http
   ) {
+
+  }
+
+  ngOnInit(): void {
 
   }
 

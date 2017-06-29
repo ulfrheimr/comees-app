@@ -12,6 +12,7 @@ export class Drug {
   max_price: number;
   sale_price: number;
   qty: number;
+  cat:number;
   lab: Lab;
   presentation: Pres;
 }

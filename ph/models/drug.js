@@ -45,6 +45,10 @@ var DrugSchema = mongoose.Schema({
   },
   desc: {
     type: String
+  },
+  cat: {
+    type: Number,
+    required: true
   }
 });
 

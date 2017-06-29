@@ -6,6 +6,7 @@ var saveDrug = (drug) => {
 
     d.code = drug.code;
     d.name = drug.name;
+    d.cat = drug.cat;
     d.substance = drug.substance;
     d.presentation = drug.presentation;
     d.dosage = drug.dosage;
@@ -75,7 +76,8 @@ var p = {
       sale_price: req.body.sale_price,
       max_price: req.body.max_price,
       ssa: req.body.ssa,
-      desc: req.body.desc
+      desc: req.body.desc,
+      cat: drug.body.cat
     };
 
     saveDrug(d)

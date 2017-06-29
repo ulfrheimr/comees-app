@@ -10,11 +10,13 @@ import { PrintPhTicketComponent } from './ph/print-ticket.component';
 
 import { SearchDrugComponent } from './ph/search-drug.component';
 
+import { UsrActivate } from './guard/usr-activate';
+
 
 const routes: Routes = [
-  { path: 'client/:type/:id', component: ClientComponent },
+  { path: 'client/:type/:id', component: ClientComponent, canActivate: [UsrActivate] },
 
-  { path: 'mi-sales', component: MiSalesComponent },
+  { path: 'mi-sales', component: MiSalesComponent, canActivate: [UsrActivate] },
   { path: 'print-mi-ticket/:id', component: PrintMiTicketComponent },
 
   { path: 'ph-sales', component: PhSalesComponent },
