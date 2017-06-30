@@ -1,4 +1,7 @@
 import {  OnInit, Component } from '@angular/core';
+import {Router} from '@angular/router';
+
+import { UsrService } from './services/usr-service';
 
 @Component({
   selector: 'login',
@@ -11,7 +14,8 @@ import {  OnInit, Component } from '@angular/core';
 export class LoginComponent implements OnInit {
   pageModel: any;
   constructor(
-
+    private usrService: UsrService,
+    private router: Router
   ) {
 
   }
@@ -24,6 +28,12 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    
+
+    this.usrService.init(this.pageModel.usr)
+      .then(u => {
+        console.log(u)
+        if (u.role == 1) this.router.navigate(['./mi-sales'])
+      })
+
   }
 }

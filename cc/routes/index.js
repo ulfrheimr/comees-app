@@ -5,6 +5,7 @@ var CouponController = require('../controllers/coupon');
 var UsedCouponController = require('../controllers/used-coupon');
 var ClientController = require('../controllers/client');
 var InvoiceController = require('../controllers/invoice');
+var UsrController = require('../controllers/usr');
 
 var router = express.Router();
 var app = express();
@@ -49,6 +50,13 @@ router.route('/invoices')
   // init, end, invoiced
   .get(InvoiceController.getInvoices);
 
+router.route('/usrs')
+  // name, usr, pass, role
+  .put(UsrController.putUsr);
+
+router.route('/usrs/:id')
+  // name, usr, pass, role
+  .get(UsrController.getUsr);
 
 
 module.exports = router;

@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import { ClientComponent } from './cc/client.component';
 import { MiSalesComponent } from './mi/sales.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
+import { LoginComponent } from './login.component';
 
 import { PhSalesComponent } from './ph/sales.component';
 import { PrintPhTicketComponent } from './ph/print-ticket.component';
@@ -14,9 +15,12 @@ import { UsrActivate } from './guard/usr-activate';
 
 
 const routes: Routes = [
-  { path: 'client/:type/:id', component: ClientComponent, canActivate: [UsrActivate] },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
 
-  { path: 'mi-sales', component: MiSalesComponent, canActivate: [UsrActivate] },
+  { path: 'client/:type/:id', component: ClientComponent },
+
+  { path: 'mi-sales', component: MiSalesComponent },
   { path: 'print-mi-ticket/:id', component: PrintMiTicketComponent },
 
   { path: 'ph-sales', component: PhSalesComponent },

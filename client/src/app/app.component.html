@@ -12,20 +12,27 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a routerLink="/mi-sales">
-            <img class="nav-logo servicios"/>Estudios
-          </a>
-        </li>
-        <li>
-          <a routerLink="/ph-sales">
-            <img class="nav-logo servicios"/>Farmacia 
+          <a>
+            HOLA {{getUsr()}}
           </a>
         </li>
       </ul>
     </div>
-
   </div>
 </nav>
+
+<div>
+  <div>
+    <a routerLink="/mi-sales">
+      <img class="nav-logo servicios"/>Estudios
+    </a>
+
+    <a routerLink="/ph-sales">
+      <img class="nav-logo servicios"/>Farmacia
+    </a>
+  </div>
+
+</div>
 
 <div class="app-container">
   <br />

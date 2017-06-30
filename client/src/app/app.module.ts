@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ClientComponent } from './cc/client.component';
 import { MiSalesComponent } from './mi/sales.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
+import { LoginComponent } from './login.component';
 
 import { PhSalesComponent } from './ph/sales.component';
 import { SearchDrugComponent } from './ph/search-drug.component';
@@ -30,6 +31,7 @@ import { UsrService } from './services/usr-service';
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     ClientComponent,
     CellComponent,
     MiSalesComponent,

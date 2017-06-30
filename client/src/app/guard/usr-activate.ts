@@ -15,7 +15,7 @@ export class UsrActivate implements CanActivate {
   }
 
   canActivate() {
-    
+
 
     console.log(this.usrService.get());
     this.router.navigate(['./search-drug']);
