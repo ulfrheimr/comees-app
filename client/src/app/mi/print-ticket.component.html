@@ -33,7 +33,7 @@
                   Cliente:
                 </td>
                 <td>
-
+                  {{paymentModel.client}}
                 </td>
               </tr>
               <tr>
@@ -41,7 +41,7 @@
                   Pago:
                 </td>
                 <td>
-
+                  {{paymentModel.type}}
                 </td>
               </tr>
               <tr>
@@ -49,7 +49,7 @@
                   Cajero:
                 </td>
                 <td>
-
+                  cajero
                 </td>
               </tr>
             </table>
@@ -62,10 +62,10 @@
                 Cant
               </td>
               <td class="col2">
-                Desc<br /> $$ desc
+                Desc<br /> $$ Descuento
               </td>
               <td class="col3 bold">
-                prec<br />imp
+                prec/u<br />importe
               </td>
             </thead>
             <tbody>
@@ -74,10 +74,10 @@
                   {{m.qty}}
                 </td>
                 <td class="mi-container">
-                  {{m.mi}}<br /> <br /> otra cosa
+                  {{m.mi}}<br /> <br /> ${{(m.qty*(m.sale_price - m.price_discount)).toFixed(2)}}
                 </td>
                 <td class="price-container">
-                  $ {{m.price_discount}}<br /> <br /> $ otra cosa
+                  ${{m.sale_price}}<br /> <br /> ${{m.qty*m.price_discount}}
                 </td>
               </tr>
             </tbody>
@@ -90,67 +90,86 @@
               <table>
                 <tr>
                   <td>
+                    IVA:
+                  </td>
+                  <td>
+                    <span class="enhaced bold">$ {{getCat()}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     Subtotal:
                   </td>
                   <td>
-                    <span class="enhaced bold">$ {{getSaleTotal()}}</span>
+                    <span class="enhaced bold">$ {{getSubtotal()}}</span>
                   </td>
                 </tr>
+              </table>
+              <hr />
+              <table>
                 <tr>
                   <td>
                     Ahorro:
                   </td>
                   <td>
-
+                    <span class="enhaced bold">$ {{getSaving()}}</span>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    Redondeo:
-                  </td>
-                  <td>
-
-                  </td>
-                </tr>
-              </table>
-              <hr />
-              <table>
                 <tr>
                   <td>
                     Total:
                   </td>
                   <td>
-
+                    <span class="enhaced bold">$ {{getTotalDisc()}}</span>
                   </td>
                 </tr>
 
               </table>
               <hr />
-              <table>
-                <tr>
-                  <td>
-                    Su pago:
-                  </td>
-                  <td>
-
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Cambio:
-                  </td>
-                  <td>
-
-                  </td>
-                </tr>
-              </table>
+              <div *ngIf="!paymentModel.isCard">
+                <table>
+                  <tr>
+                    <td>
+                      Su pago:
+                    </td>
+                    <td>
+                      $ {{paymentModel.payment}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Cambio:
+                    </td>
+                    <td>
+                      $ {{paymentModel.change}}
+                    </td>
+                  </tr>
+                </table>
+                <hr />
+              </div>
               <hr />
             </div>
           </div>
 
           <div class="text-total">
-            son: {{getSaleTotal()}}
-            <br /> Total de artículos:
+            <table>
+              <tr>
+                <td>
+                  Son:
+                </td>
+                <td>
+                  {{getQty()}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Total de artículos:
+                </td>
+                <td>
+                  {{getQty()}}
+                </td>
+              </tr>
+            </table>
           </div>
 
           <hr />

@@ -10,6 +10,8 @@ import { MiService } from '../services/mi.service';
 import { CouponService } from '../services/coupon.service';
 import { MiSaleService } from '../services/mi-sale.service';
 
+import { UsrService } from '../services/usr.service';
+
 @Component({
   selector: 'mi-sales',
   templateUrl: './sales.component.html',
@@ -17,17 +19,20 @@ import { MiSaleService } from '../services/mi-sale.service';
   providers: [
     MiService,
     CouponService,
-    MiSaleService
+    MiSaleService,
+    UsrService
   ]
 })
 
 export class MiSalesComponent implements OnInit {
   mis: Mi[];
+  miHash: any = {};
   pageModel;
   selectedMi: any;
   products: any[] = [];
   discount: number = 0;
   priceDiscount: number;
+  saleTotal: number = 0;
 
   private gridOptions: GridOptions;
 
@@ -35,19 +40,16 @@ export class MiSalesComponent implements OnInit {
     private miService: MiService,
     private couponService: CouponService,
     private miSaleService: MiSaleService,
+    private usrService:UsrService,
     private router: Router
   ) {
-    this.pageModel = {
-      hint: "",
-      toggleDiscount: null,
-      discountType: "",
-      discountCode: "",
-      discountFound: null,
-      notFoundDiscount: null,
-    }
+    this.initializePageModel();
   }
 
   ngOnInit(): void {
+    console.log("Session")
+    console.log(this.usrService.get())
+    
     this.gridOptions = <GridOptions>{
       context: {
         componentParent: this
@@ -78,6 +80,36 @@ export class MiSalesComponent implements OnInit {
     return Promise.reject(error.message || error);
   }
 
+  private initializePageModel(): void {
+    this.pageModel = {
+      hint: "",
+      toggleDiscount: null,
+      discountType: "",
+      discountCode: "",
+      discountFound: null,
+      notFoundDiscount: null,
+      toConfirm: false,
+      toPayment: false,
+      amount: 0,
+      paymentType: "cash"
+    }
+  }
+
+  private setProducts(): void {
+    var prods = Object.keys(this.miHash).map((key, index) => {
+      return this.miHash[key];
+    });
+
+    this.saleTotal = prods
+      .map((x) => x.price_discount)
+      .reduce((x, y) => x + y, 0);
+
+    this.products = prods;
+    this.initializePageModel();
+    this.selectedMi = null;
+    this.gridOptions.api.setRowData([]);
+  }
+
   findMis(): void {
     if (this.pageModel.hint != "")
       this.miService.getMis(this.pageModel.hint)
@@ -104,30 +136,79 @@ export class MiSalesComponent implements OnInit {
     this.priceDiscount = this.selectedMi.price * (1 - (this.discount * 0.01));
   }
 
+  removeMi(id: string): void {
+    console.log(id)
+    delete this.miHash[id];
+
+    this.setProducts();
+  }
+
   addToSale(): void {
-    this.products.push({
-      qty: 1,
-      mi: this.selectedMi._id, //id_mi
-      name: this.selectedMi.name,
-      sale_price: this.selectedMi.price,
-      price_discount: this.priceDiscount == undefined ? this.selectedMi.price : this.priceDiscount,
-      type_discount: this.pageModel.discountType,
-      discount: this.discount
-    });
-    console.log(this.products)
+    if (this.miHash[this.selectedMi._id]) {
+      this.miHash[this.selectedMi._id]["qty"] += 1;
+      this.miHash[this.selectedMi._id]["sale_price"] += this.selectedMi.price;
+      this.miHash[this.selectedMi._id]["price_discount"] += this.priceDiscount;
+    } else {
+      this.miHash[this.selectedMi._id] = {
+        qty: 1,
+        mi: this.selectedMi._id, //id_mi
+        name: this.selectedMi.name,
+        sale_price: this.selectedMi.price,
+        price_discount: this.priceDiscount == undefined ? this.selectedMi.price : this.priceDiscount,
+        type_discount: this.pageModel.discountType,
+        discount: this.discount
+      }
+    }
+
+    this.setProducts();
   }
 
   onSelected(mi: Mi): void {
     this.selectedMi = mi;
   }
 
+  confirmSale(): void {
+    this.pageModel.toConfirm = true;
+  }
+
+  confirmPayment(): void {
+    this.pageModel.toPayment = true;
+  }
+
   makeSale(): void {
+    var total = this.pageModel.amount - this.getTotalDiscount();
+
     this.miSaleService.makeSale(this.products)
       .then(id => {
-        console.log(id)
-        this.router.navigate(['./client', "mi", id])
+        localStorage.setItem('payment', this.pageModel.amount);
+        localStorage.setItem('change', total.toString());
+        localStorage.setItem('type', this.pageModel.paymentType);
+
+        this.router.navigate(['./mi/client', "mi", id])
       })
       .catch(this.handleError);
+  }
+
+  getTotal(): number {
+    return Object.keys(this.miHash)
+      .map((key, index) => this.miHash[key].sale_price)
+      .reduce((x, y) => x + y, 0);
+  }
+
+  getTotalDiscount(): number {
+    return Object.keys(this.miHash)
+      .map((key, index) => this.miHash[key].price_discount)
+      .reduce((x, y) => x + y, 0);
+  }
+
+  change(): number {
+    if (parseFloat(this.pageModel.amount)) {
+      var total = this.getTotalDiscount()
+
+      if (parseFloat(this.pageModel.amount) >= total) {
+        return this.pageModel.amount - total;
+      }
+    }
   }
 
 }

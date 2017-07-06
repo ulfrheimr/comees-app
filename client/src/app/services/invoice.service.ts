@@ -7,6 +7,11 @@ import 'rxjs/add/operator/mergeMap';
 @Injectable()
 export class InvoiceService {
   private uri = 'http://localhost:3000/invoices';
+  private paymentTypes = {
+    "debit": "28",
+    "credit": "04",
+    "cash": "01"
+  }
 
   constructor(
     private http: Http
@@ -19,14 +24,25 @@ export class InvoiceService {
     return Promise.reject(error.message || error);
   }
 
-  sendToInvoice(clientId: string, saleId: string, type:string): Promise<any> {
+  sendToInvoice(clientId: string,
+    saleId: string,
+    type: string,
+    paymentType: string,
+    account: string): Promise<any> {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
+
+    if (!this.paymentTypes[paymentType])
+      throw "Método de pago no permitido";
+
+      console.log(this.paymentTypes[paymentType])
 
     var data = {
       id_sale: saleId,
       id_client: clientId,
-      type:type
+      type: type,
+      paymentType: this.paymentTypes[paymentType],
+      account: account
     }
 
     console.log(data)

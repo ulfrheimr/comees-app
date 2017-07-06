@@ -1,10 +1,11 @@
 var Sale = require('../models/sale');
 
-var createSale = () => {
+var createSale = (usr) => {
   return new Promise((resolve, reject) => {
     var s = new Sale();
 
     s.timestamp = new Date();
+    s.usr = usr;
 
     s.save((err, sale) => {
       if (err) reject(err)
@@ -24,9 +25,6 @@ var addMi = (product, id) => {
       type_discount: product.type,
       discount: product.discount
     }
-
-    console.log(m);
-    console.log(id);
 
     Sale.findOne({
       _id: id
@@ -74,7 +72,9 @@ Promise.all([createSale]).catch((error) => {
 
 var s = {
   putSale: (req, res) => {
-    createSale()
+    var usr = req.body.usr;
+    
+    createSale(usr)
       .then((sale) => {
         res.json({
           ok: 1,

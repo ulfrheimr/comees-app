@@ -7,7 +7,24 @@
   color: #125996;
 }
 
-td{
+td {
   padding: 0px;
   text-align: center;
+}
+
+.payment {
+  width: 40%;
+  margin: 25px auto;
+  border: 1px solid #125996;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #EDF8FA;
+}
+
+.payment-info {
+  padding: 20px;
+}
+
+.amount {
+  width: 100px !important;
 }

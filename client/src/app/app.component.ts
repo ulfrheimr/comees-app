@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { UsrActivate } from './guard/usr-activate';
+
 
 @Component({
   selector: 'app-root',
@@ -11,15 +13,12 @@ export class AppComponent {
   pageModel: any;
 
   constructor(
-
+    private usrActivate: UsrActivate
   ) {
-    this.pageModel = {
-      usr: undefined,
-      pass: undefined
-    }
   }
 
   getUsr(): string {
-    return "Chocorito";
+
+    return null;
   }
 }

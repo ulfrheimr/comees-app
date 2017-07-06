@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed">
+<nav class="navbar navbar-default navbar-fixed nav-first">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -10,7 +10,7 @@
       <a class="navbar-brand" href="/"><img src="/assets/images/logo.png" alt="Logo"></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" *ngIf="getUsr()">
         <li>
           <a>
             HOLA {{getUsr()}}
@@ -21,24 +21,8 @@
   </div>
 </nav>
 
-<div>
-  <div>
-    <a routerLink="/mi-sales">
-      <img class="nav-logo servicios"/>Estudios
-    </a>
-
-    <a routerLink="/ph-sales">
-      <img class="nav-logo servicios"/>Farmacia
-    </a>
-  </div>
-
-</div>
-
 <div class="app-container">
-  <br />
-  <br />
-  <div>
-    <router-outlet></router-outlet>
-  </div>
-
+  <router-outlet></router-outlet>
 </div>
+
+<img class="back-image" src="/assets/images/logo-mid.png" />

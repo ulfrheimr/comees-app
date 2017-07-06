@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-
-import { UsrService } from '../services/usr-service';
+import { UsrService } from '../services/usr.service';
 
 @Injectable()
 export class UsrActivate implements CanActivate {
@@ -14,11 +13,16 @@ export class UsrActivate implements CanActivate {
 
   }
 
-  canActivate() {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ) {
+    let role: string = this.usrService.get()["role"];
+    let next: string = route.url[0].path;
 
-
-    console.log(this.usrService.get());
-    this.router.navigate(['./search-drug']);
-    return true;
+    if (role == "adm") return true;
+    else if (role == "mi" && next == "mi") return true;
+    else if (role == "ph" && next == "ph") return true;
+    else return false;
   }
 }

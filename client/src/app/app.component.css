@@ -2,7 +2,6 @@
   margin: 0 auto;
   margin-left: 5%;
   margin-right: 5%;
-  padding: 20px;
 }
 
 .menu-container {
@@ -12,4 +11,12 @@
 .menu-item {
   display: inline-block;
   width: 200px;
+}
+
+.back-image {
+  position: absolute;
+  height: 80%;
+  left: 0;
+  top: 14%;
+  z-index: -1;
 }

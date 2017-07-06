@@ -2,10 +2,11 @@ var Sale = require('../models/sale');
 var Presentation = require('../models/presentation');
 var StockController = require('./stock');
 
-var createSale = () => {
+var createSale = (usr) => {
   return new Promise((resolve, reject) => {
     var s = new Sale();
     s.timestamp = new Date();
+    s.usr = usr;
 
     s.save((err, sale) => {
       if (err) reject(err)
@@ -72,6 +73,7 @@ var findSales = (query) => {
             sales = sales.map(s => {
                 return {
                   timestamp: s.timestamp,
+                  usr: s.usr,
                   drugs: s.drugs.map(d => {
                     var temp = JSON.parse(JSON.stringify(d));
                     temp.drug.presentation = presses[temp.drug.presentation]
@@ -102,7 +104,9 @@ Promise.all([createSale]).catch((error) => {
 
 var s = {
   putSale: (req, res) => {
-    createSale()
+    var usr = req.body.usr;
+
+    createSale(usr)
       .then((sale) => {
         res.json({
           ok: 1,

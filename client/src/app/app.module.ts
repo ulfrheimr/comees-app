@@ -4,6 +4,10 @@ import { FormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {AgGridModule} from "ag-grid-angular/main";
 
+import { Ph } from './ph/ph.component';
+
+import { Mi } from './mi/mi.component';
+
 import { AppComponent } from './app.component';
 import { ClientComponent } from './cc/client.component';
 import { MiSalesComponent } from './mi/sales.component';
@@ -26,10 +30,12 @@ import {AppRoutingModule} from './app-routing.module';
 
 
 import { UsrActivate } from './guard/usr-activate';
-import { UsrService } from './services/usr-service';
+import { UsrService } from './services/usr.service';
 
 @NgModule({
   declarations: [
+    Ph,
+    Mi,
     AppComponent,
     LoginComponent,
     ClientComponent,

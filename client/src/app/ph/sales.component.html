@@ -38,7 +38,8 @@
       <button (click)="confirmSale()" class="waves-effect waves-light btn">Vender</button>
     </div>
   </div>
-  <div *ngIf="sale?.length > 0">
+
+  <div *ngIf="sale?.length > 0 && pageModel.showConfirmSale">
     <div class="coMeEs_sentence">
       Por favor confirme los productos. <br /> Si la venta es correcta oprima "CONFIRMAR", si desea modificarla oprima "REGRESAR".
     </div>
@@ -47,56 +48,144 @@
       <span class="enhaced">Productos</span>
 
       <div class="info">
-        <ul>
-          <li *ngFor="let s of sale">
-            <table>
-              <thead>
-                <td>
-                  Cantidad
-                </td>
-                <td>
-                  Nombre
-                </td>
-                <td>
-                  Descripición
-                </td>
-                <td>
-                  Precio de venta
-                </td>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    {{s.qty}}
-                  </td>
-                  <td>
-                    {{s.name}}
-                  </td>
-                  <td>
-                    {{s.desc_sale}}
-                  </td>
-                  <td>
-                    {{s.sale_price}}
-                  </td>
-                </tr>
+        <table>
+          <thead>
+            <td>
+              Cantidad
+            </td>
+            <td>
+              Nombre
+            </td>
+            <td>
+              Descripición
+            </td>
+            <td>
+              Precio de venta
+            </td>
+            <td>
+              Importe
+            </td>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of sale">
+              <td>
+                {{s.qty}}
+              </td>
+              <td>
+                {{s.name}}
+              </td>
+              <td>
+                {{s.desc_sale}}
+              </td>
+              <td>
+                {{s.price_discount}}
+              </td>
+              <td>
+                {{s.price_total}}
+              </td>
 
-              </tbody>
-            </table>
-          </li>
-        </ul>
+            </tr>
 
+          </tbody>
+        </table>
+        <div class="right">
+          Total: <span>$ {{getTotalDiscount()}}</span>
+        </div>
       </div>
       <br />
+
+      <div>
+        <div>
+          <p class="coMeEs_sentence_small"> ¿El cliente cuenta con código de descuento? Ingresalo </p>
+        </div>
+        <p>
+          <input type="checkbox" class="filled-in" id="m-discount-toggler" [(ngModel)]="pageModel.toggleDiscount" />
+          <label for="m-discount-toggler">Mostrar opciones de descuento</label>
+        </p>
+      </div>
+
+      <div *ngIf="pageModel.toggleDiscount">
+        <div class="container">
+          <input class="hint" [(ngModel)]="pageModel.discountCode" (keyup.enter)="getDiscount()" placeholder="Código de descuento" />
+        </div>
+
+        <div *ngIf="pageModel.noFoundDiscount" class="coMeEs_sentence">
+          No se ha encontrado descuento
+        </div>
+
+        <div *ngIf="pageModel.discountFound">
+          <div class="discount-info">
+            <span class="coMeEs_dark_bold">Descuento:</span>
+            <span class="enhaced_discount">{{discount}} %</span>
+          </div>
+          <button (click)="applyDiscount()" class="waves-effect waves-light btn">Aplicar descuento</button>
+        </div>
+
+        <div class="discount-info" class="right" *ngIf="priceDiscount">
+          <span class="coMeEs_dark_bold">Precio con descuento:</span>
+          <span class="enhaced_price"> $ {{priceDiscount}}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="pageModel.showConfirmSale" class="right">
+    <button (click)="toConfirm()" class="waves-effect waves-light btn">PAGAR</button>
+  </div>
+
+  <div class="confirm-container" *ngIf="pageModel.toConfirm">
+    <div class="total">
+      Importe : <span>$ {{getTotal()}}</span>
+    </div>
+    <div class="total" *ngIf="pageModel.discountFound">
+      Total a pagar con descuento: <span>$ {{getTotalDiscount()}}</span>
     </div>
 
-    <div class="confirm-container">
-      <div class="total">
-        Total: <span>$ {{getTotal()}}</span>
+    <div class="payment">
+      <div class="payment-info">
+        <div>
+          <p>
+            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="cash" id="m-payment-cash" />
+            <label for="m-payment-cash">Efectivo</label>
+          </p>
+          <p>
+            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="debit" id="m-payment-debit" />
+            <label for="m-payment-debit">Tarjeta de débito</label>
+          </p>
+          <p>
+            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="credit" id="m-payment-credit" />
+            <label for="m-payment-credit">Tarjeta de crédito</label>
+          </p>
+        </div>
+
+        <div *ngIf="pageModel.paymentType == 'cash'">
+          <div>
+            <div>
+              Importe recibido:
+            </div>
+            <div>
+              $ <input [(ngModel)]="pageModel.amount" class="hint amount" placeholder="Importe" maxlength="5" />
+            </div>
+          </div>
+          <div>
+            Cambio:
+          </div>
+          <div>
+            {{change()}}
+          </div>
+        </div>
+
+        <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
+          Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
+        </div>
       </div>
-      <br />
+
+    </div>
+
+    <div class="right">
       <button (click)="makeSale()" class="waves-effect waves-light btn">CONFIRMAR</button>
     </div>
-
-
   </div>
+
 </div>

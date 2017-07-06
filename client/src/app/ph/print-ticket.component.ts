@@ -21,7 +21,15 @@ import { Config } from '../services/config';
 
 export class PrintPhTicketComponent implements OnInit {
   sale: any;
+  saleTotals: any;
+  paymentModel: any;
   hasDiscount: boolean = false;
+  client: string;
+  paymentTypes: any = {
+    "cash": "Efectivo",
+    "debit": "Tarjeta de débito",
+    "credit": "Tarjeta de crédito",
+  }
 
   constructor(
     private saleService: PhSaleService,
@@ -33,6 +41,16 @@ export class PrintPhTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.paymentModel = {
+      payment: localStorage.getItem("payment"),
+      type: this.paymentTypes[localStorage.getItem("type")],
+      change: localStorage.getItem("change"),
+      client: localStorage.getItem("client") == ""
+        ? "Venta de mostrador"
+        : localStorage.getItem("client"),
+      isCard: localStorage.getItem("type") != "cash"
+    }
+
     this.getSale()
   }
 
@@ -45,30 +63,77 @@ export class PrintPhTicketComponent implements OnInit {
     this.activatedRoute.params
       .switchMap((params: Params) => {
         return this.saleService.getSale(params["id"])
-          .then(x => this.sale = x)
+          .then(x => {
+            this.sale = x;
+
+            console.log(x)
+
+            this.saleTotals = this.getSaleTotals(x);
+          })
           .catch(this.handleError)
       })
       .subscribe();
   }
 
-  getSaleTotal(): number {
-    return this.sale.drugs.map(x => x.price_discount)
+  getSubtotal(): number {
+    return this.saleTotals
+      .map(x => x.subtotal)
+      .reduce((x, y) => x + y, 0)
+      .toFixed(2);
+  }
+
+  getSaving(): number {
+    return this.saleTotals
+      .map(x => x.saving)
+      .reduce((x, y) => x + y, 0)
+      .toFixed(2);
+  }
+
+  getCat(): number {
+    return this.saleTotals
+      .map(x => x.cat)
+      .reduce((x, y) => x + y, 0)
+      .toFixed(2);
+  }
+
+  getTotal(): number {
+    return this.saleTotals
+      .map(x => x.total)
+      .reduce((x, y) => x + y, 0)
+      .toFixed(2);
+  }
+
+  getTotalDisc(): number {
+    return this.saleTotals
+      .map(x => x.total_disc)
+      .reduce((x, y) => x + y, 0)
+      .toFixed(2);
+  }
+
+  getQty(): number {
+    return this.saleTotals
+      .map(x => x.qty)
       .reduce((x, y) => x + y, 0);
   }
 
-  getSaleNoDiscount(): number {
-    var total = this.sale.drugs.map(x => x.sale_price)
-      .reduce((x, y) => x + y, 0);
+  getSaleTotals(sale): any {
+    return sale.drugs.map((x) => {
+      var cat = (x.cat || 0) / 100;
 
-    if (total > 0)
-      this.hasDiscount = true;
-
-    return total;
+      console.log((x.price - x.price_discount) * x.qty)
+      return {
+        cat: x.price_discount * cat * x.qty,
+        subtotal: x.price * x.qty * (1 - cat),
+        saving: (x.price - x.price_discount) * x.qty,
+        total: x.price * x.qty,
+        total_disc: x.price_discount * x.qty,
+        qty: x.qty
+      };
+    });
   }
 
   getAsset(key): any {
     var r = this.config.get(key);
-    console.log(r)
     return r;
   }
 

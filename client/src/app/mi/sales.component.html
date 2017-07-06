@@ -1,42 +1,51 @@
 <div class="top-container">
-  <div class="sale-container" *ngIf="products?.length >0">
-    <div class="sale">
-      Productos
 
-      <div class="info">
-        <ul>
-          <li *ngFor="let p of products">
-            <table>
-              <tr>
-                <td>
-                  <span class="ex">{{p.qty}}</span>
-                </td>
-                <td>
-                  <span>{{p.mi}}</span>
-                </td>
-                <td>
-                  <span class="ex">{{p.sale_price}}</span>
-                </td>
-                <td>
-                  <span class="ex">{{p.price_discount}}</span>
-                </td>
-              </tr>
-            </table>
-          </li>
-        </ul>
+  <div *ngIf="products?.length >0 && !pageModel.toConfirm">
+    <div class="sale-container">
+      <div class="sale">
+        <div class="enhaced">
+          Venta actual
+        </div>
 
+
+        <div class="info">
+          <ul>
+            <li *ngFor="let p of products">
+              <table>
+                <tr>
+                  <td>
+                    <span class="ex">{{p.qty}}</span>
+                  </td>
+                  <td>
+                    <span>{{p.name}}</span>
+                  </td>
+                  <td>
+                    <span class="ex">{{p.sale_price}}</span>
+                  </td>
+                  <td>
+                    <span class="ex">{{p.price_discount}}</span>
+                  </td>
+                  <td>
+                    <i class="remove material-icons" (click)="removeMi(p.mi)">close</i>
+                  </td>
+                </tr>
+              </table>
+            </li>
+          </ul>
+
+        </div>
+        <br />
+        <div class="total right">
+          Total: <span>$ {{saleTotal}}</span>
+        </div>
+        <br />
+        <button (click)="confirmSale()" class="waves-effect waves-light btn">VENDER</button>
       </div>
-      <br />
-      <div class="total">
-        <!-- Total: <span>$ {{saleModel.price}}</span> -->
-      </div>
-      <br />
-      <button (click)="makeSale()" class="waves-effect waves-light btn">VENDER</button>
+
     </div>
-
   </div>
 
-  <div class="search-container">
+  <div class="search-container" *ngIf="!pageModel.toConfirm">
     <div>
       <table>
         <tr>
@@ -53,7 +62,7 @@
     </div>
   </div>
 
-  <div class="grid-container">
+  <div class="grid-container" *ngIf="!pageModel.toConfirm">
     <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
     </ag-grid-angular>
   </div>
@@ -141,8 +150,98 @@
       <button (click)="addToSale()" class="waves-effect waves-light btn">Agregar a venta</button>
     </div>
   </div>
-  <div>
 
+  <div class="confirm-container" *ngIf="pageModel.toConfirm">
+    <div>
+      Por favor confirme los productos. <br /> Si la venta es correcta seleccione el método de pago y oprima "CONFIRMAR",
+      <br /> si desea modificarla oprima "REGRESAR".
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <td>
+            Cantidad
+          </td>
+          <td>
+            Estudio
+          </td>
+          <td>
+            Precio de venta
+          </td>
+          <td>
+            Importe unitario
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of products">
+          <td>
+            <span class="ex">{{p.qty}}</span>
+          </td>
+          <td>
+            <span>{{p.name}}</span>
+          </td>
+          <td>
+            <span class="ex">{{p.sale_price}}</span>
+          </td>
+          <td>
+            <span class="ex">{{p.price_discount}}</span>
+          </td>
+        </tr>
+      </tbody>
 
+    </table>
+    <div class="total">
+      Importe : <span>$ {{getTotal()}}</span>
+    </div>
+    <div class="total">
+      Total a pagar con descuento: <span>$ {{getTotalDiscount()}}</span>
+    </div>
+
+    <div class="payment">
+      <div class="payment-info">
+        <div>
+          <p>
+            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="cash" id="m-payment-cash" />
+            <label for="m-payment-cash">Efectivo</label>
+          </p>
+          <p>
+            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="debit" id="m-payment-debit" />
+            <label for="m-payment-debit">Tarjeta de débito</label>
+          </p>
+          <p>
+            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="credit" id="m-payment-credit" />
+            <label for="m-payment-credit">Tarjeta de crédito</label>
+          </p>
+        </div>
+
+        <div *ngIf="pageModel.paymentType == 'cash'">
+          <div>
+            <div>
+              Importe recibido:
+            </div>
+            <div>
+              $ <input [(ngModel)]="pageModel.amount" class="hint amount" placeholder="Importe" maxlength="5" />
+            </div>
+          </div>
+          <div>
+            Cambio:
+          </div>
+          <div>
+            {{change()}}
+          </div>
+        </div>
+
+        <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
+          Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
+        </div>
+
+      </div>
+    </div>
+
+    <div class="right">
+      <button (click)="makeSale()" class="waves-effect waves-light btn">CONFIRMAR</button>
+    </div>
   </div>
+
 </div>

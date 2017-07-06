@@ -1,7 +1,12 @@
-<div>
-  <input [(ngModel)]="pageModel.usr" class="hint"  placeholder="Usuario" />
-  <input [(ngModel)]="pageModel.pass" class="hint"  placeholder="Password" />
-
-  <button (click)="login()" class="waves-effect waves-light btn">INICIO</button>
+<div class="login">
+  <div class="login-info">
+    <input [(ngModel)]="pageModel.usr" class="hint" placeholder="Usuario" /> <br />
+    <input [(ngModel)]="pageModel.pass" class="hint" placeholder="Password" type="password" />
+    <br /><br />
+    <button (click)="login()" class="waves-effect waves-light btn">INICIO</button>
+    <div *ngIf="error">
+      {{error}}
+    </div>
+  </div>
 
 </div>

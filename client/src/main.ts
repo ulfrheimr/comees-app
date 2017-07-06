@@ -5,7 +5,7 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 import { HttpModule } from '@angular/http';
-import { UsrService } from './app/services/usr-service';
+import { UsrService } from './app/services/usr.service';
 
 if (environment.production) {
   enableProdMode();

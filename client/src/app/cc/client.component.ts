@@ -31,6 +31,7 @@ export class ClientComponent implements OnInit {
   selectedClient: Client;
   pageModel;
   clientModel;
+  paymentModel: any;
 
   private gridOptions: GridOptions;
 
@@ -41,6 +42,7 @@ export class ClientComponent implements OnInit {
     private clientService: ClientService,
     private invoiceService: InvoiceService
   ) {
+
     this.pageModel = {
       specifyClient: false,
       toggleClient: true,
@@ -59,6 +61,15 @@ export class ClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.paymentModel = {
+      payment: localStorage.getItem("payment"),
+      type: localStorage.getItem("type"),
+      change: localStorage.getItem("change"),
+      account: null
+    }
+
+    console.log(this.paymentModel)
+
     this.activatedRoute.params
       .switchMap((params: Params) => this.saleId = params["id"])
       .subscribe(s => s);
@@ -142,17 +153,31 @@ export class ClientComponent implements OnInit {
   }
 
   registerToInvoice(): void {
-    console.log(this.from)
-    this.invoiceService.sendToInvoice(this.selectedClient._id, this.saleId, this.from)
+    console.log(this.pageModel.specifyClient)
+    let mi: string = this.selectedClient == undefined  ? undefined : this.selectedClient._id;
+    let client: string = this.selectedClient == undefined ? "" : this.selectedClient.name;
+
+    this.invoiceService.sendToInvoice(mi,
+      this.saleId,
+      this.from,
+      this.paymentModel.type,
+      this.paymentModel.account)
       .then(result => {
         if (result == 0)
           alert("Venta ya facturada");
         else {
+          localStorage.setItem('payment', this.paymentModel.payment);
+          localStorage.setItem('change', this.paymentModel.change);
+          localStorage.setItem('type', this.paymentModel.type);
+          localStorage.setItem('client', client);
+          localStorage.setItem('account', this.paymentModel.account);
+
           alert("Correctamente registrado");
+
           if (this.from == "mi") {
-            this.router.navigate(['./print-mi-ticket', this.saleId])
+            this.router.navigate(['./mi/print-ticket', this.saleId])
           } else {
-            this.router.navigate(['./print-ph-ticket', this.saleId])
+            this.router.navigate(['./ph/print-ticket', this.saleId])
           }
 
         }

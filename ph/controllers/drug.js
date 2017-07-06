@@ -1,6 +1,7 @@
 var Drug = require('../models/drug');
 
 var saveDrug = (drug) => {
+  console.log(drug);
   return new Promise((resolve, reject) => {
     var d = new Drug();
 
@@ -77,7 +78,7 @@ var p = {
       max_price: req.body.max_price,
       ssa: req.body.ssa,
       desc: req.body.desc,
-      cat: drug.body.cat
+      cat: req.body.cat
     };
 
     saveDrug(d)

@@ -27,8 +27,6 @@ export class ClientService implements OnInit {
   }
 
   getClients(by: string, name: string): Promise<Client[]> {
-    console.log(name)
-    console.log(by)
     return this.http.get(this.uri + "?id=" + name + "&by=" + by)
       .toPromise()
       .then(c => c.json().data)

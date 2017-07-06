@@ -35,6 +35,7 @@ router.route('/phys_mis/:phys_id')
   .get(PhysMiController.getPhysMI);
 
 router.route('/sales')
+  // usr
   .put(SaleController.putSale)
   // id_sale, qty, mi, sale_price,price_discount, type_discount, discount,
   .post(SaleController.addMis)
@@ -42,9 +43,6 @@ router.route('/sales')
 
 router.route('/sales/:id')
   .get(SaleController.getSale)
-
-
-
 
 
 module.exports = router;

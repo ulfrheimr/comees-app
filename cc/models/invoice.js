@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var InvoiceSchema = mongoose.Schema({
   client: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: false
   },
   sale: {
     type: mongoose.Schema.Types.ObjectId,
@@ -18,9 +18,20 @@ var InvoiceSchema = mongoose.Schema({
     type: Boolean,
     required: true
   },
-  type:{
+  type: {
     type: String,
     required: true
+  },
+  paymentMethod: {
+    type: String,
+    required: true
+  },
+  paymentType: {
+    type: String,
+    required: true
+  },
+  paymentAccount: {
+    type: String
   }
 });
 

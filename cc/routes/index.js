@@ -6,6 +6,7 @@ var UsedCouponController = require('../controllers/used-coupon');
 var ClientController = require('../controllers/client');
 var InvoiceController = require('../controllers/invoice');
 var UsrController = require('../controllers/usr');
+var LoginController = require('../controllers/login');
 
 var router = express.Router();
 var app = express();
@@ -45,18 +46,22 @@ router.route('/used_coupons')
   .get(UsedCouponController.getCouponByDate);
 
 router.route('/invoices')
-  // id_client,id_sale, type
+  // id_client,id_sale, type, paymentType
   .put(InvoiceController.putInvoice)
   // init, end, invoiced
   .get(InvoiceController.getInvoices);
 
 router.route('/usrs')
   // name, usr, pass, role
-  .put(UsrController.putUsr);
+  .put(UsrController.putUsr)
+  .get(UsrController.getUsrs);
 
 router.route('/usrs/:id')
   // name, usr, pass, role
   .get(UsrController.getUsr);
 
+router.route('/login')
+  // usr, pass
+  .post(LoginController.login)
 
 module.exports = router;

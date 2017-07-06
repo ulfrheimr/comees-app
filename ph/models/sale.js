@@ -5,6 +5,10 @@ var SaleSchema = mongoose.Schema({
     type: Date,
     required: true
   },
+  usr: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
   drugs: [{
     qty: {
       type: Number

@@ -7,7 +7,7 @@
       <input type="checkbox" class="filled-in" id="m-client-toggler" [(ngModel)]="pageModel.toggleClient" checked="checked" (ngModelChange)="pageModel.specifyClient = !$event" />
       <label for="m-client-toggler">Venta de mostrador</label>
     </p>
-    <div class="coMeEs_sentence_small right" *ngIf="!pageModel.specifyClient">
+    <div class="coMeEs_sentence_small right" *ngIf="!pageModel.specifyClient" >
       Si desea especificar un cliente para facturación selección el control.
     </div>
 
@@ -150,10 +150,22 @@
           </td>
         </tr>
       </table>
+      <br />
+      <div>
+        <div class="enhaced">
+          Ya que el método de pago es tarjeta de crédito/débito.<br /> Capture los 4 últimos dígitos de la tarjeta.
+        </div>
+        <div>
+          <input class="hint" [(ngModel)]="paymentModel.account" placeholder="Ultimos 4 dígitos" maxlength="4" />
+        </div>
+      </div>
     </div>
-    <div class="right">
-      <button (click)="registerToInvoice()" class="waves-effect waves-light btn">REGISTRAR PARA FACTURAR</button>
-    </div>
+
   </div>
 
+  <br />
+  <br />
+  <div class="right">
+    <button (click)="registerToInvoice()" class="waves-effect waves-light btn">REGISTRAR PARA FACTURAR</button>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-<div>
+<div class="top-container">
   <div class="search-container">
     <div>
       Búsqueda de medicamento<br />
@@ -21,26 +21,59 @@
     </div>
   </div>
 
-  <div *ngIf="selectedDrug">
-    Medicamento seleccionado:
-
-    <div>
-      Nombre: {{selectedDrug.name}}
-    </div>
-    <div>
-      Sustancia: {{selectedDrug.substance}}
-    </div>
-    <div>
-      Descripción: {{selectedDrug.pres_desc}}- {{selectedDrug.desc}}
-    </div>
-    <div>
-      Laboratorio: {{selectedDrug.lab}}
-    </div>
-    <div>
-      Precio de venta: {{selectedDrug.sale_price}}
+  <div *ngIf="selectedDrug" class="selected-container">
+    <div class="enhaced">
+      Medicamento seleccionado
     </div>
 
-    <button (click)="addToSale()" class="waves-effect waves-light btn">Agregar a la venta</button>
+    <table>
+      <tr>
+        <td>
+          Nombre:
+        </td>
+        <td class="enhaced">
+          {{selectedDrug.name}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Sustancia:
+        </td>
+        <td class="enhaced">
+          {{selectedDrug.substance}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Descripción:
+        </td>
+        <td class="enhaced">
+          {{selectedDrug.pres_desc}} - {{selectedDrug.desc}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Laboratorio:
+        </td>
+        <td class="enhaced">
+          {{selectedDrug.lab}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Precio de venta:
+        </td>
+        <td class="enhaced">
+          $ {{selectedDrug.sale_price}}
+        </td>
+      </tr>
+    </table>
+
+    <div class="right">
+      <button (click)="addToSale()" class="waves-effect waves-light btn">Agregar a la venta</button>
+    </div>
+
+
   </div>
 
 </div>

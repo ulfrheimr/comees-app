@@ -13,8 +13,7 @@
             <br />
             <p class="enhaced-ticket bold">
               {{getAsset("name")}}
-              <br />
-              {{getAsset("desc")}}
+              <br /> {{getAsset("desc")}}
             </p>
           </div>
           <div class="top-container">
@@ -25,6 +24,8 @@
           <div class="right">
             <span class="enhaced-ticket">{{sale.timestamp | date: 'dd/MM/yyyy hh:mm' }}</span>
           </div>
+          <br />
+          <br />
           <div>
             <table class="client-opts">
               <tr>
@@ -32,7 +33,7 @@
                   Cliente:
                 </td>
                 <td>
-
+                  {{paymentModel.client}}
                 </td>
               </tr>
               <tr>
@@ -40,7 +41,7 @@
                   Pago:
                 </td>
                 <td>
-
+                  {{paymentModel.type}}
                 </td>
               </tr>
               <tr>
@@ -48,7 +49,7 @@
                   Cajero:
                 </td>
                 <td>
-
+                  cajero
                 </td>
               </tr>
             </table>
@@ -62,10 +63,10 @@
                 Cant
               </td>
               <td class="col2">
-                Desc<br /> $$ desc
+                Desc<br /> $$ Descuento
               </td>
               <td class="col3 bold">
-                prec<br />imp
+                Prec/u<br />importe
               </td>
             </thead>
             <tbody>
@@ -75,10 +76,10 @@
                 {{d.qty}}
               </td>
               <td>
-                {{d.name}} - {{d.desc}}<br /> <br /> otra cosa
+                {{d.name}} - {{d.desc}}<br /> <br /> ${{(d.qty*(d.price - d.price_discount)).toFixed(2)}}
               </td>
               <td class="bold">
-                ${{d.price_discount}}<br /> <br /> $ otra cosa
+                ${{d.price}}<br /> <br /> ${{d.qty*d.price_discount}}
               </td>
             </tr>
           </table>
@@ -89,67 +90,85 @@
               <table>
                 <tr>
                   <td>
+                    IVA:
+                  </td>
+                  <td>
+                    <span class="enhaced bold">$ {{getCat()}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     Subtotal:
                   </td>
                   <td>
-                    <span class="enhaced bold">$ {{getSaleTotal()}}</span>
+                    <span class="enhaced bold">$ {{getSubtotal()}}</span>
                   </td>
                 </tr>
+              </table>
+              <hr />
+              <table>
                 <tr>
                   <td>
                     Ahorro:
                   </td>
                   <td>
-
+                    <span class="enhaced bold">$ {{getSaving()}}</span>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    Redondeo:
-                  </td>
-                  <td>
-
-                  </td>
-                </tr>
-              </table>
-              <hr />
-              <table>
                 <tr>
                   <td>
                     Total:
                   </td>
                   <td>
-
+                    <span class="enhaced bold">$ {{getTotalDisc()}}</span>
                   </td>
                 </tr>
 
               </table>
               <hr />
-              <table>
-                <tr>
-                  <td>
-                    Su pago:
-                  </td>
-                  <td>
-
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Cambio:
-                  </td>
-                  <td>
-
-                  </td>
-                </tr>
-              </table>
-              <hr />
+              <div *ngIf="!paymentModel.isCard">
+                <table>
+                  <tr>
+                    <td>
+                      Su pago:
+                    </td>
+                    <td>
+                      $ {{paymentModel.payment}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Cambio:
+                    </td>
+                    <td>
+                      $ {{paymentModel.change}}
+                    </td>
+                  </tr>
+                </table>
+                <hr />
+              </div>
             </div>
           </div>
 
           <div class="text-total">
-            son: {{getSaleTotal()}}
-            <br /> Total de artículos:
+            <table>
+              <tr>
+                <td>
+                  Son:
+                </td>
+                <td>
+                  {{getQty()}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Total de artículos:
+                </td>
+                <td>
+                  {{getQty()}}
+                </td>
+              </tr>
+            </table>
           </div>
 
           <hr />

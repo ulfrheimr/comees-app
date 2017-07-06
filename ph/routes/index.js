@@ -51,6 +51,7 @@ router.route('/purchases')
   .get(PurchaseController.getPurchases);
 
 router.route('/sales')
+  // usr
   .put(SaleController.putSale)
   // id_sale, qty, drug, sale_price, price_discount, type_discount, discount,
   .post(SaleController.addDrugs)

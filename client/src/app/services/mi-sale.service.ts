@@ -7,12 +7,15 @@ import 'rxjs/add/operator/mergeMap';
 import { MiSale } from '../prots/mi-sale';
 import { MiProduct } from '../prots/mi-product';
 
+import { UsrService } from './usr.service';
+
 @Injectable()
 export class MiSaleService {
   private uri = 'http://localhost:3001/sales';
 
   constructor(
-    private http: Http
+    private http: Http,
+    private usrService: UsrService
   ) {
 
   }
@@ -26,7 +29,9 @@ export class MiSaleService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.put(this.uri, {}, { headers: headers })
+    var data = { usr: this.usrService.get().id };
+
+    return this.http.put(this.uri, data, { headers: headers })
       .toPromise()
       .then(r => r.json().data._id)
       .catch(this.handleError);

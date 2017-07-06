@@ -7,19 +7,21 @@ import 'rxjs/add/operator/mergeMap';
 import { PhSale } from '../../prots/ph/sale';
 import { PhProduct } from '../../prots/ph/ph-product'
 
+import { UsrService } from '../usr.service';
+
 
 @Injectable()
 export class PhSaleService {
   private uri = 'http://localhost:3002/sales';
 
   constructor(
-    private http: Http
+    private http: Http,
+    private usrService: UsrService
   ) {
 
   }
 
   private handleError(error: any): Promise<any> {
-    console.log("Hndle error")
     console.log(error);
     return Promise.reject(error.message || error);
   }
@@ -28,7 +30,9 @@ export class PhSaleService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    return this.http.put(this.uri, {}, { headers: headers })
+    var data = { usr: this.usrService.get().id };
+
+    return this.http.put(this.uri, data, { headers: headers })
       .toPromise()
       .then(r => r.json().data._id)
       .catch(this.handleError);
@@ -93,9 +97,10 @@ export class PhSaleService {
       code: d.drug.code.substr(d.drug.code.length - 5),
       qty: d.qty,
       name: d.drug.name,
-      desc: d.drug.presentation + " - " + d.drug.dosage + "c/" + d.drug.qty,
-      price: d.sale_price,
-      price_discount: d.price_with_discount
+      desc: d.drug.presentation + " - " + d.drug.dosage + "c/" + (d.drug.qty || ""),
+      price: d.sale_price.toFixed(2),
+      price_discount: d.price_with_discount.toFixed(2),
+      cat: d.drug.cat || 0
     }
 
     return res;
