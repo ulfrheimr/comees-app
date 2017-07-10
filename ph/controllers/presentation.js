@@ -35,10 +35,10 @@ var p = {
         presentation: req.body.presentation
       })
       .then((r) => {
-        console.log(r);
         res.json({
           ok: 1,
-          message: "Presentation added"
+          message: "Presentation added",
+          data: r
         });
       }).catch((err) => res.status(500).send(err));
   },

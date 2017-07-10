@@ -4,10 +4,10 @@
     Selección de cliente
 
     <p>
-      <input type="checkbox" class="filled-in" id="m-client-toggler" [(ngModel)]="pageModel.toggleClient" checked="checked" (ngModelChange)="pageModel.specifyClient = !$event" />
+      <input type="checkbox" class="filled-in" id="m-client-toggler" [(ngModel)]="pageModel.toggleClient" checked="checked" (ngModelChange)="toggleClient($event)" />
       <label for="m-client-toggler">Venta de mostrador</label>
     </p>
-    <div class="coMeEs_sentence_small right" *ngIf="!pageModel.specifyClient" >
+    <div class="coMeEs_sentence_small right" *ngIf="!pageModel.specifyClient">
       Si desea especificar un cliente para facturación selección el control.
     </div>
 
@@ -97,8 +97,11 @@
       </tr>
     </table>
     <div class="right">
+      <button (click)="cancelRegister()" class="waves-effect waves-light btn">CANCELAR REGISTRO</button>
+
       <button (click)="registerNewClient()" class="waves-effect waves-light btn">REGISTRAR CLIENTE</button>
     </div>
+
 
   </div>
 
@@ -142,7 +145,7 @@
           </td>
         </tr>
         <tr>
-          <td>
+          <td class="info">
             Dirección:
           </td>
           <td>
@@ -151,7 +154,7 @@
         </tr>
       </table>
       <br />
-      <div>
+      <div *ngIf="paymentModel.type!='cash'">
         <div class="enhaced">
           Ya que el método de pago es tarjeta de crédito/débito.<br /> Capture los 4 últimos dígitos de la tarjeta.
         </div>
@@ -160,12 +163,28 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <br />
   <br />
   <div class="right">
-    <button (click)="registerToInvoice()" class="waves-effect waves-light btn">REGISTRAR PARA FACTURAR</button>
+    <button [disabled]="!pageModel.allowRegister" (click)="confirmInvoice()" class="waves-effect waves-light btn">REGISTRAR PARA FACTURAR</button>
+  </div>
+</div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirmación de facturación</h4>
+    <div>
+      Confirme para registrar para facturación
+
+      <div class="client-enhace">
+        {{invoiceClient()}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="registerToInvoice()">Facturar</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
   </div>
 </div>

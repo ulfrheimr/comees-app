@@ -40,8 +40,7 @@ var DrugSchema = mongoose.Schema({
     required: true
   },
   ssa: {
-    type: String,
-    required: true
+    type: String
   },
   desc: {
     type: String

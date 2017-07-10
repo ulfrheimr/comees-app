@@ -50,6 +50,9 @@ router.route('/purchases')
   .post(PurchaseController.addDrug)
   .get(PurchaseController.getPurchases);
 
+router.route('/purchases/:id')
+  .get(PurchaseController.getPurchase);
+
 router.route('/sales')
   // usr
   .put(SaleController.putSale)

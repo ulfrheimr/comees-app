@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GridOptions } from "ag-grid";
 import { AddComponent } from '../add.component';
 import { DeleteComponent } from '../delete.component';
+
+import { MaterializeAction } from 'angular2-materialize';
 
 import { Drug } from '../prots/ph/drug';
 
@@ -35,33 +37,23 @@ export class PhSalesComponent implements OnInit {
   sale: any = []
   paymentTypes: string[] = ["cash", "debit", "credit"];
 
+  modalActions = new EventEmitter<string | MaterializeAction>();
+  modalStock = new EventEmitter<string | MaterializeAction>();
+
   constructor(
     private router: Router,
     private storedSale: StoredSale,
     private couponService: CouponService,
     private drugService: DrugService,
     private phSaleService: PhSaleService,
-    private usrService:UsrService
+    private usrService: UsrService
   ) {
-    this.pageModel = {
-      hint: "",
-      showGridSale: true,
-      showConfirmSale: null,
-      toggleDiscount: null,
-      discountCode: null,
-      noFoundDiscount: null,
-      discountFound: null,
-      toConfirm: null,
-      amount: null,
-      paymentType: "cash"
-    }
+    this.initializePageModel();
   }
 
   private gridOptions: GridOptions;
 
   ngOnInit(): void {
-    console.log("Session")
-    console.log(this.usrService.get())
 
     this.gridOptions = <GridOptions>{
       context: {
@@ -76,11 +68,10 @@ export class PhSalesComponent implements OnInit {
       }, {
         headerName: "Nombre",
         field: "name",
-        width: 100
+        width: 200
       }, {
         headerName: "Descripción",
-        field: "desc_sale",
-        width: 100
+        field: "desc_sale"
       }, {
         headerName: "Stock",
         field: "stock",
@@ -111,12 +102,29 @@ export class PhSalesComponent implements OnInit {
     this.checkSale();
   }
 
+  private initializePageModel(): void {
+    this.pageModel = {
+      hint: "",
+      showGridSale: true,
+      showConfirmSale: null,
+      toggleDiscount: null,
+      discountCode: null,
+      noFoundDiscount: null,
+      discountFound: null,
+      toConfirm: null,
+      amount: null,
+      paymentType: "cash",
+      allowConfirm: false,
+      allowSale: true
+    }
+  }
+
   private handleError(error: any): Promise<any> {
     return Promise.reject(error.message || error);
   }
 
   private checkSale(): void {
-    console.log(this.storedSale.sale)
+
     let hasItems: boolean = false;
 
     for (var key in this.storedSale.sale) {
@@ -125,26 +133,40 @@ export class PhSalesComponent implements OnInit {
     }
 
     if (hasItems) {
-      this.drugHash = this.storedSale.sale;
+      console.log(this.storedSale.sale)
+      let id: string = this.storedSale.sale["code"];
       setTimeout(() => {
-        this.setSale();
+        this.findDrug(id);
       }, 1000);
 
     }
   }
 
-  findDrug(): void {
-    this.drugService.getDrug(this.pageModel.hint)
-      .then(r => {
-        if (r["stock"] == 0) {
-          alert("no se puede agregar sin stock")
-          return;
-        }
+  toggleDiscount(e: boolean): void {
+    this.pageModel.toggleDiscount = e;
+    this.pageModel.allowSale = !e;
 
+  }
+
+  findDrug(code: string): void {
+    this.pageModel.hint = "";
+    
+    this.drugService.getDrug(code)
+      .then(r => {
         if (this.drugHash[r._id]) {
-          this.drugHash[r._id].qty = this.drugHash[r._id].qty + 1;
+          if (r["stock"] - this.drugHash[r._id].qty <= 0) {
+            this.showNoStock();
+            return;
+          }
+          this.drugHash[r._id].qty += 1;
           this.drugHash[r._id].price_total = this.drugHash[r._id].qty * this.drugHash[r._id].price_discount;
+          this.drugHash[r._id].stock -= 1;
         } else {
+          if (r["stock"] == 0) {
+            this.showNoStock();
+            return;
+          }
+
           this.drugHash[r._id] = {
             id: r._id,
             code: r.code,
@@ -154,7 +176,7 @@ export class PhSalesComponent implements OnInit {
             sale_price: r.sale_price,
             price_discount: r.sale_price,
             price_total: r.sale_price,
-            stock: r.stock,
+            stock: r.stock - 1,
             cat: r.cat || 0
           }
         }
@@ -174,6 +196,8 @@ export class PhSalesComponent implements OnInit {
     for (var key in this.drugHash) {
       drugs.push(this.drugHash[key]);
     }
+
+    this.pageModel.allowConfirm = drugs.length > 0;
 
     this.gridOptions.api.setRowData(drugs);
   }
@@ -196,6 +220,7 @@ export class PhSalesComponent implements OnInit {
       this.drugHash[key].price_discount = this.drugHash[key].sale_price * ((100 - this.discount) / 100);
     });
 
+    this.pageModel.allowSale = true;
   }
 
   getTotal(): number {
@@ -243,6 +268,8 @@ export class PhSalesComponent implements OnInit {
   }
 
   makeSale(): void {
+    this.modalActions.emit({ action: "modal", params: ['close'] });
+
     var total = this.pageModel.amount - this.getTotalDiscount();
     let s: any[] = this.sale.map(x => {
       return {
@@ -265,6 +292,17 @@ export class PhSalesComponent implements OnInit {
       .catch(err => {
         console.log("IS over here")
       });
+  }
+
+  showPayment(): void {
+    this.modalActions.emit({ action: "modal", params: ['open'] });
+  }
+  closeModal() {
+    this.modalActions.emit({ action: "modal", params: ['close'] });
+  }
+
+  showNoStock(): void {
+    this.modalStock.emit({ action: "modal", params: ['open'] });
   }
 
 }

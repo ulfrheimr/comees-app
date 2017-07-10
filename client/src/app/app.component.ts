@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 import { UsrActivate } from './guard/usr-activate';
 
@@ -20,5 +20,10 @@ export class AppComponent {
   getUsr(): string {
 
     return null;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadHandler(event) {
+    this.usrActivate.drop();
   }
 }

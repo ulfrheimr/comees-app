@@ -28,6 +28,7 @@ import { Config } from './services/config';
 
 import {AppRoutingModule} from './app-routing.module';
 
+import { MaterializeModule } from "angular2-materialize";
 
 import { UsrActivate } from './guard/usr-activate';
 import { UsrService } from './services/usr.service';
@@ -53,6 +54,7 @@ import { UsrService } from './services/usr.service';
     AppRoutingModule,
     FormsModule,
     HttpModule,
+    MaterializeModule,
     AgGridModule.withComponents(
       [CellComponent,
         AddComponent,

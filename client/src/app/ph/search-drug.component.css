@@ -7,3 +7,12 @@
   width: 80%;
   margin: 0 auto;
 }
+
+.grid-container {
+  width: 800px;
+}
+
+.enhaced {
+  color: #125996;
+  font-weight: bold;;
+}

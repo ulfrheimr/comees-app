@@ -22,7 +22,7 @@ var addDrug = (product, id) => {
     StockController.addToStock(product.drug, product.qty)
       .then(s => {
         var id_drug = s.drug;
-        
+
         var d = {
           qty: product.qty,
           drug: id_drug,
@@ -54,7 +54,7 @@ var addDrug = (product, id) => {
 
 var findPurchases = (query) => {
   return new Promise((resolve, reject) => {
-    Purchase.find({})
+    Purchase.find(query)
       .populate('drugs.drug')
       .populate('place')
       .exec((err, purchases) => {
@@ -125,20 +125,18 @@ var s = {
       })
       .catch((err) => res.status(500).send(err));
   },
-  getSale: (req, res) => {
-    // var id = req.params.id;
-    //
-    // findSales({
-    //     _id: id
-    //   })
-    //   .then((sales) => {
-    //     if (sales.length == 0) throw "No found sales";
-    //     res.json({
-    //       ok: 1,
-    //       data: sales[0]
-    //     })
-    //   })
-    //   .catch((err) => res.status(500).send(err));
+  getPurchase: (req, res) => {
+    var id = req.params.id;
+    findPurchases({
+        _id: id
+      })
+      .then((purchases) => {
+        res.json({
+          ok: 1,
+          data: purchases
+        })
+      })
+      .catch((err) => res.status(500).send(err));
   }
 }
 

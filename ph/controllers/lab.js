@@ -36,10 +36,10 @@ var p = {
         lab: req.body.lab
       })
       .then((r) => {
-        console.log(r);
         res.json({
           ok: 1,
-          message: "Laboratory added"
+          message: "Laboratory added",
+          data: r
         });
       }).catch((err) => res.status(500).send(err));
   },

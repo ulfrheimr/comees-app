@@ -44,7 +44,8 @@ var p = {
       .then((r) => {
         res.json({
           ok: 1,
-          message: "Buy place added"
+          message: "Buy place added",
+          data: r
         });
       }).catch((err) => res.status(500).send(err));
   },

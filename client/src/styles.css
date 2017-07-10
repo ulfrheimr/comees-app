@@ -64,6 +64,31 @@ h3 {
   border-bottom: 2px solid #438bca;
 }
 
+.usr-settings {
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.usr-settings:hover {
+  color: #125996;
+}
+
+.usr-settings-content {
+  width: 90%;
+  height: 40px;
+  margin: 0 auto;
+}
+
+.usr-settings-inner {
+  font-size: 1.1em;
+  float: right;
+}
+
+.usr-settings-inner>span {
+  font-weight: bold;
+  color: #125996;
+}
+
 
 /*Fixes materialize*/
 

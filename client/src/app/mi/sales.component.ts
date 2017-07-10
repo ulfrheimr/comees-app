@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {Component, Input, OnInit, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { MaterializeAction } from 'angular2-materialize';
 
 import { GridOptions } from "ag-grid";
 import { CellComponent } from '../cell.component';
@@ -34,13 +36,15 @@ export class MiSalesComponent implements OnInit {
   priceDiscount: number;
   saleTotal: number = 0;
 
+  modalActions = new EventEmitter<string | MaterializeAction>();
+
   private gridOptions: GridOptions;
 
   constructor(
     private miService: MiService,
     private couponService: CouponService,
     private miSaleService: MiSaleService,
-    private usrService:UsrService,
+    private usrService: UsrService,
     private router: Router
   ) {
     this.initializePageModel();
@@ -49,7 +53,7 @@ export class MiSalesComponent implements OnInit {
   ngOnInit(): void {
     console.log("Session")
     console.log(this.usrService.get())
-    
+
     this.gridOptions = <GridOptions>{
       context: {
         componentParent: this
@@ -58,12 +62,10 @@ export class MiSalesComponent implements OnInit {
     this.gridOptions.columnDefs = [
       {
         headerName: "Estudio",
-        field: "name",
-        width: 100
+        field: "name"
       }, {
         headerName: "Precio",
-        field: "price",
-        width: 100
+        field: "price"
       },
       {
         headerName: "Seleccionar",
@@ -90,8 +92,9 @@ export class MiSalesComponent implements OnInit {
       notFoundDiscount: null,
       toConfirm: false,
       toPayment: false,
-      amount: 0,
-      paymentType: "cash"
+      amount: 0.0,
+      paymentType: "cash",
+      allowAdd: true
     }
   }
 
@@ -108,6 +111,16 @@ export class MiSalesComponent implements OnInit {
     this.initializePageModel();
     this.selectedMi = null;
     this.gridOptions.api.setRowData([]);
+  }
+
+  toggleDiscount(e: boolean): void {
+    this.pageModel.toggleDiscount = e;
+    this.pageModel.allowAdd = !e;
+    this.pageModel.discountType = "";
+    this.pageModel.discountCode = "";
+    this.pageModel.discountFound = null;
+    this.pageModel.notFoundDiscount = null;
+
   }
 
   findMis(): void {
@@ -129,10 +142,12 @@ export class MiSalesComponent implements OnInit {
       })
       .catch((err) => {
         this.pageModel.notFoundDiscount = true;
+        this.discount = 0;
       })
   }
 
   applyDiscount(): void {
+    this.pageModel.allowAdd = true;
     this.priceDiscount = this.selectedMi.price * (1 - (this.discount * 0.01));
   }
 
@@ -176,6 +191,7 @@ export class MiSalesComponent implements OnInit {
   }
 
   makeSale(): void {
+    this.modalActions.emit({ action: "modal", params: ['close'] });
     var total = this.pageModel.amount - this.getTotalDiscount();
 
     this.miSaleService.makeSale(this.products)
@@ -185,6 +201,7 @@ export class MiSalesComponent implements OnInit {
         localStorage.setItem('type', this.pageModel.paymentType);
 
         this.router.navigate(['./mi/client', "mi", id])
+
       })
       .catch(this.handleError);
   }
@@ -201,14 +218,20 @@ export class MiSalesComponent implements OnInit {
       .reduce((x, y) => x + y, 0);
   }
 
-  change(): number {
+  change(): string {
     if (parseFloat(this.pageModel.amount)) {
       var total = this.getTotalDiscount()
 
-      if (parseFloat(this.pageModel.amount) >= total) {
-        return this.pageModel.amount - total;
-      }
+      if (parseFloat(this.pageModel.amount) >= total)
+        return (this.pageModel.amount - total).toFixed(2);
     }
+  }
+
+  showPayment(): void {
+    this.modalActions.emit({ action: "modal", params: ['open'] });
+  }
+  closeModal() {
+    this.modalActions.emit({ action: "modal", params: ['close'] });
   }
 
 }

@@ -20,7 +20,7 @@ import { UsrActivate } from './guard/usr-activate';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   {
     path: 'ph', component: Ph, canActivate: [UsrActivate],

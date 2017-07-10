@@ -1,8 +1,10 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import {Location} from '@angular/common';
-import {Observable} from 'rxjs/Observable';
+import { MaterializeAction } from 'angular2-materialize';
+
+import { Location } from '@angular/common';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 
 import { MiSale } from '../prots/mi-sale';
@@ -32,18 +34,21 @@ export class PrintMiTicketComponent implements OnInit {
     "credit": "Tarjeta de crédito",
   }
 
+  modalActions = new EventEmitter<string | MaterializeAction>();
+
   constructor(
     private saleService: MiSaleService,
     private activatedRoute: ActivatedRoute,
     private location: Location,
-    private config: Config
+    private config: Config,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.paymentModel = {
       payment: localStorage.getItem("payment"),
       type: this.paymentTypes[localStorage.getItem("type")],
-      change: localStorage.getItem("change"),
+      change: parseFloat(localStorage.getItem("change")).toFixed(2),
       client: localStorage.getItem("client") == ""
         ? "Venta de mostrador"
         : localStorage.getItem("client"),
@@ -133,7 +138,13 @@ export class PrintMiTicketComponent implements OnInit {
     return r;
   }
 
+  endProcess(): void {
+    this.modalActions.emit({ action: "modal", params: ['close'] });
+    this.router.navigate(['./mi/']);
+  }
+
   print(): void {
+    this.modalActions.emit({ action: "modal", params: ['open'] });
     let printContents, popupWin;
     printContents = document.getElementById('ticket').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -246,7 +257,7 @@ export class PrintMiTicketComponent implements OnInit {
         }
           </style>
         </head>
-    <body onload="window.print();">${printContents}</body>
+    <body onload="window.print();close();">${printContents}</body>
       </html>`
     );
     popupWin.document.close();

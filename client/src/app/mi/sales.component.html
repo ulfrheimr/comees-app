@@ -95,7 +95,7 @@
       </div>
 
       <p>
-        <input type="checkbox" class="filled-in" id="m-discount-toggler" [(ngModel)]="pageModel.toggleDiscount" />
+        <input type="checkbox" class="filled-in" id="m-discount-toggler" [(ngModel)]="pageModel.toggleDiscount" (ngModelChange)="toggleDiscount($event)" />
         <label for="m-discount-toggler">Mostrar opciones de descuento</label>
       </p>
 
@@ -147,7 +147,8 @@
 
     </div>
     <div class="right">
-      <button (click)="addToSale()" class="waves-effect waves-light btn">Agregar a venta</button>
+      <button *ngIf="pageModel.toggleDiscount" (click)="toggleDiscount(false)" class="waves-effect waves-light btn">CANCELAR</button>
+      <button (click)="addToSale()" [disabled]="!pageModel.allowAdd" class="waves-effect waves-light btn">Agregar a venta</button>
     </div>
   </div>
 
@@ -182,66 +183,87 @@
             <span>{{p.name}}</span>
           </td>
           <td>
-            <span class="ex">{{p.sale_price}}</span>
+            <span class="ex">$ {{p.sale_price}}</span>
           </td>
           <td>
-            <span class="ex">{{p.price_discount}}</span>
+            <span class="ex">$ {{p.price_discount}}</span>
           </td>
         </tr>
       </tbody>
 
     </table>
-    <div class="total">
+    <br />
+    <div class="total sale-enhace">
       Importe : <span>$ {{getTotal()}}</span>
     </div>
-    <div class="total">
+    <div class="total sale-enhace">
       Total a pagar con descuento: <span>$ {{getTotalDiscount()}}</span>
     </div>
-
-    <div class="payment">
-      <div class="payment-info">
-        <div>
-          <p>
-            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="cash" id="m-payment-cash" />
-            <label for="m-payment-cash">Efectivo</label>
-          </p>
-          <p>
-            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="debit" id="m-payment-debit" />
-            <label for="m-payment-debit">Tarjeta de débito</label>
-          </p>
-          <p>
-            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="credit" id="m-payment-credit" />
-            <label for="m-payment-credit">Tarjeta de crédito</label>
-          </p>
-        </div>
-
-        <div *ngIf="pageModel.paymentType == 'cash'">
-          <div>
-            <div>
-              Importe recibido:
-            </div>
-            <div>
-              $ <input [(ngModel)]="pageModel.amount" class="hint amount" placeholder="Importe" maxlength="5" />
-            </div>
-          </div>
-          <div>
-            Cambio:
-          </div>
-          <div>
-            {{change()}}
-          </div>
-        </div>
-
-        <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
-          Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
-        </div>
-
-      </div>
-    </div>
+    <br />
+    <br />
 
     <div class="right">
-      <button (click)="makeSale()" class="waves-effect waves-light btn">CONFIRMAR</button>
+      <button (click)="showPayment()" class="waves-effect waves-light btn">CONFIRMAR</button>
     </div>
   </div>
 
+</div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirmación de venta</h4>
+    <div>
+      Por favor confirme el método de pago para la venta.
+
+      <div class="total sale-enhace">
+        Total a pagar: <span>$ {{getTotalDiscount()}}</span>
+      </div>
+
+      <div class="payment">
+        <div class="payment-info">
+          <div>
+            <p>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="cash" id="m-payment-cash" />
+              <label for="m-payment-cash">Efectivo</label>
+            </p>
+            <p>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="debit" id="m-payment-debit" />
+              <label for="m-payment-debit">Tarjeta de débito</label>
+            </p>
+            <p>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="credit" id="m-payment-credit" />
+              <label for="m-payment-credit">Tarjeta de crédito</label>
+            </p>
+          </div>
+
+          <div *ngIf="pageModel.paymentType == 'cash'">
+            <div>
+              <div>
+                Importe recibido:
+              </div>
+              <div class="sale-enhace">
+                $ <input [(ngModel)]="pageModel.amount" class="hint amount sale-enhace" placeholder="Importe" maxlength="5" />
+              </div>
+            </div>
+            <div>
+              Cambio:
+            </div>
+            <div class="sale-enhace change">
+              $ {{change()}}
+            </div>
+          </div>
+
+          <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
+            Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="makeSale()">Vender</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+  </div>
 </div>

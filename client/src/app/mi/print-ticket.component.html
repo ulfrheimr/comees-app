@@ -195,3 +195,17 @@
     <button (click)="print()" class="waves-effect waves-light btn">Imprimir</button>
   </div>
 </div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirmación de venta</h4>
+    <div>
+      Si el ticket se imprimió correctamente oprima "TERMINAR PROCESO" <br />
+      de lo contrario selecciones "REINTENTAR IMPRESIÓN"
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="endProcess()">Terminar proceso</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="print()">Reintentar</a>
+  </div>
+</div>

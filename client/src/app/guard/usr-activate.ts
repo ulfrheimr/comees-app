@@ -25,4 +25,8 @@ export class UsrActivate implements CanActivate {
     else if (role == "ph" && next == "ph") return true;
     else return false;
   }
+
+  drop(): void {
+    // this.usrService.dropInfo();
+  }
 }

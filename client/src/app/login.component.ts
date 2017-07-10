@@ -1,5 +1,7 @@
-import {  OnInit, Component } from '@angular/core';
-import {Router} from '@angular/router';
+import {  OnInit, Component, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { MaterializeAction } from 'angular2-materialize';
 
 import { UsrService } from './services/usr.service';
 
@@ -22,6 +24,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.usrService.dropInfo();
+
     this.pageModel = {
       usr: undefined,
       pass: undefined
@@ -29,7 +33,6 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-
     this.usrService.init(this.pageModel.usr, this.pageModel.pass)
       .then(u => {
         console.log(u)
@@ -37,6 +40,13 @@ export class LoginComponent implements OnInit {
         else if (u.role == "ph") this.router.navigate(['./ph/'])
         else this.error = "Por favor revise sus credenciales y vuelva a intentar"
       })
+  }
 
+  modalActions = new EventEmitter<string|MaterializeAction>();
+  openModal() {
+    this.modalActions.emit({action:"modal",params:['open']});
+  }
+  closeModal() {
+    this.modalActions.emit({action:"modal",params:['close']});
   }
 }

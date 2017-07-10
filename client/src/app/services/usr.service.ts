@@ -35,6 +35,12 @@ export class UsrService {
       .catch(this.handleError);
   }
 
+  dropInfo(): any {
+    sessionStorage.setItem("usr", null)
+    sessionStorage.setItem("role", null)
+    sessionStorage.setItem("id", null)
+  }
+
   init(usr: string, pass: string): any {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');

@@ -14,7 +14,7 @@
           </tr>
           <tr>
             <td>
-              <input [(ngModel)]="pageModel.hint" class="hint" (keyup.enter)="findDrug()" placeholder="Código" />
+              <input [(ngModel)]="pageModel.hint" class="hint" (keyup.enter)="findDrug(pageModel.hint)" placeholder="Código" />
             </td>
             <td>
               <button (click)="searchDrug()" class="waves-effect waves-light btn">Buscar</button>
@@ -35,7 +35,7 @@
       <div class="sale-total">
         Total:<span>$ {{getTotal()}}</span>
       </div>
-      <button (click)="confirmSale()" class="waves-effect waves-light btn">Vender</button>
+      <button (click)="confirmSale()" [disabled]="!pageModel.allowConfirm" class="waves-effect waves-light btn">Vender</button>
     </div>
   </div>
 
@@ -99,7 +99,7 @@
           <p class="coMeEs_sentence_small"> ¿El cliente cuenta con código de descuento? Ingresalo </p>
         </div>
         <p>
-          <input type="checkbox" class="filled-in" id="m-discount-toggler" [(ngModel)]="pageModel.toggleDiscount" />
+          <input type="checkbox" class="filled-in" id="m-discount-toggler" [(ngModel)]="pageModel.toggleDiscount" (ngModelChange)="toggleDiscount($event)" />
           <label for="m-discount-toggler">Mostrar opciones de descuento</label>
         </p>
       </div>
@@ -131,61 +131,81 @@
   </div>
 
   <div *ngIf="pageModel.showConfirmSale" class="right">
-    <button (click)="toConfirm()" class="waves-effect waves-light btn">PAGAR</button>
+    <button [disabled]="!pageModel.allowSale" (click)="showPayment()" class="waves-effect waves-light btn">PAGAR</button>
   </div>
 
-  <div class="confirm-container" *ngIf="pageModel.toConfirm">
-    <div class="total">
-      Importe : <span>$ {{getTotal()}}</span>
-    </div>
-    <div class="total" *ngIf="pageModel.discountFound">
-      Total a pagar con descuento: <span>$ {{getTotalDiscount()}}</span>
-    </div>
+</div>
 
-    <div class="payment">
-      <div class="payment-info">
-        <div>
-          <p>
-            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="cash" id="m-payment-cash" />
-            <label for="m-payment-cash">Efectivo</label>
-          </p>
-          <p>
-            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="debit" id="m-payment-debit" />
-            <label for="m-payment-debit">Tarjeta de débito</label>
-          </p>
-          <p>
-            <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="credit" id="m-payment-credit" />
-            <label for="m-payment-credit">Tarjeta de crédito</label>
-          </p>
-        </div>
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirmación de venta</h4>
+    <div>
+      Por favor confirme el método de pago para la venta.
 
-        <div *ngIf="pageModel.paymentType == 'cash'">
+      <div class="total sale-enhace">
+        Importe : <span>$ {{getTotal()}}</span>
+      </div>
+      <div class="total sale-enhace" *ngIf="pageModel.discountFound">
+        Importe a pagar: <span>$ {{getTotalDiscount()}}</span>
+      </div>
+
+      <div class="payment">
+        <div class="payment-info">
           <div>
+            <p>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="cash" id="m-payment-cash" />
+              <label for="m-payment-cash">Efectivo</label>
+            </p>
+            <p>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="debit" id="m-payment-debit" />
+              <label for="m-payment-debit">Tarjeta de débito</label>
+            </p>
+            <p>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.paymentType" value="credit" id="m-payment-credit" />
+              <label for="m-payment-credit">Tarjeta de crédito</label>
+            </p>
+          </div>
+
+          <div *ngIf="pageModel.paymentType == 'cash'">
             <div>
-              Importe recibido:
+              <div>
+                Importe recibido:
+              </div>
+              <div class="sale-enhace">
+                $ <input [(ngModel)]="pageModel.amount" class="hint amount sale-enhace" placeholder="Importe" maxlength="5" />
+              </div>
             </div>
             <div>
-              $ <input [(ngModel)]="pageModel.amount" class="hint amount" placeholder="Importe" maxlength="5" />
+              Cambio:
+            </div>
+            <div class="sale-enhace change">
+              {{change()}}
             </div>
           </div>
-          <div>
-            Cambio:
-          </div>
-          <div>
-            {{change()}}
+
+          <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
+            Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
           </div>
         </div>
 
-        <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
-          Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
-        </div>
       </div>
 
     </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="makeSale()">Vender</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+  </div>
+</div>
 
-    <div class="right">
-      <button (click)="makeSale()" class="waves-effect waves-light btn">CONFIRMAR</button>
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalStock">
+  <div class="modal-content">
+    <h4>Aviso</h4>
+    <div>
+      No puede agregarse un producto sin existencias a la venta.
     </div>
   </div>
-
+  <div class="modal-footer">
+    <a class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
+  </div>
 </div>

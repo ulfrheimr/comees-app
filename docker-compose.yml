@@ -1,0 +1,15 @@
+version:            '2'
+services:
+  cc:
+    container_name:
+      "cc"
+    build:
+      context:      ./data
+    image:
+      "cc"
+    tty: true
+  # data:
+  #   image: mongo
+  #   command: mongod
+  #   ports:
+  #     - "27017:27017"

@@ -64,3 +64,13 @@
 .amount {
   width: 100px !important;
 }
+
+.sale-enhace {
+  font-size: 1.3em;
+  color: #125996;
+  font-weight: bold;;
+}
+
+.change{
+  color: blue;
+}

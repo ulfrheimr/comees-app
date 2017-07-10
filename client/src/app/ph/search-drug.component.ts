@@ -52,11 +52,11 @@ export class SearchDrugComponent implements OnInit {
       }, {
         headerName: "Sustancia",
         field: "substance",
-        width: 100
+        width: 200
       }, {
         headerName: "Presentación",
         field: "pres_desc",
-        width: 100
+        width: 250
       }, {
         headerName: "Precio de Venta",
         field: "sale_price",
@@ -67,7 +67,7 @@ export class SearchDrugComponent implements OnInit {
         field: "value",
         cellRendererFramework: CellComponent,
         colId: "select",
-        width: 120
+        width: 100
       }
     ];
     this.gridOptions.rowData = [];
@@ -80,6 +80,7 @@ export class SearchDrugComponent implements OnInit {
   private convertDrug(d: any): any {
     return {
       id: d._id,
+      code: d.code,
       name: d.name,
       substance: d.substance,
       pres_desc: d.qty + " " + d.presentation.presentation + " " + d.dosage,
@@ -101,16 +102,13 @@ export class SearchDrugComponent implements OnInit {
   }
 
   addToSale(): void {
-    console.log(this.selectedDrug);
-
-    this.storedSale.sale[this.selectedDrug.id] = {
+    this.storedSale.sale = {
       qty: 1,
-      name: this.selectedDrug.name,
-      desc_sale: this.selectedDrug.substance + " - " + this.selectedDrug.presentation + " " + this.selectedDrug.dosage,
-      sale_price: this.selectedDrug.sale_price
+      code: this.selectedDrug.code,
+      id: this.selectedDrug.id
     };
 
-    this.router.navigate(['./ph-sales'])
+    this.router.navigate(['./ph/sales'])
   }
 
   onSelected(d: any): void {

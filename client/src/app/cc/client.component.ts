@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Params, Router, NavigationEnd } from '@angular/router';
+
+import { MaterializeAction } from 'angular2-materialize';
 
 import {Location} from '@angular/common';
 import {Observable} from 'rxjs/Observable';
@@ -33,6 +35,8 @@ export class ClientComponent implements OnInit {
   clientModel;
   paymentModel: any;
 
+  modalActions = new EventEmitter<string | MaterializeAction>();
+
   private gridOptions: GridOptions;
 
   constructor(
@@ -48,16 +52,11 @@ export class ClientComponent implements OnInit {
       toggleClient: true,
       clientTypeSearch: "rfc",
       hint: "",
-      showClientRegistration: false
+      showClientRegistration: false,
+      allowRegister: true
     }
 
-    this.clientModel = {
-      rfc: "",
-      name: "",
-      phone: "",
-      mail: "",
-      address: ""
-    }
+    this.initializeClientModel();
   }
 
   ngOnInit(): void {
@@ -67,8 +66,6 @@ export class ClientComponent implements OnInit {
       change: localStorage.getItem("change"),
       account: null
     }
-
-    console.log(this.paymentModel)
 
     this.activatedRoute.params
       .switchMap((params: Params) => this.saleId = params["id"])
@@ -130,7 +127,32 @@ export class ClientComponent implements OnInit {
       .catch(this.handleError);
   }
 
+  toggleClient(e: boolean): void {
+    this.pageModel.specifyClient = !e;
+    this.pageModel.allowRegister = e;
+    this.pageModel.showClientRegistration = false;
+  }
+
+  initializeClientModel(): void {
+    this.clientModel = {
+      rfc: "",
+      name: "",
+      phone: "",
+      mail: "",
+      address: ""
+    }
+  }
+
+  cancelRegister(): void {
+    this.initializeClientModel();
+    this.pageModel.specifyClient = true;
+    this.pageModel.allowRegister = false;
+    this.pageModel.showClientRegistration = false;
+  }
+
   registerNewClient(): void {
+    this.pageModel.allowRegister = true;
+
     let c: Client = new Client();
 
     c.name = this.clientModel.name;
@@ -149,12 +171,14 @@ export class ClientComponent implements OnInit {
 
   onSelected(client: Client): void {
     this.pageModel.specifyClient = false;
-    this.selectedClient = client
+    this.selectedClient = client;
+    this.pageModel.allowRegister = true;
   }
 
   registerToInvoice(): void {
-    console.log(this.pageModel.specifyClient)
-    let mi: string = this.selectedClient == undefined  ? undefined : this.selectedClient._id;
+    this.modalActions.emit({ action: "modal", params: ['close'] });
+
+    let mi: string = this.selectedClient == undefined ? undefined : this.selectedClient._id;
     let client: string = this.selectedClient == undefined ? "" : this.selectedClient.name;
 
     this.invoiceService.sendToInvoice(mi,
@@ -172,8 +196,6 @@ export class ClientComponent implements OnInit {
           localStorage.setItem('client', client);
           localStorage.setItem('account', this.paymentModel.account);
 
-          alert("Correctamente registrado");
-
           if (this.from == "mi") {
             this.router.navigate(['./mi/print-ticket', this.saleId])
           } else {
@@ -183,6 +205,19 @@ export class ClientComponent implements OnInit {
         }
       })
       .catch(this.handleError);
+  }
+
+  invoiceClient(): string {
+    return this.selectedClient == undefined ?
+      "Venta de mostrador" :
+      this.selectedClient.name + " -  " + this.selectedClient.rfc;
+  }
+
+  confirmInvoice(): void {
+    this.modalActions.emit({ action: "modal", params: ['open'] });
+  }
+  closeModal() {
+    this.modalActions.emit({ action: "modal", params: ['close'] });
   }
 
 }
