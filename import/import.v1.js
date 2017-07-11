@@ -127,7 +127,8 @@ var i = {
         max_price: drug.max_price,
         cat: drug.cat,
         ssa: drug.ssa,
-        desc: drug.desc
+        desc: drug.desc,
+        follow: drug.follow,
       });
 
       var opts = {

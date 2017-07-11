@@ -35,18 +35,29 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.usrService.init(this.pageModel.usr, this.pageModel.pass)
       .then(u => {
-        console.log(u)
-        if (u.role == "mi") this.router.navigate(['./mi/'])
-        else if (u.role == "ph") this.router.navigate(['./ph/'])
+        var r = JSON.parse(u.role);
+
+        if (r["ph"] == "adm" && r["mi"] == "adm") {
+          this.router.navigate(['./ph/'])
+        } else if (r["ph"] == "sales" && r["mi"] == "sales")
+          this.router.navigate(['./ph/'])
+        else if (r["ph"] == "adm") {
+
+        } else if (r["mi"] == "adm") {
+
+        } else if (r["ph"] == "sales")
+          this.router.navigate(['./ph/'])
+        else if (r["mi"] == "sales")
+          this.router.navigate(['./mi/'])
         else this.error = "Por favor revise sus credenciales y vuelva a intentar"
       })
   }
 
-  modalActions = new EventEmitter<string|MaterializeAction>();
+  modalActions = new EventEmitter<string | MaterializeAction>();
   openModal() {
-    this.modalActions.emit({action:"modal",params:['open']});
+    this.modalActions.emit({ action: "modal", params: ['open'] });
   }
   closeModal() {
-    this.modalActions.emit({action:"modal",params:['close']});
+    this.modalActions.emit({ action: "modal", params: ['close'] });
   }
 }

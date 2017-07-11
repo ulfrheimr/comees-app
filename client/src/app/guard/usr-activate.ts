@@ -20,10 +20,35 @@ export class UsrActivate implements CanActivate {
     let role: string = this.usrService.get()["role"];
     let next: string = route.url[0].path;
 
-    if (role == "adm") return true;
-    else if (role == "mi" && next == "mi") return true;
-    else if (role == "ph" && next == "ph") return true;
-    else return false;
+    console.log(next)
+    console.log(role)
+    var r = JSON.parse(role);
+
+    if (r["ph"] == "adm" && r["mi"] == "adm") {
+      if (next == "ph" || next == "mi")
+        return true;
+    }
+    else if (r["ph"] == "sales" && r["mi"] == "sales") {
+      if (next == "ph" || next == "mi")
+        return true;
+    }
+    else if (r["ph"] == "adm") {
+
+    }
+    else if (r["ph"] == "sales") {
+      if (next == "ph")
+        return true;
+    }
+    else if (r["mi"] == "adm") {
+
+    }
+    else if (r["mi"] == "sales") {
+      if (next == "mi")
+        return true;
+    }
+
+
+    return false;
   }
 
   drop(): void {

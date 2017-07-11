@@ -17,6 +17,7 @@ var saveDrug = (drug) => {
     d.sale_price = drug.sale_price;
     d.max_price = drug.max_price;
     d.ssa = drug.ssa;
+    d.to_follow = drug.to_follow;
 
     d.save((err, ds) => {
       if (err) reject(err);
@@ -78,8 +79,12 @@ var p = {
       max_price: req.body.max_price,
       ssa: req.body.ssa,
       desc: req.body.desc,
-      cat: req.body.cat
+      cat: req.body.cat,
+      to_follow: req.body.follow
     };
+
+    console.log("save");
+    console.log(d);
 
     saveDrug(d)
       .then((r) => {

@@ -28,7 +28,7 @@ router.route('/ssas')
 
 router.route('/drugs')
   // code, name, substance, id_presentation, dosage, qty,
-  // id_lab, sale_price, max_price, cat, ssa, desc
+  // id_lab, sale_price, max_price, cat, ssa, desc, follow
   .put(DrugController.putDrug)
   .get(DrugController.getDrugs)
 

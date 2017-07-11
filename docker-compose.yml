@@ -4,12 +4,42 @@ services:
     container_name:
       "cc"
     build:
-      context:      ./data
+      context:      ./cc
     image:
       "cc"
-    tty: true
-  # data:
-  #   image: mongo
-  #   command: mongod
-  #   ports:
-  #     - "27017:27017"
+    command:        node index.js
+    ports:
+      - "3000:3000"
+    depends_on:
+      - data
+  ph:
+    container_name:
+      "ph"
+    build:
+      context:      ./ph
+    image:
+      "ph"
+    command:        node index.js
+    ports:
+      - "3002:3002"
+    depends_on:
+      - data
+  mi:
+    container_name:
+      "mi"
+    build:
+      context:      ./mi
+    image:
+      "mi"
+    command:        node index.js
+    ports:
+      - "3001:3001"
+    depends_on:
+      - data
+  data:
+    image:          mongo
+    command:        mongod
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Users/rrivera/data:/data/db:rw

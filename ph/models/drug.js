@@ -45,6 +45,10 @@ var DrugSchema = mongoose.Schema({
   desc: {
     type: String
   },
+  to_follow: {
+    type: Boolean,
+    required: true
+  },
   cat: {
     type: Number,
     required: true

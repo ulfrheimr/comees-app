@@ -2,10 +2,12 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+var config = require('./config');
+
 var app = express();
 var port = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/cc');
+mongoose.connect('mongodb://' + config.data + ':27017/cc');
 
 var allowCrossDomain = function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

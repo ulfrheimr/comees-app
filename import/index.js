@@ -28,7 +28,8 @@ function readFile(path) {
       ssa: i[9].split(' ')[i[9].split(" ").length - 1],
       desc: i[10].toLowerCase(),
       stock: i[11],
-      cad: i[12]
+      cad: i[12],
+      follow: false
     };
   })
 
@@ -129,6 +130,8 @@ function getDrugs(drugs) {
   return new Promise((resolve, reject) => {
     getStock(current)
       .then((d) => {
+        console.log("STOCK");
+        console.log(d);
         if (drugs.length == 0) {
           resolve()
         } else {
@@ -198,7 +201,8 @@ function startImporting(path, buy_place) {
               cat: 16,
               ssa: drug.ssa,
               desc: drug.desc,
-              stock: drug.stock
+              stock: drug.stock,
+              follow: drug.follow
             }
           })
 
