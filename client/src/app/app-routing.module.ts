@@ -3,8 +3,9 @@ import {RouterModule, Routes} from '@angular/router';
 
 import { Ph } from './ph/ph.component';
 
-
 import { Mi } from './mi/mi.component';
+
+import { Sales } from './sales.component';
 
 import { ClientComponent } from './cc/client.component';
 import { MiSalesComponent } from './mi/sales.component';
@@ -39,6 +40,30 @@ const routes: Routes = [
       { path: 'sales', component: MiSalesComponent },
       { path: 'client/:type/:id', component: ClientComponent },
       { path: 'print-ticket/:id', component: PrintMiTicketComponent },
+    ]
+  },
+  {
+    path: 'sales', component: Sales,canActivate: [UsrActivate],
+    children: [
+      {
+        path: 'ph', component: Ph, canActivate: [UsrActivate],
+        children: [
+          { path: '', redirectTo: 'sales', pathMatch: 'full' },
+          { path: 'sales', component: PhSalesComponent },
+          { path: 'client/:type/:id', component: ClientComponent },
+          { path: 'print-ticket/:id', component: PrintPhTicketComponent },
+          { path: 'search-drug', component: SearchDrugComponent }
+        ]
+      },
+      {
+        path: 'mi', component: Mi,canActivate: [UsrActivate],
+        children: [
+          { path: '', redirectTo: 'sales', pathMatch: 'full' },
+          { path: 'sales', component: MiSalesComponent },
+          { path: 'client/:type/:id', component: ClientComponent },
+          { path: 'print-ticket/:id', component: PrintMiTicketComponent },
+        ]
+      },
     ]
   }
 ];

@@ -25,12 +25,10 @@ export class UsrActivate implements CanActivate {
     var r = JSON.parse(role);
 
     if (r["ph"] == "adm" && r["mi"] == "adm") {
-      if (next == "ph" || next == "mi")
-        return true;
+      return true;
     }
     else if (r["ph"] == "sales" && r["mi"] == "sales") {
-      if (next == "ph" || next == "mi")
-        return true;
+      return true;
     }
     else if (r["ph"] == "adm") {
 

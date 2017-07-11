@@ -38,9 +38,9 @@ export class LoginComponent implements OnInit {
         var r = JSON.parse(u.role);
 
         if (r["ph"] == "adm" && r["mi"] == "adm") {
-          this.router.navigate(['./ph/'])
+          this.router.navigate(['./sales/'])
         } else if (r["ph"] == "sales" && r["mi"] == "sales")
-          this.router.navigate(['./ph/'])
+          this.router.navigate(['./sales/'])
         else if (r["ph"] == "adm") {
 
         } else if (r["mi"] == "adm") {

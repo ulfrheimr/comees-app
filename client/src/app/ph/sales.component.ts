@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { GridOptions } from "ag-grid";
 import { AddComponent } from '../add.component';
@@ -46,7 +46,8 @@ export class PhSalesComponent implements OnInit {
     private couponService: CouponService,
     private drugService: DrugService,
     private phSaleService: PhSaleService,
-    private usrService: UsrService
+    private usrService: UsrService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initializePageModel();
   }
@@ -150,7 +151,7 @@ export class PhSalesComponent implements OnInit {
 
   findDrug(code: string): void {
     this.pageModel.hint = "";
-    
+
     this.drugService.getDrug(code)
       .then(r => {
         if (this.drugHash[r._id]) {
@@ -188,7 +189,10 @@ export class PhSalesComponent implements OnInit {
 
   searchDrug(): void {
     this.storedSale.sale = this.drugHash;
-    this.router.navigate(['./ph/search-drug'])
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, url.length - 1).reduce((x, y) => x + "/" + y, "");
+    console.log(routeUrl)
+    this.router.navigate(['.' + routeUrl + '/search-drug'])
   }
 
   setSale(): void {

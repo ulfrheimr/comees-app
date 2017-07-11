@@ -8,6 +8,8 @@ import { Ph } from './ph/ph.component';
 
 import { Mi } from './mi/mi.component';
 
+import { Sales } from './sales.component';
+
 import { AppComponent } from './app.component';
 import { ClientComponent } from './cc/client.component';
 import { MiSalesComponent } from './mi/sales.component';
@@ -37,6 +39,7 @@ import { UsrService } from './services/usr.service';
   declarations: [
     Ph,
     Mi,
+    Sales,
     AppComponent,
     LoginComponent,
     ClientComponent,
