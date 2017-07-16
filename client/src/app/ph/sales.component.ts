@@ -55,6 +55,8 @@ export class PhSalesComponent implements OnInit {
   private gridOptions: GridOptions;
 
   ngOnInit(): void {
+    this.pageModel.discountCode = "coupon_test_both"
+    this.getDiscount();
 
     this.gridOptions = <GridOptions>{
       context: {
@@ -189,9 +191,9 @@ export class PhSalesComponent implements OnInit {
 
   searchDrug(): void {
     this.storedSale.sale = this.drugHash;
+
     var url = this.router.url.split('/');
     let routeUrl: string = url.slice(1, url.length - 1).reduce((x, y) => x + "/" + y, "");
-    console.log(routeUrl)
     this.router.navigate(['.' + routeUrl + '/search-drug'])
   }
 
@@ -207,9 +209,11 @@ export class PhSalesComponent implements OnInit {
   }
 
   getDiscount(): void {
+    let segment: string = this.router.url.split('/')[1];
+
     this.pageModel.notFoundDiscount = null;
     this.pageModel.discountFound = null;
-    this.couponService.getCoupon(this.pageModel.discountCode)
+    this.couponService.getCoupon(this.pageModel.discountCode, segment)
       .then((d) => {
         this.pageModel.discountFound = true;
         this.discount = d.discount;
@@ -274,6 +278,9 @@ export class PhSalesComponent implements OnInit {
   makeSale(): void {
     this.modalActions.emit({ action: "modal", params: ['close'] });
 
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, 2).reduce((x, y) => x + "/" + y, "");
+
     var total = this.pageModel.amount - this.getTotalDiscount();
     let s: any[] = this.sale.map(x => {
       return {
@@ -291,7 +298,7 @@ export class PhSalesComponent implements OnInit {
         localStorage.setItem('change', total.toString());
         localStorage.setItem('type', this.pageModel.paymentType);
 
-        this.router.navigate(['./ph/client', "ph", id])
+        this.router.navigate(['.' + routeUrl + '/client', "ph", id])
       })
       .catch(err => {
         console.log("IS over here")

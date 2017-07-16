@@ -4,7 +4,8 @@ var capitalize = require('capitalize');
 var utf8 = require('utf8');
 var iconv = require('iconv-lite');
 
-var imp = require('./import.v1');
+var imp = require('./ph.v1');
+var mi = require('./mi.v1');
 
 var importedDrugs = []
 
@@ -72,7 +73,50 @@ function getLabs(labs) {
       })
       .catch((err) => reject(err));
   });
+}
 
+function getCats(cats) {
+  return new Promise((resolve, reject) => {
+    mi.getCats()
+      .then((catsDB) => {
+
+        async.map(cats,
+          (c, callback) => {
+
+            if (c.toLowerCase() in catsDB) {
+              c = c.toLowerCase()
+              callback(null, {
+                cat: c,
+                id: catsDB[c]
+              });
+            } else {
+
+              mi.putCat(c)
+                .then((cat) => {
+                  callback(null, {
+                    pres: cat["name"].toLowerCase(),
+                    id: cat["_id"]
+                  });
+                })
+                .catch((err) => reject(err));
+
+            }
+          },
+          (err, results) => {
+            if (err) reject(err);
+
+            console.log(results);
+
+            var r = {}
+            results.map((x) => {
+              r[x["name"]] = x["id"];
+            })
+
+            resolve(r);
+          })
+      })
+      .catch((err) => reject(err));
+  });
 }
 
 function getPress(press) {
@@ -172,7 +216,7 @@ function addDrugsToPurchase(drugs, purchase) {
   });
 }
 
-function startImporting(path, buy_place) {
+function importDrugs(path, buy_place) {
   var items = readFile(path)
 
   getLabs([...new Set(items.map(i => capitalize.words(i["lab"])))])
@@ -246,4 +290,75 @@ function startImporting(path, buy_place) {
     .catch((err) => console.log(err));
 }
 
-startImporting('/Users/rrivera/Desktop/lst.csv', "amsa");
+// MIS
+function readMis(path) {
+  var fileContents = fs.readFileSync(path);
+  var lines = fileContents.toString().split('\r');
+
+  var items = lines
+    .filter(x => x != "")
+    .map((item) => {
+      var i = item.split(",");
+      return {
+        name: i[0].toLowerCase(),
+        cat: i[1].toLowerCase(),
+        price: i[2],
+        desc: i[3].toLowerCase(),
+        available: parseInt(i[4]) == 1
+      };
+    })
+
+  return items;
+}
+
+function importMis(path) {
+  var items = readMis(path).slice(1);
+  getCats([...new Set(items.map(i => capitalize.words(i['cat'])))])
+    .then((catsDB) => {
+      console.log("Correctly resolved MI cats");
+
+      var diffItems = {};
+      var repeated = [];
+      items = items.filter(x => x.available);
+
+      items.map((x) => {
+        if (x.name in diffItems)
+          repeated.push(x);
+        else
+          diffItems[x.name] = x;
+      });
+
+      async.map(items,
+        (item, callback) => {
+          mi.putMi(item)
+            .then((res) => {
+              callback(null, res);
+            })
+            .catch((err) => {
+              console.log("There is an Error");
+              console.log(err)
+            })
+        },
+        (err, result) => {
+          if (err) console.log(err)
+
+          var res = result.map(x => x.ok)
+            .reduce((x, y) => x && y, true);
+
+          if (res)
+            console.log("Everything is fine, you are able to kill yourself");
+          else {
+            console.log("Well, something is wrong");
+            console.log(res);
+          }
+
+        });
+    })
+    .catch((err) => console.log(err));
+}
+
+
+
+
+importMis('/Users/rrivera/Desktop/svcs.csv')
+// startImporting('/Users/ulfrheimr/Desktop/lst.csv', "amsa");

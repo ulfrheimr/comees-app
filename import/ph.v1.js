@@ -1,6 +1,8 @@
 var http = require('http');
 var querystring = require('querystring');
 
+var config = require('./config');
+
 var i = {
   putPress: (p) => {
     return new Promise((resolve, reject) => {
@@ -9,8 +11,8 @@ var i = {
       });
 
       var opts = {
-        host: 'localhost',
-        port: '3002',
+        host: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/press',
         method: 'PUT',
         headers: {
@@ -35,8 +37,8 @@ var i = {
   getPress: () => {
     return new Promise((resolve, reject) => {
       http.get({
-        hostname: 'localhost',
-        port: 3002,
+        hostname: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/press',
         agent: false // create a new agent just for this one request
       }, (res) => {
@@ -64,8 +66,8 @@ var i = {
       });
 
       var opts = {
-        host: 'localhost',
-        port: '3002',
+        host: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/labs',
         method: 'PUT',
         headers: {
@@ -89,8 +91,8 @@ var i = {
   getLabs: () => {
     return new Promise((resolve, reject) => {
       http.get({
-        hostname: 'localhost',
-        port: 3002,
+        hostname: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/labs',
         agent: false // create a new agent just for this one request
       }, (res) => {
@@ -132,8 +134,8 @@ var i = {
       });
 
       var opts = {
-        host: 'localhost',
-        port: '3002',
+        host: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/drugs',
         method: 'PUT',
         headers: {
@@ -157,8 +159,8 @@ var i = {
   getStock: (drug) => {
     return new Promise((resolve, reject) => {
       var req = http.get({
-        hostname: 'localhost',
-        port: 3002,
+        hostname: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/stock/' + drug.code,
         agent: false // create a new agent just for this one request
       }, (res) => {
@@ -199,8 +201,8 @@ var i = {
   getBuyPlace: (buy_place) => {
     return new Promise((resolve, reject) => {
       http.get({
-        hostname: 'localhost',
-        port: 3002,
+        hostname: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/buy_places',
         agent: false // create a new agent just for this one request
       }, (res) => {
@@ -238,8 +240,8 @@ var i = {
       });
 
       var opts = {
-        host: 'localhost',
-        port: '3002',
+        host: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/buy_places',
         method: 'PUT',
         headers: {
@@ -268,8 +270,8 @@ var i = {
       });
 
       var opts = {
-        host: 'localhost',
-        port: '3002',
+        host: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/purchases',
         method: 'PUT',
         headers: {
@@ -304,8 +306,8 @@ var i = {
       });
 
       var opts = {
-        host: 'localhost',
-        port: '3002',
+        host: config.srvr.ph.address,
+        port: config.srvr.ph.port,
         path: '/purchases',
         method: 'POST',
         headers: {

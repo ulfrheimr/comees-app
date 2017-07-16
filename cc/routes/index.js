@@ -29,6 +29,7 @@ router.route('/physs/:id')
   .get(PhysController.getPhys);
 
 router.route('/coupons')
+  // TO SEND AN ARRAY LIKE cats, use cats[]
   // code, cats, init_date, end_date, discount, description
   // We need a cats revision for availables cats
   .put(CouponController.putCoupon)

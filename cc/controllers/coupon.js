@@ -1,4 +1,5 @@
 var Coupon = require('../models/coupon');
+var CouponCats = require('../models/coupon-cats');
 
 var saveCoupon = (c) => {
   return new Promise((resolve, reject) => {
@@ -21,7 +22,7 @@ var saveCoupon = (c) => {
 var findCoupon = (query) => {
   return new Promise((resolve, reject) => {
     Coupon.find(query)
-    .populate('category')
+      .populate('category')
       .exec((err, cs) => {
         if (err) reject(err);
 
@@ -38,6 +39,20 @@ Promise.all([saveCoupon]).catch((error) => {
 
 var s = {
   putCoupon: (req, res) => {
+    var a = {
+      code: req.body.code,
+      cats: req.body.cats,
+      init_date: req.body.init_date,
+      end_date: req.body.end_date,
+      discount: req.body.discount,
+      description: req.body.description,
+    }
+
+    a.cats.map((x) => {
+      console.log(x);
+      if (CouponCats.cats[x] == null)
+        throw new Error("Category not allowed");
+    });
     saveCoupon({
         code: req.body.code,
         cats: req.body.cats,

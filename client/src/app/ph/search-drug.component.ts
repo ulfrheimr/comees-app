@@ -108,7 +108,10 @@ export class SearchDrugComponent implements OnInit {
       id: this.selectedDrug.id
     };
 
-    this.router.navigate(['./ph/sales'])
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, url.length - 1).reduce((x, y) => x + "/" + y, "");
+
+    this.router.navigate(['.' + routeUrl + '/sales'])
   }
 
   onSelected(d: any): void {

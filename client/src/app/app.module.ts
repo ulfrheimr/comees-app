@@ -9,6 +9,7 @@ import { Ph } from './ph/ph.component';
 import { Mi } from './mi/mi.component';
 
 import { Sales } from './sales.component';
+import { MUtils } from './utils';
 
 import { AppComponent } from './app.component';
 import { ClientComponent } from './cc/client.component';
@@ -64,7 +65,7 @@ import { UsrService } from './services/usr.service';
         DeleteComponent]
     )
   ],
-  providers: [StoredSale, Config, UsrActivate, UsrService],
+  providers: [StoredSale, Config, UsrActivate, UsrService, MUtils],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

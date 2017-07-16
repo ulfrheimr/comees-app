@@ -51,9 +51,6 @@ export class MiSalesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Session")
-    console.log(this.usrService.get())
-
     this.gridOptions = <GridOptions>{
       context: {
         componentParent: this
@@ -120,7 +117,6 @@ export class MiSalesComponent implements OnInit {
     this.pageModel.discountCode = "";
     this.pageModel.discountFound = null;
     this.pageModel.notFoundDiscount = null;
-
   }
 
   findMis(): void {
@@ -133,9 +129,11 @@ export class MiSalesComponent implements OnInit {
   }
 
   getDiscount(): void {
+    let segment: string = this.router.url.split('/')[1];
+
     this.pageModel.notFoundDiscount = null;
     this.pageModel.discountFound = null;
-    this.couponService.getCoupon(this.pageModel.discountCode)
+    this.couponService.getCoupon(this.pageModel.discountCode, segment)
       .then((d) => {
         this.pageModel.discountFound = true;
         this.discount = d.discount;
@@ -191,6 +189,9 @@ export class MiSalesComponent implements OnInit {
   }
 
   makeSale(): void {
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, 2).reduce((x, y) => x + "/" + y, "");
+
     this.modalActions.emit({ action: "modal", params: ['close'] });
     var total = this.pageModel.amount - this.getTotalDiscount();
 
@@ -200,7 +201,7 @@ export class MiSalesComponent implements OnInit {
         localStorage.setItem('change', total.toString());
         localStorage.setItem('type', this.pageModel.paymentType);
 
-        this.router.navigate(['./mi/client', "mi", id])
+        this.router.navigate(['.' + routeUrl + '/client', "mi", id])
 
       })
       .catch(this.handleError);

@@ -13,6 +13,17 @@ var saveCat = (cat) => {
   });
 }
 
+var findCats = (query) => {
+  return new Promise((resolve, reject) => {
+    Cat.find(query)
+      .exec((err, cats) => {
+        if (err) reject(err);
+
+        resolve(cats);
+      });
+  });
+}
+
 Promise.all([saveCat]).catch((error) => {
   console.log(error);
   return Promise.reject(error.message || error);
@@ -24,15 +35,25 @@ var s = {
         name: req.body.name
       })
       .then((r) => {
-        console.log(r);
         res.json({
           ok: 1,
-          message: "Category added"
+          message: "Category added",
+          data: r
         });
       }).catch((err) => res.status(500).send(err));
-  }
-}
+  },
+  getCats: (req, res) => {
+    findCats({})
+      .then((r) => {
+        res.json({
+          ok: 1,
+          data: r
+        });
+      })
+      .catch((err) => res.status(500).send(err));
 
-// 59496ebf3e4a803c832b69cf
+  }
+
+}
 
 module.exports = s;

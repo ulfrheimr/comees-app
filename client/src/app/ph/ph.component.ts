@@ -11,7 +11,7 @@ import { UsrService } from '../services/usr.service';
   providers: []
 })
 
-export class Ph {
+export class Ph implements OnInit {
   pageModel: any;
   user: string;
   modalActions = new EventEmitter<string | MaterializeAction>();

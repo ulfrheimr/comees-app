@@ -7,6 +7,8 @@ import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 
+import { MUtils } from '../utils';
+
 import { MiSale } from '../prots/mi-sale';
 import { MiSaleService } from '../services/mi-sale.service';
 
@@ -41,7 +43,8 @@ export class PrintMiTicketComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private config: Config,
-    private router: Router
+    private router: Router,
+    private utils: MUtils
   ) { }
 
   ngOnInit(): void {
@@ -127,6 +130,10 @@ export class PrintMiTicketComponent implements OnInit {
       .toFixed(2);
   }
 
+  getTotalAsText(): string {
+    return this.utils.numToText(this.getTotalDisc());
+  }
+
   getQty(): number {
     return this.saleTotals
       .map(x => x.qty)
@@ -140,7 +147,10 @@ export class PrintMiTicketComponent implements OnInit {
 
   endProcess(): void {
     this.modalActions.emit({ action: "modal", params: ['close'] });
-    this.router.navigate(['./mi/']);
+
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, url.length - 2).reduce((x, y) => x + "/" + y, "");
+    this.router.navigate(['.' + routeUrl])
   }
 
   print(): void {

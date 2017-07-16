@@ -13,7 +13,8 @@ var app = express();
 
 router.route('/cats')
   // {name}
-  .put(CatController.putCat);
+  .put(CatController.putCat)
+  .get(CatController.getCats);
 
 router.route('/mis')
   // {name, catId, price, desc}

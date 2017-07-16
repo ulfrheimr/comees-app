@@ -6,9 +6,11 @@ import { environment } from './environments/environment';
 
 import { HttpModule } from '@angular/http';
 import { UsrService } from './app/services/usr.service';
+import { MUtils } from './app/utils';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule, [HttpModule, UsrService]);
+platformBrowserDynamic().bootstrapModule(AppModule,
+  [HttpModule, UsrService, MUtils]);

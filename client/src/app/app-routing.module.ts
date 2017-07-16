@@ -27,43 +27,35 @@ const routes: Routes = [
     path: 'ph', component: Ph, canActivate: [UsrActivate],
     children: [
       { path: '', redirectTo: 'sales', pathMatch: 'full' },
+      { path: 'ph', redirectTo: 'sales', pathMatch: 'full' },
       { path: 'sales', component: PhSalesComponent },
       { path: 'client/:type/:id', component: ClientComponent },
-      { path: 'print-ticket/:id', component: PrintPhTicketComponent },
+      { path: 'ph/print-ticket/:id', component: PrintPhTicketComponent },
       { path: 'search-drug', component: SearchDrugComponent }
     ]
   },
   {
-    path: 'mi', component: Mi,canActivate: [UsrActivate],
+    path: 'mi', component: Mi, canActivate: [UsrActivate],
     children: [
       { path: '', redirectTo: 'sales', pathMatch: 'full' },
+      { path: 'mi', redirectTo: 'sales', pathMatch: 'full' },
       { path: 'sales', component: MiSalesComponent },
       { path: 'client/:type/:id', component: ClientComponent },
-      { path: 'print-ticket/:id', component: PrintMiTicketComponent },
+      { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
     ]
   },
   {
-    path: 'sales', component: Sales,canActivate: [UsrActivate],
+    path: 'sales', component: Sales, canActivate: [UsrActivate],
     children: [
-      {
-        path: 'ph', component: Ph, canActivate: [UsrActivate],
-        children: [
-          { path: '', redirectTo: 'sales', pathMatch: 'full' },
-          { path: 'sales', component: PhSalesComponent },
-          { path: 'client/:type/:id', component: ClientComponent },
-          { path: 'print-ticket/:id', component: PrintPhTicketComponent },
-          { path: 'search-drug', component: SearchDrugComponent }
-        ]
-      },
-      {
-        path: 'mi', component: Mi,canActivate: [UsrActivate],
-        children: [
-          { path: '', redirectTo: 'sales', pathMatch: 'full' },
-          { path: 'sales', component: MiSalesComponent },
-          { path: 'client/:type/:id', component: ClientComponent },
-          { path: 'print-ticket/:id', component: PrintMiTicketComponent },
-        ]
-      },
+      { path: 'ph', redirectTo: 'ph/sales', pathMatch: 'full' },
+      { path: 'ph/sales', component: PhSalesComponent },
+      { path: 'client/:type/:id', component: ClientComponent },
+      { path: 'ph/print-ticket/:id', component: PrintPhTicketComponent },
+      { path: 'ph/search-drug', component: SearchDrugComponent },
+      { path: 'mi', redirectTo: 'mi/sales', pathMatch: 'full' },
+      { path: 'mi/sales', component: MiSalesComponent },
+      { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
+
     ]
   }
 ];

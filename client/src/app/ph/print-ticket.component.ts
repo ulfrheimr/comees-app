@@ -9,6 +9,8 @@ import 'rxjs/add/operator/switchMap';
 
 import { PhSaleService } from '../services/ph/sale.service';
 
+import { MUtils } from '../utils';
+
 import { Config } from '../services/config';
 
 @Component({
@@ -40,7 +42,8 @@ export class PrintPhTicketComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private config: Config,
-    private router: Router
+    private router: Router,
+    private utils: MUtils
   ) {
 
   }
@@ -121,6 +124,10 @@ export class PrintPhTicketComponent implements OnInit {
       .reduce((x, y) => x + y, 0);
   }
 
+  getTotalAsText(): string {
+    return this.utils.numToText(this.getTotalDisc());
+  }
+
   getSaleTotals(sale): any {
     return sale.drugs.map((x) => {
       var cat = (x.cat || 0) / 100;
@@ -144,7 +151,11 @@ export class PrintPhTicketComponent implements OnInit {
 
   endProcess(): void {
     this.modalActions.emit({ action: "modal", params: ['close'] });
-    this.router.navigate(['./ph/']);
+
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, url.length - 2).reduce((x, y) => x + "/" + y, "");
+
+    this.router.navigate(['.' + routeUrl])
   }
 
   print(): void {

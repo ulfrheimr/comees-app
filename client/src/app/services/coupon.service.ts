@@ -18,14 +18,27 @@ export class CouponService {
       .catch(this.handleError);
   }
 
-  getCoupon(code: string): Promise<Coupon> {
+  getCoupon(code: string, segment: string): Promise<Coupon> {
     return this.http.get(this.couponUrl + "/" + code)
       .toPromise()
       .then(r => {
         var data = r.json().data
 
         if (data.length != 1)
-          throw "There's an error retrieving a coupon";
+          throw "No se ha encontrado el cupón";
+
+        data = data[0];
+
+        if (data["categories"].indexOf(segment) == -1)
+          throw "Este cupón no es aplicable a la categoría";
+
+        data["init_date"] = (data["init_date"].replace(/-/gi, "/")).split("T")[0];
+        data["end_date"] = (data["end_date"].replace(/-/gi, "/")).split("T")[0];
+
+        let init_date: Date = new Date(data["init_date"])
+        let end_date: Date = new Date(data["end_date"])
+        if (new Date() >= end_date && new Date() <= init_date)
+          throw "Este cupón ha expirado";
 
         return data[0] as Coupon
       })

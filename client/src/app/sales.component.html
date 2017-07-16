@@ -1,11 +1,58 @@
 <div class="title">
   <h4>Ventas</h4>
 </div>
+<div class="usr-settings-content">
+  <div class="usr-settings-inner valign-wrapper">
+    Hola <span>&nbsp;{{user}}&nbsp;</span> <i (click)="viewSettings()" class="material-icons usr-settings">settings</i>
+  </div>
+</div>
+
 <div class="top-submenu">
-  <a class="item" routerLink="/sales/mi">Ventas Estudios</a>
-  <a class="item" routerLink="/sales/ph">Ventas Farmacia</a>
+  <a class="item" routerLink="mi/sales">Ventas Estudios</a>
+  <a class="item" routerLink="ph/sales">Ventas Farmacia</a>
 </div>
 
 <div>
   <router-outlet></router-outlet>
+</div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Opciones de usuario</h4>
+    <div>
+      <table>
+        <tr>
+          <td>
+            <span class="enhaced">Contraseña anterior:</span>
+          </td>
+          <td>
+            <input [(ngModel)]="pageModel.oldPass" class="hint" placeholder="Contraseña anterior" type="password" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="enhaced">Nueva contraseña:</span>
+          </td>
+          <td>
+            <input [(ngModel)]="pageModel.newPass" class="hint" placeholder="Contraseña anterior" type="password" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="enhaced">Confirme contraseña:</span>
+          </td>
+          <td>
+            <input [(ngModel)]="pageModel.passConfirmation" class="hint" placeholder="Contraseña anterior" type="password" />
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="pageModel.error">
+        {{pageModel.error}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="changePass()">Cambiar contraseña</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+  </div>
 </div>

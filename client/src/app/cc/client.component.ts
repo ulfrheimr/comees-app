@@ -176,6 +176,10 @@ export class ClientComponent implements OnInit {
   }
 
   registerToInvoice(): void {
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, url.length - 3).reduce((x, y) => x + "/" + y, "");
+
+
     this.modalActions.emit({ action: "modal", params: ['close'] });
 
     let mi: string = this.selectedClient == undefined ? undefined : this.selectedClient._id;
@@ -196,11 +200,7 @@ export class ClientComponent implements OnInit {
           localStorage.setItem('client', client);
           localStorage.setItem('account', this.paymentModel.account);
 
-          if (this.from == "mi") {
-            this.router.navigate(['./mi/print-ticket', this.saleId])
-          } else {
-            this.router.navigate(['./ph/print-ticket', this.saleId])
-          }
+          this.router.navigate(['.' + routeUrl + '/' + this.from + '/print-ticket', this.saleId])
 
         }
       })
