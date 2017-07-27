@@ -23,6 +23,7 @@
     "@angular/router": "^4.0.0",
     "ag-grid": "^11.0.0",
     "ag-grid-angular": "^11.0.0",
+    "angular2-csv": "^0.2.3",
     "angular2-materialize": "^15.0.4",
     "core-js": "^2.4.1",
     "hammerjs": "^2.0.8",

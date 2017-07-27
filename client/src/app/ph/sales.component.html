@@ -33,7 +33,7 @@
 
     <div class="confirm-container">
       <div class="sale-total">
-        Total:<span>$ {{getTotal()}}</span>
+        Total:<span>$ {{getTotal() | number : '1.2-2'}}</span>
       </div>
       <button (click)="confirmSale()" [disabled]="!pageModel.allowConfirm" class="waves-effect waves-light btn">Vender</button>
     </div>
@@ -78,10 +78,10 @@
                 {{s.desc_sale}}
               </td>
               <td>
-                {{s.price_discount}}
+                ${{s.price_discount | number : '1.2-2' }}
               </td>
               <td>
-                {{s.price_total}}
+                ${{s.price_total | number : '1.2-2'}}
               </td>
 
             </tr>
@@ -89,7 +89,7 @@
           </tbody>
         </table>
         <div class="right">
-          Total: <span>$ {{getTotalDiscount()}}</span>
+          Total: <span>$ {{getTotalDiscount() | number : '1.2-2'}}</span>
         </div>
       </div>
       <br />
@@ -116,14 +116,14 @@
         <div *ngIf="pageModel.discountFound">
           <div class="discount-info">
             <span class="coMeEs_dark_bold">Descuento:</span>
-            <span class="enhaced_discount">{{discount}} %</span>
+            <span class="enhaced_discount">{{discount | number : '1.2-2'}} %</span>
           </div>
           <button (click)="applyDiscount()" class="waves-effect waves-light btn">Aplicar descuento</button>
         </div>
 
         <div class="discount-info" class="right" *ngIf="priceDiscount">
           <span class="coMeEs_dark_bold">Precio con descuento:</span>
-          <span class="enhaced_price"> $ {{priceDiscount}}</span>
+          <span class="enhaced_price"> $ {{priceDiscount | number : '1.2-2'}}</span>
         </div>
       </div>
 
@@ -143,10 +143,10 @@
       Por favor confirme el método de pago para la venta.
 
       <div class="total sale-enhace">
-        Importe : <span>$ {{getTotal()}}</span>
+        Importe : <span>$ {{getTotal() | number : '1.2-2'}}</span>
       </div>
       <div class="total sale-enhace" *ngIf="pageModel.discountFound">
-        Importe a pagar: <span>$ {{getTotalDiscount()}}</span>
+        Importe a pagar: <span>$ {{getTotalDiscount() | number : '1.2-2'}}</span>
       </div>
 
       <div class="payment">
@@ -179,7 +179,7 @@
               Cambio:
             </div>
             <div class="sale-enhace change">
-              {{change()}}
+              ${{change() | number : '1.2-2'}}
             </div>
           </div>
 

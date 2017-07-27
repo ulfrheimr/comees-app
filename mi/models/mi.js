@@ -5,6 +5,9 @@ var MISchema = mongoose.Schema({
     type: String,
     required: true
   },
+  delivery_time: {
+    type: Number
+  },
   price: {
     type: Number,
     required: true
@@ -15,8 +18,10 @@ var MISchema = mongoose.Schema({
   },
   description: {
     type: String
+  },
+  sample: {
+    type: String
   }
-
 });
 
 module.exports = mongoose.model('MI', MISchema);

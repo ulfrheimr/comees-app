@@ -1,0 +1,109 @@
+<div class="top-container">
+  <div class="search-container">
+    <div>
+      Facturas<br />
+      <!-- <p>
+        <input name="searchField" type="radio" [(ngModel)]="pageModel.searchType" value="substance" id="m-search-substance" />
+        <label for="m-search-substance">Sustancia</label>
+      </p>
+      <p>
+        <input name="searchField" type="radio" [(ngModel)]="pageModel.searchType" value="name" id="m-search-name" />
+        <label for="m-search-name">Nombre</label>
+      </p>
+
+      <br />
+      <input [(ngModel)]="pageModel.hint" class="hint" (keyup.enter)="searchDrug()" placeholder="Medicamento" /> -->
+    </div>
+
+    <div class="grid-container">
+      <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
+      </ag-grid-angular>
+    </div>
+    <div class="right">
+      <button (click)="export()" class="waves-effect waves-light btn">EXPORTAR</button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedInvoice" class="selected-container">
+    <div class="enhaced">
+      <h5>Factura seleccionada</h5>
+
+      <div class="client-container">
+        <h4>Cliente</h4>
+        <table>
+          <tr>
+            <td>Cliente:</td>
+            <td class="info">{{selectedInvoice.clientObject.name}}</td>
+          </tr>
+          <tr>
+            <td>RFC:</td>
+            <td class="info">{{selectedInvoice.clientObject.rfc}}</td>
+          </tr>
+          <tr>
+            <td>Dirección: </td>
+            <td class="info">{{selectedInvoice.clientObject.address}}</td>
+          </tr>
+          <tr>
+            <td>Correo:</td>
+            <td class="info">{{selectedInvoice.clientObject.mail}}</td>
+          </tr>
+          <tr>
+            <td>Método de pago:</td>
+            <td class="info">{{selectedInvoice.paymentMethod}}</td>
+          </tr>
+          <tr>
+            <td>Tipo de pago:</td>
+            <td class="info">{{selectedInvoice.paymentType}}</td>
+          </tr>
+          <tr *ngIf="selectedInvoice.paymentType != '01'">
+            <td>Cuenta de pago:</td>
+            <td class="info">{{selectedInvoice.paymentAccount}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="selectedInvoice.type == 'mi'">
+      <h5>Estudios</h5>
+      <table>
+        <thead>
+          <tr>
+            <td>Cantidad</td>
+            <td>Estudio</td>
+            <td>Importe unitario</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mi of selectedInvoice.saleObject.mis">
+            <td>{{mi.qty}}</td>
+            <td>{{mi.mi}}</td>
+            <td> {{mi.price_discount}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="selectedInvoice.type == 'ph'">
+      <h5>Medicamentos</h5>
+      <table>
+        <thead>
+          <tr>
+            <td>Cantidad</td>
+            <td>Estudio</td>
+            <td>Importe unitario</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of selectedInvoice.saleObject.drugs">
+            <td>{{d.qty}}</td>
+            <td>{{d.name}} - {{d.desc}}</td>
+            <td> {{d.price_discount}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="right">Total:{{selectedInvoice.total}}</h4>
+  </div>
+  <br />
+  <br />
+
+</div>

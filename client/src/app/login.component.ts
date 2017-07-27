@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
     this.usrService.init(this.pageModel.usr, this.pageModel.pass)
       .then(u => {
         var r = JSON.parse(u.role);
+        console.log(r)
 
         if (r["ph"] == "adm" && r["mi"] == "adm") {
           this.router.navigate(['./sales/'])

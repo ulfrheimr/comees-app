@@ -26,6 +26,13 @@ export class ClientService implements OnInit {
     return Promise.reject(error.message || error);
   }
 
+  getClient(id: string): Promise<Client> {
+    return this.http.get(this.uri + "/" + id)
+      .toPromise()
+      .then(c => c.json().data)
+      .catch(this.handleError)
+  }
+
   getClients(by: string, name: string): Promise<Client[]> {
     return this.http.get(this.uri + "?id=" + name + "&by=" + by)
       .toPromise()

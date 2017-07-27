@@ -281,13 +281,13 @@ export class PhSalesComponent implements OnInit {
     var url = this.router.url.split('/');
     let routeUrl: string = url.slice(1, 2).reduce((x, y) => x + "/" + y, "");
 
-    var total = this.pageModel.amount - this.getTotalDiscount();
+    var total = parseFloat((this.pageModel.amount - this.getTotalDiscount()).toFixed(2));
     let s: any[] = this.sale.map(x => {
       return {
         qty: x.qty,
         drug: x.code,
-        sale_price: x.sale_price,
-        price_discount: x.price_discount,
+        sale_price: parseFloat(x.sale_price).toFixed(2),
+        price_discount: parseFloat(x.price_discount).toFixed(2),
         discount: this.pageModel.discountCode
       }
     });

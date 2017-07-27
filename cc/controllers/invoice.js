@@ -39,7 +39,7 @@ var saveInvoice = (invoice) => {
     i.type = invoice.type;
     i.paymentType = invoice.paymentType;
     i.paymentMethod = "PUE";
-    i.paymentAccount = invoice.account;
+    i.paymentAccount = invoice.paymentAccount;
     i.timestamp = new Date();
     i.is_invoiced = false;
 
@@ -69,8 +69,9 @@ var i = {
     var id_sale = req.body.id_sale;
     var type = req.body.type;
     var paymentType = req.body.paymentType;
-    var account = paymentType == "04" || paymentType == "28" ?
+    var account = paymentType != "01" ?
       req.body.account : null;
+
 
     if (paymentWay[paymentType] == null)
       res.status(500).send("Método de pago inválido");

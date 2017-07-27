@@ -1,0 +1,12 @@
+.client-container {
+  width: 60%;
+  margin: 0 auto;
+}
+
+td {
+  padding: 5px 5px !important;
+}
+
+.info{
+  font-weight: normal;
+}

@@ -13,28 +13,29 @@ function readFile(path) {
   var fileContents = fs.readFileSync(path, 'binary');
   var lines = fileContents.toString().split('\n');
 
-  var items = lines.map((item) => {
-    var i = item.replace("\r", "").split(",");
+  var items = lines
+    .filter((x) => x != "")
+    .map((item) => {
+      var i = item.replace("\r", "").split(",");
+      return {
+        code: i[0],
+        name: i[1].toLowerCase(),
+        substance: i[2].toLowerCase(),
+        pres: i[3].toLowerCase(),
+        dosage: i[4].toLowerCase(),
+        qty: i[5],
+        lab: i[6].toLowerCase(),
+        price: i[7],
+        max: i[8],
+        ssa: i[9].split(' ')[i[9].split(" ").length - 1],
+        desc: i[10].toLowerCase(),
+        stock: i[11],
+        cad: i[12],
+        follow: false
+      };
+    })
 
-    return {
-      code: i[0],
-      name: i[1].toLowerCase(),
-      substance: i[2].toLowerCase(),
-      pres: i[3].toLowerCase(),
-      dosage: i[4].toLowerCase(),
-      qty: i[5],
-      lab: i[6].toLowerCase(),
-      price: i[7],
-      max: i[8],
-      ssa: i[9].split(' ')[i[9].split(" ").length - 1],
-      desc: i[10].toLowerCase(),
-      stock: i[11],
-      cad: i[12],
-      follow: false
-    };
-  })
-
-  return items;
+  return items.slice(1);
 }
 
 function getLabs(labs) {
@@ -157,9 +158,11 @@ function getPress(press) {
 }
 
 function getStock(d) {
+
   return new Promise((resolve, reject) => {
     imp.getStock(d)
       .then((d) => {
+
         resolve(d);
       })
       .catch((err) => reject(err));
@@ -238,10 +241,10 @@ function importDrugs(path, buy_place) {
               substance: capitalize.words(drug.substance),
               id_presentation: press[drug.pres],
               dosage: drug.dosage,
-              qty: 14,
+              qty: drug.qty,
               id_lab: labs[drug.lab],
-              sale_price: 0,
-              max_price: isNaN(drug.max_price) ? 0 : drug.max_price,
+              sale_price: drug.price,
+              max_price: isNaN(drug.max) ? 0 : drug.max,
               cat: 16,
               ssa: drug.ssa,
               desc: drug.desc,
@@ -299,12 +302,15 @@ function readMis(path) {
     .filter(x => x != "")
     .map((item) => {
       var i = item.split(",");
+
       return {
         name: i[0].toLowerCase(),
-        cat: i[1].toLowerCase(),
-        price: i[2],
-        desc: i[3].toLowerCase(),
-        available: parseInt(i[4]) == 1
+        cat: i[5].toLowerCase(),
+        price: i[7],
+        desc: i[1].toLowerCase(),
+        available: parseInt(i[8]) == 1,
+        sample: i[4].toLowerCase(),
+        delivery: i[2].toLowerCase()
       };
     })
 
@@ -313,6 +319,10 @@ function readMis(path) {
 
 function importMis(path) {
   var items = readMis(path).slice(1);
+
+  items = items.filter(x => x.available);
+
+
   getCats([...new Set(items.map(i => capitalize.words(i['cat'])))])
     .then((catsDB) => {
       console.log("Correctly resolved MI cats");
@@ -360,5 +370,5 @@ function importMis(path) {
 
 
 
-importMis('/Users/rrivera/Desktop/svcs.csv')
-// startImporting('/Users/ulfrheimr/Desktop/lst.csv', "amsa");
+importMis('/Users/ulfrheimr/Desktop/svc.csv')
+// importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");

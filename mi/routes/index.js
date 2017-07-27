@@ -5,6 +5,8 @@ var MIController = require('../controllers/mi');
 var PhysComissionController = require('../controllers/phys-comission')
 var PhysMiController = require('../controllers/phys-mi');
 var SaleController = require('../controllers/sale');
+var InvoicedMIController = require('../controllers/invoiced-mis');
+var FacturerController = require('../controllers/facturer');
 
 
 var router = express.Router();
@@ -16,10 +18,19 @@ router.route('/cats')
   .put(CatController.putCat)
   .get(CatController.getCats);
 
+router.route('/facturers')
+  // {name}
+  .put(FacturerController.putFacturer)
+  .get(FacturerController.getFacturers);
+
 router.route('/mis')
-  // {name, catId, price, desc}
+  // {name, catId, price, desc, delivery, sample}
   .put(MIController.putMI)
   .get(MIController.getMIs);
+
+router.route('/invoiced_mis')
+  .put(InvoicedMIController.putMi)
+  .get(InvoicedMIController.getMis);
 
 router.route('/phys_comissions')
   // physId,bottom,perc

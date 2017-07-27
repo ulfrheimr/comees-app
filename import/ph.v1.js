@@ -117,6 +117,7 @@ var i = {
       // code, name, substance, id_presentation, dosage, qty,
       // id_lab, sale_price, max_price, cat, ssa, desc
 
+      console.log(drug);
       var d = querystring.stringify({
         code: drug.code,
         name: drug.name,
@@ -157,6 +158,7 @@ var i = {
     });
   },
   getStock: (drug) => {
+
     return new Promise((resolve, reject) => {
       var req = http.get({
         hostname: config.srvr.ph.address,

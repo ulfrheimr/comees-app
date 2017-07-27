@@ -8,6 +8,8 @@ var saveMI = (mi) => {
     m.price = mi.price;
     m.description = mi.desc;
     m.category = mi.catId;
+    m.delivery_time = mi.delivery;
+    m.sample = mi.sample;
 
     m.save((err, mis) => {
       if (err) reject(err);
@@ -40,7 +42,9 @@ var s = {
         name: req.body.name,
         price: req.body.price,
         catId: req.body.catId,
-        desc: req.body.desc
+        desc: req.body.desc,
+        delivery: req.body.delivery,
+        sample: req.body.sample
       })
       .then((r) => {
         console.log(r);

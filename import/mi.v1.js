@@ -64,7 +64,9 @@ var i = {
         name: capitalize.words(m.name),
         cat: m.cat,
         price: m.price,
-        desc: capitalize.words(m.desc)
+        desc: capitalize.words(m.desc),
+        delivery: m.delivery,
+        sample: capitalize.words(m.sample)
       });
 
       var opts = {
