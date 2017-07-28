@@ -172,7 +172,7 @@
                 Importe recibido:
               </div>
               <div class="sale-enhace">
-                $ <input [(ngModel)]="pageModel.amount" class="hint amount sale-enhace" placeholder="Importe" maxlength="5" />
+                $ <input [(ngModel)]="pageModel.amount" required minlength="1" maxlength="5" class="hint amount sale-enhace" placeholder="Importe" maxlength="5" />
               </div>
             </div>
             <div>
@@ -189,7 +189,9 @@
         </div>
 
       </div>
-
+      <div *ngIf="pageModel.amountError">
+        {{pageModel.amountError}}
+      </div>
     </div>
   </div>
   <div class="modal-footer">

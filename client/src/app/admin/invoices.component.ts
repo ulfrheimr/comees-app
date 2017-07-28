@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { MaterializeAction } from 'angular2-materialize';
 
 import { Angular2Csv } from 'angular2-csv/Angular2-csv';
 
@@ -30,8 +32,11 @@ export class InvoiceComponent implements OnInit {
   private invoices: Object[] = [];
   private gridOptions: GridOptions;
 
-  pageModel;
+  pageModel: any = {};
   selectedInvoice: any;
+
+  modalInvoice = new EventEmitter<string | MaterializeAction>();
+  modalMessage = new EventEmitter<string | MaterializeAction>();
 
   constructor(
     private invoiceService: InvoiceService,
@@ -74,8 +79,11 @@ export class InvoiceComponent implements OnInit {
         colId: "select",
         width: 100
       }
+
     ];
     this.gridOptions.rowData = [];
+
+    this.pageModel.message_confirm = "";
 
     this.getInvoices()
       .then(() => {
@@ -134,6 +142,20 @@ export class InvoiceComponent implements OnInit {
 
   onSelected(d: any): void {
     this.selectedInvoice = d;
+  }
+
+  setAsInvoiced(): void {
+    let id: String = this.selectedInvoice["_id"];
+    console.log(id);
+
+    this.invoiceService.markAsInvoiced(id)
+      .then(() => {
+        this.closeConfirmation();
+        this.notify("Factura correctamente registrada");
+
+      })
+      .catch(this.handleError);
+
   }
 
   export(): void {
@@ -196,7 +218,7 @@ export class InvoiceComponent implements OnInit {
         ])
 
         invoice["saleObject"]["mis"].map((m) => {
-          m["cat"] = 0.0;
+          m["cat"] = 16.0;
           var temp_iva = (parseFloat(m["cat"]) / 100.0) * (parseFloat(m["price_discount"]));
           var temp_total = (parseFloat(m["price_discount"])) * (1.0 - (parseFloat(m["cat"]) / 100.0));
 
@@ -207,8 +229,8 @@ export class InvoiceComponent implements OnInit {
               "2": "Servicio",
               "3": m["mi"],
               "4": m["price_discount"],
-              "5": temp_iva + "",
-              "6": temp_total + ""
+              "5": temp_iva.toFixed(2),
+              "6": temp_total.toFixed(2)
             }
           ])
 
@@ -237,8 +259,8 @@ export class InvoiceComponent implements OnInit {
               "2": "Pieza",
               "3": d["name"] + " - " + d["desc"],
               "4": d["price_discount"],
-              "5": temp_iva + "",
-              "6": temp_total + ""
+              "5": temp_iva.toFixed(2),
+              "6": temp_total.toFixed(2)
             }
           ])
 
@@ -249,13 +271,33 @@ export class InvoiceComponent implements OnInit {
       }
 
       data = data.concat([
-        { "1": "Total iva", "2": total_iva },
-        { "1": "Total", "2": total }
+        { "1": "Total iva", "2": total_iva.toFixed(2) },
+        { "1": "Total", "2": total.toFixed(2) }
       ])
 
 
       console.log(data)
       new Angular2Csv(data, invoice["_id"]);
     });
+  }
+
+  showConfirmation(): void {
+    this.modalInvoice.emit({ action: "modal", params: ['open'] });
+  }
+
+  closeConfirmation(): void {
+    this.invoices = [];
+    this.selectedInvoice = undefined;
+    this.modalInvoice.emit({ action: "modal", params: ['close'] });
+    this.getInvoices()
+      .then(() => {
+        this.gridOptions.api.setRowData(this.invoices);
+      })
+      .catch(this.handleError);
+  }
+
+  notify(message: string): void {
+    this.pageModel.message_confirm = message;
+    this.modalMessage.emit({ action: "modal", params: ['open'] });
   }
 }

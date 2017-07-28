@@ -65,6 +65,7 @@ Promise.all([savePhys, findPhys, updatePhys]).catch((error) => {
 
 var p = {
   putPhys: (req, res, next) => {
+    console.log("asdasdasd");
     var p = {
       mail: req.body.mail,
       code: req.body.code,
@@ -86,7 +87,7 @@ var p = {
         });
       }).catch((err) => res.status(500).send(err));
   },
-  getPhyss: (req, res)=>{
+  getPhyss: (req, res) => {
     findPhys({})
       .then((r) => res.json({
         ok: 1,

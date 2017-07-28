@@ -39,6 +39,7 @@ Promise.all([saveCoupon]).catch((error) => {
 
 var s = {
   putCoupon: (req, res) => {
+    
     var a = {
       code: req.body.code,
       cats: req.body.cats,
@@ -53,6 +54,7 @@ var s = {
       if (CouponCats.cats[x] == null)
         throw new Error("Category not allowed");
     });
+
     saveCoupon({
         code: req.body.code,
         cats: req.body.cats,

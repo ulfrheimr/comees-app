@@ -17,6 +17,8 @@ import { ClientComponent } from './cc/client.component';
 
 import { Sales } from './sales.component';
 
+import { Admin } from './admin/admin.component';
+
 import { LoginComponent } from './login.component';
 
 import { UsrActivate } from './guard/usr-activate';
@@ -58,7 +60,21 @@ const routes: Routes = [
       { path: 'mi', redirectTo: 'mi/sales', pathMatch: 'full' },
       { path: 'mi/sales', component: MiSalesComponent },
       { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
-      { path: 'admin/invoices', component: InvoiceComponent },
+    ]
+  }
+  ,
+  {
+    path: 'admin', component: Admin, canActivate: [UsrActivate],
+    children: [
+      { path: 'ph', redirectTo: 'ph/sales', pathMatch: 'full' },
+      { path: 'ph/sales', component: PhSalesComponent },
+      { path: 'client/:type/:id', component: ClientComponent },
+      { path: 'ph/print-ticket/:id', component: PrintPhTicketComponent },
+      { path: 'ph/search-drug', component: SearchDrugComponent },
+      { path: 'mi', redirectTo: 'mi/sales', pathMatch: 'full' },
+      { path: 'mi/sales', component: MiSalesComponent },
+      { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
+      { path: 'admin/invoices', component: InvoiceComponent }
     ]
   }
 ];

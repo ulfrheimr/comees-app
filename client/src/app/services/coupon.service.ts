@@ -8,6 +8,7 @@ import { Coupon } from '../prots/coupon';
 @Injectable()
 export class CouponService {
   private couponUrl = 'http://localhost:3000/coupons';
+  private refMiUrl = 'http://localhost:3001/phys_discounts';
 
   constructor(private http: Http) { }
 
@@ -19,6 +20,7 @@ export class CouponService {
   }
 
   getCoupon(code: string, segment: string): Promise<Coupon> {
+    console.log()
     return this.http.get(this.couponUrl + "/" + code)
       .toPromise()
       .then(r => {
@@ -40,10 +42,30 @@ export class CouponService {
         if (new Date() >= end_date && new Date() <= init_date)
           throw "Este cupón ha expirado";
 
-        return data[0] as Coupon
+        return data as Coupon
       })
       .catch(this.handleError);
   }
+
+  getRefMiDisc(code: string): Promise<number> {
+
+    return this.http.get(this.refMiUrl + "/" + code + "?by=code")
+      .toPromise()
+      .then(r => {
+        var ok = r.json().ok;
+        var data = r.json().data
+
+        if (ok == 0)
+          throw "No se ha encontrado el cupón";
+
+        if (data == 0)
+          throw "No se ha encontrado el cupón";
+
+        return data;
+      })
+      .catch(this.handleError);
+  }
+
 
   private handleError(error: any): Promise<any> {
     console.log(error);

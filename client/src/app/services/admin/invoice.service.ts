@@ -26,9 +26,24 @@ export class InvoiceService implements OnInit {
   }
 
   getNotInvoiced(): Promise<Invoice[]> {
-    return this.http.get(this.uri + "?invoiced=false")
+    return this.http.get(this.uri + "?invoiced=false&client=true")
       .toPromise()
       .then(c => c.json().data)
       .catch(this.handleError)
+  }
+
+  markAsInvoiced(id): Promise<void> {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    var data = { invoice: id };
+
+    return this.http.post(this.uri, data, { headers: headers })
+      .toPromise()
+      .then(r => {
+        console.log(r)
+        r.json().data._id
+      })
+      .catch(this.handleError);
   }
 }

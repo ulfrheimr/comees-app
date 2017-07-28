@@ -1,0 +1,62 @@
+Create usrs
+We send role as string 'cause on endpoint we make a json.parse
+curl
+  -H 'Content-Type: application/json'
+  -H 'Accept: application/json' -X PUT
+  -d '{"name":"Esmeralda","usr":"mi", "pass":"pass","role":"{\"mi\":\"sales\"}"}'
+  http://127.0.0.1:3000/usrs
+
+
+On endpoint
+  name
+  usr
+  pass
+  role {"mi,ph":"adm,sales"}
+
+Push coupon
+  code d1407
+  cats
+  init_date 2017-06-01
+  end_date 2018-06-01
+  discount 8
+  description Inaug
+
+Here cats is a json object
+curl
+  -H 'Content-Type: application/json'
+  -H 'Accept: application/json'
+  -X PUT
+  -d '{"code":"d1407","init_date":"2017-06-01", "end_date":"2018-06-01", "discount":"8", "description":"Descrpition of coupon",
+  "cats":["mi","ph"]}' http://127.0.0.1:3000/coupons
+
+
+Push physs external
+  mail
+  code
+  phone
+  address
+  external 1
+  name
+  first
+  last
+  rfc
+  account
+curl -H 'Content-Type: application/json'
+  -H 'Accept: application/json' -X PUT
+  -d '{"mail":"chocotron12","code":"01", "phone":"2018-06-01", "address":"Dirección chocotrón", "external":"1", "name":"El", "first":"Choco", "last":"Tron", "account":"47474 Banamex","rfc":""}'
+  http://127.0.0.1:3000/physs
+
+curl -H 'Content-Type: application/json' -H 'Accept: application/json' -X GET http://127.0.0.1:3000/physs
+
+
+
+comission
+use physid not code
+  physId
+  bottom
+  perc
+curl
+  -H 'Content-Type: application/json'
+  -H 'Accept: application/json' -X PUT
+  -d '{"physId":"597b64449863c02eebfcd0a3","bottom":"0", "perc":"5"}'
+  http://127.0.0.1:3001/phys_comissions

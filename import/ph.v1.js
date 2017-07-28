@@ -117,7 +117,6 @@ var i = {
       // code, name, substance, id_presentation, dosage, qty,
       // id_lab, sale_price, max_price, cat, ssa, desc
 
-      console.log(drug);
       var d = querystring.stringify({
         code: drug.code,
         name: drug.name,
@@ -321,6 +320,14 @@ var i = {
       var request = http.request(opts, function(res) {
         res.setEncoding('utf8');
         res.on('data', function(d) {
+          if (d == "Stock isn't find for drug") {
+            console.log("DRUG");
+            console.log(drug);
+            console.log("NOT IMPORTED PLEASE CHECK");
+            reject(d);
+            return
+          }
+
           d = JSON.parse(d)
 
           resolve(d)

@@ -52,14 +52,16 @@ var u = {
       role: req.body.role
     };
 
+
     var r = JSON.parse(u.role);
+
     Object.keys(r).map((x) => {
       if (UsrRoles.platform[x] == undefined)
         throw new Error("No platform allowed");
       if (UsrRoles.level[r[x]] == undefined)
         throw new Error("No level allowed");
     })
-    
+
     createUsr(u)
       .then((r) => {
         res.json({

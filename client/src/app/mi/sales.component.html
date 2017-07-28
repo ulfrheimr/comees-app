@@ -20,10 +20,10 @@
                     <span>{{p.name}}</span>
                   </td>
                   <td>
-                    <span class="ex">{{p.sale_price}}</span>
+                    <span class="ex">{{p.sale_price | number : '1.2-2'}}</span>
                   </td>
                   <td>
-                    <span class="ex">{{p.price_discount}}</span>
+                    <span class="ex">{{p.price_discount | number : '1.2-2' }}</span>
                   </td>
                   <td>
                     <i class="remove material-icons" (click)="removeMi(p.mi)">close</i>
@@ -36,7 +36,7 @@
         </div>
         <br />
         <div class="total right">
-          Total: <span>$ {{saleTotal}}</span>
+          Total: <span>$ {{saleTotal | number : '1.2-2'}}</span>
         </div>
         <br />
         <button (click)="confirmSale()" class="waves-effect waves-light btn">VENDER</button>
@@ -85,7 +85,7 @@
         </tr>
         <tr>
           <td class="info">Precio: </td>
-          <td><span class="coMeEs_dark_bold">$ {{selectedMi.price}}</span></td>
+          <td><span class="coMeEs_dark_bold">$ {{selectedMi.price | number : '1.2-2'}}</span></td>
         </tr>
       </table>
     </div>
@@ -131,14 +131,14 @@
         <div *ngIf="pageModel.discountFound">
           <div class="discount-info">
             <span class="coMeEs_dark_bold">Descuento:</span>
-            <span class="enhaced_discount">{{discount}} %</span>
+            <span class="enhaced_discount">{{discount | number : '1.2-2'}} %</span>
           </div>
           <button (click)="applyDiscount()" class="waves-effect waves-light btn">Aplicar descuento</button>
         </div>
 
         <div class="discount-info" class="right" *ngIf="priceDiscount">
           <span class="coMeEs_dark_bold">Precio con descuento:</span>
-          <span class="enhaced_price"> $ {{priceDiscount}}</span>
+          <span class="enhaced_price"> $ {{priceDiscount | number : '1.2-2'}}</span>
         </div>
         <br />
         <br />
@@ -183,10 +183,10 @@
             <span>{{p.name}}</span>
           </td>
           <td>
-            <span class="ex">$ {{p.sale_price}}</span>
+            <span class="ex">$ {{p.sale_price | number : '1.2-2'}}</span>
           </td>
           <td>
-            <span class="ex">$ {{p.price_discount}}</span>
+            <span class="ex">$ {{p.price_discount | number : '1.2-2'}}</span>
           </td>
         </tr>
       </tbody>
@@ -194,10 +194,10 @@
     </table>
     <br />
     <div class="total sale-enhace">
-      Importe : <span>$ {{getTotal()}}</span>
+      Importe : <span>$ {{getTotal() | number : '1.2-2'}}</span>
     </div>
     <div class="total sale-enhace">
-      Total a pagar con descuento: <span>$ {{getTotalDiscount()}}</span>
+      Total a pagar con descuento: <span>$ {{getTotalDiscount() | number : '1.2-2'}}</span>
     </div>
     <br />
     <br />
@@ -216,7 +216,7 @@
       Por favor confirme el método de pago para la venta.
 
       <div class="total sale-enhace">
-        Total a pagar: <span>$ {{getTotalDiscount()}}</span>
+        Total a pagar: <span>$ {{getTotalDiscount() | number : '1.2-2'}}</span>
       </div>
 
       <div class="payment">
@@ -249,7 +249,7 @@
               Cambio:
             </div>
             <div class="sale-enhace change">
-              $ {{change()}}
+              $ {{change() | number : '1.2-2'}}
             </div>
           </div>
 
@@ -259,7 +259,9 @@
 
         </div>
       </div>
-
+      <div *ngIf="pageModel.amountError">
+        {{pageModel.amountError}}
+      </div>
     </div>
   </div>
   <div class="modal-footer">

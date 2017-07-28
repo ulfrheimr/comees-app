@@ -6,7 +6,7 @@ var MISchema = mongoose.Schema({
     required: true
   },
   delivery_time: {
-    type: Number
+    type: String
   },
   price: {
     type: Number,

@@ -36,6 +36,9 @@ router.route('/phys_comissions')
   // physId,bottom,perc
   .put(PhysComissionController.putPhysComission);
 
+  router.route('/phys_discounts/:phys_id')
+    .get(PhysMiController.getPhysDiscount);
+
 router.route('/phys_comissions/:id')
   .get(PhysComissionController.getPhysCommission);
 

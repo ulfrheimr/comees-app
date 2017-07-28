@@ -55,7 +55,7 @@ export class PhSalesComponent implements OnInit {
   private gridOptions: GridOptions;
 
   ngOnInit(): void {
-    this.pageModel.discountCode = "coupon_test_both"
+    
     this.getDiscount();
 
     this.gridOptions = <GridOptions>{
@@ -118,7 +118,8 @@ export class PhSalesComponent implements OnInit {
       amount: null,
       paymentType: "cash",
       allowConfirm: false,
-      allowSale: true
+      allowSale: true,
+      amountError: undefined
     }
   }
 
@@ -276,6 +277,21 @@ export class PhSalesComponent implements OnInit {
   }
 
   makeSale(): void {
+    if(this.pageModel.paymentType == "cash"){
+      if(!parseFloat(this.pageModel.amount)){
+        this.pageModel.amountError = "Importe no válido";
+        return;
+      }
+
+      if(this.pageModel.amount < this.getTotalDiscount()){
+        this.pageModel.amountError = "El importe tiene que ser mayor";
+        return;
+      }
+    }
+
+
+
+
     this.modalActions.emit({ action: "modal", params: ['close'] });
 
     var url = this.router.url.split('/');

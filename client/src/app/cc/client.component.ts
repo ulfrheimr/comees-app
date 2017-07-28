@@ -53,7 +53,8 @@ export class ClientComponent implements OnInit {
       clientTypeSearch: "rfc",
       hint: "",
       showClientRegistration: false,
-      allowRegister: true
+      allowRegister: true,
+      errorCard: undefined
     }
 
     this.initializeClientModel();
@@ -131,6 +132,9 @@ export class ClientComponent implements OnInit {
     this.pageModel.specifyClient = !e;
     this.pageModel.allowRegister = e;
     this.pageModel.showClientRegistration = false;
+    if (e) {
+      this.selectedClient = undefined;
+    }
   }
 
   initializeClientModel(): void {
@@ -151,6 +155,47 @@ export class ClientComponent implements OnInit {
   }
 
   registerNewClient(): void {
+    var regRFC = RegExp(/^([A-Z,Ñ,&]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$/)
+    var mailReg = RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+    this.clientModel.err_name = undefined;
+    this.clientModel.err_address = undefined;
+    this.clientModel.err_phone = undefined;
+    this.clientModel.err_rfc = undefined;
+    this.clientModel.err_mail = undefined;
+
+    if (this.pageModel.showClientRegistration) {
+      let err: boolean = false;
+
+      if (this.clientModel.name == undefined || this.clientModel.name == "") {
+        this.clientModel.err_name = "El campo no puede estar vacío";
+        err = true;
+      }
+
+      if (this.clientModel.address == undefined || this.clientModel.address == "") {
+        this.clientModel.err_address = "El campo no puede estar vacío";
+        err = true;
+      }
+
+      if (this.clientModel.phone == undefined || !this.clientModel.phone.match(/^[0-9\-\.]{4,15}$/im)) {
+        this.clientModel.err_phone = "El campo solo permite dígitos y el caracter '-'";
+        err = true;
+      }
+
+      if (this.clientModel.rfc == undefined || !this.clientModel.rfc.match(regRFC)) {
+        this.clientModel.err_rfc = "El RFC no es válido y tiene que ser escrito con mayúsculas";
+        err = true;
+      }
+
+      if (this.clientModel.mail == undefined || !this.clientModel.mail.match(mailReg)) {
+        this.clientModel.err_mail = "Debe indicar un correo válido";
+        err = true;
+      }
+
+      if (err)
+        return;
+    }
+
     this.pageModel.allowRegister = true;
 
     let c: Client = new Client();
@@ -178,7 +223,6 @@ export class ClientComponent implements OnInit {
   registerToInvoice(): void {
     var url = this.router.url.split('/');
     let routeUrl: string = url.slice(1, url.length - 3).reduce((x, y) => x + "/" + y, "");
-
 
     this.modalActions.emit({ action: "modal", params: ['close'] });
 
@@ -214,6 +258,25 @@ export class ClientComponent implements OnInit {
   }
 
   confirmInvoice(): void {
+    this.pageModel.errorCard = undefined;
+    if (this.paymentModel.type != "cash" && this.selectedClient) {
+
+      if (this.paymentModel.account == null) {
+        this.pageModel.errorCard = "Se deben capturar los 4 dígitos de la tarjeta";
+        return;
+      }
+      if (this.paymentModel.account.toString().length < 4) {
+        this.pageModel.errorCard = "Se deben capturar los 4 dígitos de la tarjeta";
+        return;
+      }
+
+      if (!parseInt(this.paymentModel.account)) {
+        this.pageModel.errorCard = "Los números de tarjeta no son válidos";
+        return;
+      }
+    }
+
+    console.log("pass")
     this.modalActions.emit({ action: "modal", params: ['open'] });
   }
   closeModal() {

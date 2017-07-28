@@ -91,7 +91,8 @@ export class MiSalesComponent implements OnInit {
       toPayment: false,
       amount: 0.0,
       paymentType: "cash",
-      allowAdd: true
+      allowAdd: true,
+      amountError: undefined
     }
   }
 
@@ -99,6 +100,8 @@ export class MiSalesComponent implements OnInit {
     var prods = Object.keys(this.miHash).map((key, index) => {
       return this.miHash[key];
     });
+
+    console.log(prods)
 
     this.saleTotal = prods
       .map((x) => x.price_discount)
@@ -133,15 +136,32 @@ export class MiSalesComponent implements OnInit {
 
     this.pageModel.notFoundDiscount = null;
     this.pageModel.discountFound = null;
-    this.couponService.getCoupon(this.pageModel.discountCode, segment)
-      .then((d) => {
-        this.pageModel.discountFound = true;
-        this.discount = d.discount;
-      })
-      .catch((err) => {
-        this.pageModel.notFoundDiscount = true;
-        this.discount = 0;
-      })
+
+    if (this.pageModel.discountType == "coupon") {
+      this.couponService.getCoupon(this.pageModel.discountCode, segment)
+        .then((d) => {
+          console.log(d)
+          this.pageModel.discountFound = true;
+          this.discount = d.discount;
+        })
+        .catch((err) => {
+          this.pageModel.notFoundDiscount = true;
+          this.discount = 0;
+        })
+    } else {
+      this.couponService.getRefMiDisc(this.pageModel.discountCode)
+        .then((d) => {
+          console.log(d)
+          this.pageModel.discountFound = true;
+          this.discount = d;
+        })
+        .catch((err) => {
+          this.pageModel.notFoundDiscount = true;
+          this.discount = 0;
+        })
+    }
+
+
   }
 
   applyDiscount(): void {
@@ -157,21 +177,33 @@ export class MiSalesComponent implements OnInit {
   }
 
   addToSale(): void {
+    console.log("DISC")
+    console.log(this.pageModel.discountType)
+    let priceDiscount: number = this.priceDiscount == undefined ? this.selectedMi.price : this.priceDiscount
+    priceDiscount = parseFloat(priceDiscount.toFixed(2))
+
+    console.log(this.selectedMi.priceDiscount)
     if (this.miHash[this.selectedMi._id]) {
+
       this.miHash[this.selectedMi._id]["qty"] += 1;
       this.miHash[this.selectedMi._id]["sale_price"] += this.selectedMi.price;
-      this.miHash[this.selectedMi._id]["price_discount"] += this.priceDiscount;
+      this.miHash[this.selectedMi._id]["price_discount"] += priceDiscount;
     } else {
       this.miHash[this.selectedMi._id] = {
         qty: 1,
         mi: this.selectedMi._id, //id_mi
         name: this.selectedMi.name,
         sale_price: this.selectedMi.price,
-        price_discount: this.priceDiscount == undefined ? this.selectedMi.price : this.priceDiscount,
+        price_discount: priceDiscount,
         type_discount: this.pageModel.discountType,
-        discount: this.discount
+        discount: this.pageModel.discountCode
       }
     }
+
+
+    this.priceDiscount = undefined;
+    this.pageModel.discountType = "";
+    this.discount = 0
 
     this.setProducts();
   }
@@ -189,6 +221,18 @@ export class MiSalesComponent implements OnInit {
   }
 
   makeSale(): void {
+    if (this.pageModel.paymentType == "cash") {
+      if (!parseFloat(this.pageModel.amount)) {
+        this.pageModel.amountError = "Importe no válido";
+        return;
+      }
+
+      if (this.pageModel.amount < this.getTotalDiscount()) {
+        this.pageModel.amountError = "El importe tiene que ser mayor";
+        return;
+      }
+    }
+
     var url = this.router.url.split('/');
     let routeUrl: string = url.slice(1, 2).reduce((x, y) => x + "/" + y, "");
 

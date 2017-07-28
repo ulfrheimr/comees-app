@@ -51,6 +51,23 @@ var saveInvoice = (invoice) => {
   });
 }
 
+var setAsInvoiced = (invoice) => {
+  return new Promise((resolve, reject) => {
+    Invoice.findOneAndUpdate({
+      _id: invoice
+    }, {
+      is_invoiced: true
+    }, {
+      upsert: true
+    }, function(err, i) {
+      if (err) reject(err);
+
+      console.log(i);
+      return resolve(i);
+    });
+  });
+}
+
 var findInvoices = (query) => {
   console.log(query);
   return new Promise((resolve, reject) => {
@@ -140,6 +157,7 @@ var i = {
     var init = req.query.init || "";
     var end = req.query.end || "";
     var invoiced = req.query.invoiced || "";
+    var client = req.query.client || "";
 
     var query = {}
 
@@ -159,6 +177,10 @@ var i = {
 
     if (invoiced != "")
       query["is_invoiced"] = JSON.parse(invoiced);
+    if (client != "")
+      query["client"] = {
+        $ne: null
+      };
 
     findInvoices(query)
       .then(is => {
@@ -169,6 +191,18 @@ var i = {
       })
       .catch((err) => res.status(500).send(err));
 
+  },
+  markAsInvoiced: (req, res) => {
+    var id_invoice = req.body.invoice;
+
+    setAsInvoiced(id_invoice)
+      .then((i) => {
+        res.json({
+          ok: 1,
+          data: i
+        });
+      })
+      .catch((err) => res.status(500).send(err));
   }
 }
 

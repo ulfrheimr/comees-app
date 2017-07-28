@@ -30,7 +30,7 @@ var SaleSchema = mongoose.Schema({
       type: String
     },
     type_discount: {
-      type: Number
+      type: String
     }
   }]
 });

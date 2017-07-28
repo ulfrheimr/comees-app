@@ -66,6 +66,7 @@ var c = {
     .catch((err) => res.status(500).send(err));
   },
   queryPhysComission: (query) => {
+    console.log(query);
     return findComission(query);
   }
 };

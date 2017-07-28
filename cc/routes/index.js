@@ -49,8 +49,9 @@ router.route('/used_coupons')
 router.route('/invoices')
   // id_client,id_sale, type, paymentType
   .put(InvoiceController.putInvoice)
-  // init, end, invoiced
-  .get(InvoiceController.getInvoices);
+  // init, end, invoiced, client
+  .get(InvoiceController.getInvoices)
+  .post(InvoiceController.markAsInvoiced);
 
 router.route('/usrs')
   // name, usr, pass, role

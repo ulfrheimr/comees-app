@@ -13,8 +13,11 @@ var options = {
 
 var p = {
   getPhys: (query) => {
+    console.log(query);
     var queryString = "/physs/" + query.id + "?by=" + query.by
     var prot = http;
+
+    console.log(queryString);
 
     options.path = queryString;
     return new Promise((resolve, reject) => {
@@ -27,15 +30,21 @@ var p = {
         });
 
         res.on('end', function() {
-          var obj = JSON.parse(output);
-          resolve({
-            status: res.statusCode,
-            data: obj
-          });
+          if (("" + res.statusCode).match(/^2\d\d$/)) {
+            var obj = JSON.parse(output);
+            resolve({
+              status: res.statusCode,
+              data: obj
+            });
+          } else if (("" + res.statusCode).match(/^5\d\d$/)) {
+            console.log("EVERYTHING BAD");
+            reject("01:Not found phys")
+          }
         });
       });
 
       req.on('error', function(err) {
+        console.log("ERR");
         reject(err);
       });
 

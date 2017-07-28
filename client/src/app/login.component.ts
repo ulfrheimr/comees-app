@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
         console.log(r)
 
         if (r["ph"] == "adm" && r["mi"] == "adm") {
-          this.router.navigate(['./sales/'])
+          this.router.navigate(['./admin/'])
         } else if (r["ph"] == "sales" && r["mi"] == "sales")
           this.router.navigate(['./sales/'])
         else if (r["ph"] == "adm") {

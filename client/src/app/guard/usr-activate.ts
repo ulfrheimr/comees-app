@@ -28,7 +28,10 @@ export class UsrActivate implements CanActivate {
       return true;
     }
     else if (r["ph"] == "sales" && r["mi"] == "sales") {
-      return true;
+      if (next == "sales")
+        return true;
+
+      return false;
     }
     else if (r["ph"] == "adm") {
 

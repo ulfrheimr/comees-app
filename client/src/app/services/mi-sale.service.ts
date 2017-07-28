@@ -44,7 +44,8 @@ export class MiSaleService {
     headers.append('Content-Type', 'application/json');
 
     mi['id_sale'] = idSale;
-    mi['type_discount'] = 0
+
+    console.log(mi)
 
     return this.http.post(this.uri, mi, { headers: headers })
       .toPromise()
@@ -84,12 +85,14 @@ export class MiSaleService {
   }
 
   makeSale(mis: any[]): Promise<string> {
+
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     return new Promise((resolve, reject) => {
       this.createSale()
         .then(id => {
+          console.log(mis)
           this.addMi(id, mis)
             .then(idSale => {
               resolve(id)

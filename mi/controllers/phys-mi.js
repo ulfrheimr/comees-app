@@ -36,6 +36,7 @@ var findPhysMi = (query) => {
     PhysMI.find(query)
       .populate('mi')
       .exec((err, pmis) => {
+        console.log("RESPONSE PMIS");
         console.log(pmis);
         if (err) reject(err);
 
@@ -62,12 +63,15 @@ var findPhysMIbyDate = (sender) => {
       }
     ]
   }
+
+  console.log("FIND PHYS MI");
   console.log(query);
   return findPhysMi(query);
 }
 
 
 var getDiscountbyDate = (id, init, end) => {
+
   return new Promise((resolve, reject) => {
     findPhysMIbyDate({
         id: id,
@@ -76,6 +80,9 @@ var getDiscountbyDate = (id, init, end) => {
       })
       .then((r) => {
         var count_mis = r.length;
+
+        console.log("COUNT MIS: " + count_mis)
+        console.log(id);
 
         PhysComissionController.queryPhysComission({
             $and: [{
@@ -105,10 +112,34 @@ Promise.all([savePhysMI]).catch((error) => {
 });
 
 var c = {
-  putPhysMI: (req, res) => {
+  sendPhysMi: (idPhys, idMi, price) => {
     var today = new Date();
     var firstOfMonth = new Date(today.getUTCFullYear(), today.getUTCMonth(), 1);
+
+    getDiscountbyDate(idPhys, firstOfMonth, today)
+      .then((discount => {
+
+        savePhysMI({
+            phys: idPhys,
+            mi: idMi,
+            price: price,
+            commission: discount
+          })
+          .then((r) => {
+            console.log(r);
+            // res.json({
+            //   ok: 1,
+            //   message: "Phys MI added"
+            // });
+          })
+          .catch((err) => console.log(err));
+      }))
+      .catch((err) => console.log(err));
+  },
+  putPhysMI: (req, res) => {
     var id = req.body.id_phys;
+    var today = new Date();
+    var firstOfMonth = new Date(today.getUTCFullYear(), today.getUTCMonth(), 1);
 
     getDiscountbyDate(id, firstOfMonth, today)
       .then((discount => {
@@ -133,6 +164,7 @@ var c = {
 
   },
   getPhysMI: (req, res) => {
+    console.log("asdasd");
     var seachField = req.query.by || "id";
     var phys_id = req.params.phys_id;
     var initDate = req.query.init;
@@ -184,14 +216,35 @@ var c = {
         break;
     }
 
-    queryPhys(query)
-      .then((id) => {
+    PhysController.getPhys({
+        id: id,
+        by: seachField
+      })
+      .then((r) => {
+        console.log(r);
+
+        if (r.data.data.length == 0) {
+          res.json({
+            ok: 1,
+            data: 0
+          });
+        }
+
+        var physsID = r.data.data[0]["_id"];
+
 
         var today = new Date();
         var firstOfMonth = new Date(today.getUTCFullYear(), today.getUTCMonth(), 1);
 
-        getDiscountbyDate(id, firstOfMonth, today)
+        console.log("PHYSS ID");
+        console.log(physsID);
+
+        getDiscountbyDate(physsID, firstOfMonth, today)
           .then((discount => {
+            console.log("asdasd");
+            console.log(discount);
+
+
             res.json({
               ok: 1,
               data: discount
@@ -200,7 +253,16 @@ var c = {
           .catch((err) => res.status(500).send(err));
 
       })
-      .catch((err) => res.status(500).send(err));
+      .catch((err) => {
+        if (err.split(":")[0] == "01") {
+          res.json({
+            ok: 0,
+            data: 0
+          });
+        }
+
+        res.status(500).send(err)
+      });
   },
   queryPhysMI: (query) => {
     return findPhysMi(query);

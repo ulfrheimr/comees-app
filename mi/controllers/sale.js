@@ -1,4 +1,6 @@
 var Sale = require('../models/sale');
+var PhysController = require('../controllers/phys');
+var PhysMiController = require('../controllers/phys-mi');
 
 var createSale = (usr) => {
   return new Promise((resolve, reject) => {
@@ -25,6 +27,33 @@ var addMi = (product, id) => {
       type_discount: product.type,
       discount: product.discount
     }
+
+    console.log("MI ADD");
+    console.log(m["type_discount"]);
+    if (m["type_discount"] == "ref_mi") {
+      PhysController.getPhys({
+          id: m.discount,
+          by: "code"
+        })
+        .then((r) => {
+          if (r.data.data.length == 0) {
+            console.log("Phys not found");
+            return;
+          }
+
+          var physsID = r.data.data[0]["_id"];
+          console.log(physsID);
+          console.log(m.mi);
+
+          PhysMiController.sendPhysMi(physsID, m.mi, m.price_with_discount)
+
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    console.log("MI WRONG");
 
     Sale.findOne({
       _id: id
@@ -73,9 +102,10 @@ Promise.all([createSale]).catch((error) => {
 var s = {
   putSale: (req, res) => {
     var usr = req.body.usr;
-    
+
     createSale(usr)
       .then((sale) => {
+        console.log(sale);
         res.json({
           ok: 1,
           data: sale
@@ -84,6 +114,7 @@ var s = {
       .catch((err) => res.status(500).send(err));
   },
   addMis: (req, res) => {
+    console.log("ADD");
     addMi({
         qty: req.body.qty,
         mi: req.body.mi,

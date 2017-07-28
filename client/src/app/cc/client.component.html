@@ -54,13 +54,17 @@
   <div class="search-container" *ngIf="pageModel.showClientRegistration">
     Por favor registra los datos del cliente.
 
+
     <table style="width:100%">
       <tr>
         <td style="width:30%">
           RFC:
         </td>
         <td>
-          <input class="hint" [(ngModel)]="clientModel.rfc" placeholder="RFC" />
+          <input class="hint" [(ngModel)]="clientModel.rfc" placeholder="RFC" maxlength="13"/>
+          <div *ngIf="clientModel.err_rfc">
+            {{clientModel.err_rfc}}
+          </div>
         </td>
       </tr>
       <tr>
@@ -69,6 +73,9 @@
         </td>
         <td>
           <input class="hint" [(ngModel)]="clientModel.name" placeholder="Nombre" />
+          <div *ngIf="clientModel.err_name">
+            {{clientModel.err_name}}
+          </div>
         </td>
       </tr>
       <tr>
@@ -76,7 +83,10 @@
           Teléfono:
         </td>
         <td>
-          <input class="hint" [(ngModel)]="clientModel.phone" placeholder="Teléfono" />
+          <input class="hint" [(ngModel)]="clientModel.phone" maxlength="15" placeholder="Teléfono" />
+          <div *ngIf="clientModel.err_phone">
+            {{clientModel.err_phone}}
+          </div>
         </td>
       </tr>
       <tr>
@@ -85,6 +95,9 @@
         </td>
         <td>
           <input class="hint" [(ngModel)]="clientModel.mail" placeholder="Correo Electrónico" />
+          <div *ngIf="clientModel.err_mail">
+            {{clientModel.err_mail}}
+          </div>
         </td>
       </tr>
       <tr>
@@ -93,6 +106,9 @@
         </td>
         <td>
           <input class="hint" [(ngModel)]="clientModel.address" placeholder="Dirección" />
+          <div *ngIf="clientModel.err_address">
+            {{clientModel.err_address}}
+          </div>
         </td>
       </tr>
     </table>
@@ -161,6 +177,9 @@
         <div>
           <input class="hint" [(ngModel)]="paymentModel.account" placeholder="Ultimos 4 dígitos" maxlength="4" />
         </div>
+        <div *ngIf="pageModel.errorCard">
+          {{pageModel.errorCard}}
+        </div>
       </div>
     </div>
   </div>
@@ -170,6 +189,7 @@
   <div class="right">
     <button [disabled]="!pageModel.allowRegister" (click)="confirmInvoice()" class="waves-effect waves-light btn">REGISTRAR PARA FACTURAR</button>
   </div>
+
 </div>
 
 <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
@@ -177,7 +197,6 @@
     <h4>Confirmación de facturación</h4>
     <div>
       Confirme para registrar para facturación
-
       <div class="client-enhace">
         {{invoiceClient()}}
       </div>

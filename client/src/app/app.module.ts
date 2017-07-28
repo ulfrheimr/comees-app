@@ -20,6 +20,8 @@ import { ClientComponent } from './cc/client.component';
 
 import { Sales } from './sales.component';
 
+import { Admin } from './admin/admin.component';
+
 import { MUtils } from './utils';
 
 import { AppComponent } from './app.component';
@@ -49,6 +51,7 @@ import { ClientService } from './services/client.service';
     Mi,
     MiSalesComponent,
     PrintMiTicketComponent,
+    Admin,
     Sales,
     InvoiceComponent,
     AppComponent,
