@@ -1,4 +1,4 @@
-FROM node
+FROM teracy/angular-cli
 
 WORKDIR /usr/app
 

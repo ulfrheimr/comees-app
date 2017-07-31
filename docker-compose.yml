@@ -24,6 +24,16 @@ services:
       - "3002:3002"
     depends_on:
       - data
+  client:
+    container_name:
+      "client"
+    build:
+      context:      ./client
+    image:
+      "client"
+    command:        ng serve --host 0.0.0.0
+    ports:
+      - "8085:8085"
   mi:
     container_name:
       "mi"
@@ -38,8 +48,5 @@ services:
       - data
   data:
     image:          mongo
-    command:        mongod
     ports:
       - "27017:27017"
-    volumes:
-      - /Users/rrivera/data:/data/db:rw
