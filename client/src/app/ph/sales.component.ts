@@ -55,7 +55,7 @@ export class PhSalesComponent implements OnInit {
   private gridOptions: GridOptions;
 
   ngOnInit(): void {
-    
+
     this.getDiscount();
 
     this.gridOptions = <GridOptions>{
@@ -214,7 +214,7 @@ export class PhSalesComponent implements OnInit {
 
     this.pageModel.notFoundDiscount = null;
     this.pageModel.discountFound = null;
-    this.couponService.getCoupon(this.pageModel.discountCode, segment)
+    this.couponService.getCoupon(this.pageModel.discountCode, "ph")
       .then((d) => {
         this.pageModel.discountFound = true;
         this.discount = d.discount;

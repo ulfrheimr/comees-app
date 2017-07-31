@@ -32,6 +32,9 @@ var InvoiceSchema = mongoose.Schema({
   },
   paymentAccount: {
     type: String
+  },
+  serial: {
+    type: String
   }
 });
 

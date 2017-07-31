@@ -161,13 +161,42 @@ export class InvoiceComponent implements OnInit {
   export(): void {
     this.invoices.map((invoice) => {
       var data = []
+      var dateInvoice = invoice["timestamp"].split("T")[0];
+      var timeInvoice = invoice["timestamp"].split("T")[1].split(".")[0];
       var client = invoice["clientObject"];
       var total = 0.0;
       var total_iva = 0.0;
 
-      data = [{
-        "1": "Cliente"
-      }, {
+
+      data = [
+        { "1": "Datos del emisor" },
+        {
+          "1": "coMéEs",
+          "2": "consultorios Médicos Especializados",
+          "3": "Serie",
+          "4": invoice["serial"]
+        },
+        {
+          "1": "Nombre Fiscal",
+          "2": "Mercedes Camacho Meda",
+          "3": "Fecha",
+          "4": dateInvoice + "  " + timeInvoice
+        },
+        {
+          "1": "RFC",
+          "2": "CAMM590430DV4"
+        },
+        {
+          "1": "Regimen Fiscal",
+          "2": "Régimen de incorporación fiscal"
+        },
+        {
+          "1": "Lugar de Expedición",
+          "2": "\"Gustavo A. Madero\,Ciudad de México\""
+        },
+        {
+          "1": "Cliente"
+        }, {
           "1": "Cliente",
           "2": client["name"],
         }, {
@@ -275,8 +304,6 @@ export class InvoiceComponent implements OnInit {
         { "1": "Total", "2": total.toFixed(2) }
       ])
 
-
-      console.log(data)
       new Angular2Csv(data, invoice["_id"]);
     });
   }

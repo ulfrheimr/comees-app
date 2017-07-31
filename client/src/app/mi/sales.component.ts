@@ -138,7 +138,7 @@ export class MiSalesComponent implements OnInit {
     this.pageModel.discountFound = null;
 
     if (this.pageModel.discountType == "coupon") {
-      this.couponService.getCoupon(this.pageModel.discountCode, segment)
+      this.couponService.getCoupon(this.pageModel.discountCode, "mi")
         .then((d) => {
           console.log(d)
           this.pageModel.discountFound = true;

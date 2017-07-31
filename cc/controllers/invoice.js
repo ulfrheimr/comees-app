@@ -43,11 +43,45 @@ var saveInvoice = (invoice) => {
     i.timestamp = new Date();
     i.is_invoiced = false;
 
-    i.save((err, invoice) => {
-      if (err) reject(err);
+    if (invoice.client != null) {
+      getLastInvoice()
+        .then((li) => {
+          console.log(li);
+          if (li == null) {
+            li = {};
+          }
+          var next = 1;
+          var currentYear = new Date().getFullYear();
+          var serial = "F-" + currentYear + "-" + next;
 
-      resolve(invoice);
-    });
+          if (li["serial"]) {
+            var lastInvoiceYear = new Date(li["timestamp"]).getFullYear();
+
+            if (currentYear == lastInvoiceYear) {
+              var current = parseInt(li["serial"].split("-")[2])
+              next = current + 1;
+              serial = "F-" + lastInvoiceYear + "-" + next;
+            }
+          }
+          i["serial"] = serial;
+
+          i.save((err, invoice) => {
+            if (err) reject(err);
+
+            resolve(invoice);
+          });
+        })
+        .catch((err) => reject(err))
+    } else {
+      i.save((err, invoice) => {
+        if (err) reject(err);
+
+        resolve(invoice);
+      });
+    }
+
+
+
   });
 }
 
@@ -68,10 +102,45 @@ var setAsInvoiced = (invoice) => {
   });
 }
 
+var getLastInvoice = () => {
+  return new Promise((resolve, reject) => {
+    var query = {}
+
+    query["$and"] = [{
+        timestamp: {
+          // min sec millis
+          $lte: new Date()
+        }
+      },
+      {
+        client: {
+          $ne: null
+        }
+      }
+    ];
+
+    Invoice.findOne(query)
+      .sort({
+        timestamp: -1
+      })
+      .exec((err, is) => {
+        if (err)
+          reject(err)
+
+        resolve(is);
+      });
+  });
+
+
+}
+
 var findInvoices = (query) => {
   console.log(query);
   return new Promise((resolve, reject) => {
     Invoice.find(query)
+      .sort({
+        timestamp: -1
+      })
       .exec((err, is) => {
         if (err) reject(err);
 
@@ -190,7 +259,6 @@ var i = {
         })
       })
       .catch((err) => res.status(500).send(err));
-
   },
   markAsInvoiced: (req, res) => {
     var id_invoice = req.body.invoice;

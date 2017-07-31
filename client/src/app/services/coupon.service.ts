@@ -20,7 +20,6 @@ export class CouponService {
   }
 
   getCoupon(code: string, segment: string): Promise<Coupon> {
-    console.log()
     return this.http.get(this.couponUrl + "/" + code)
       .toPromise()
       .then(r => {
@@ -30,6 +29,8 @@ export class CouponService {
           throw "No se ha encontrado el cupón";
 
         data = data[0];
+
+        
 
         if (data["categories"].indexOf(segment) == -1)
           throw "Este cupón no es aplicable a la categoría";

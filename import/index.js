@@ -376,8 +376,8 @@ function addDrugsToPurchase(drugs, purchase) {
 
 
 
-  importMis('/Users/rrivera/Desktop/svc.csv')
-  // importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
+  // importMis('/Users/rrivera/Desktop/svc.csv')
+  importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
 
   // importMis('/Users/ulfrheimr/Desktop/svc.csv')
   // importDrugs('/Users/ulfrheimr/Desktop/lst.csv', "amsa");
