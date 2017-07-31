@@ -1,5 +1,5 @@
 var config = {
-  data:"localhost"
+  data:"data"
 }
 
 module.exports = config;
