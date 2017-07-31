@@ -7,7 +7,8 @@ import {Mi} from '../prots/mi';
 
 @Injectable()
 export class MiService {
-  private miUrl = 'http://localhost:3001/mis';
+  private miUrl = 'http://192.168.99.100:3001/mis';
+  // private miUrl = 'http://localhost:3001/mis';
 
   constructor(private http: Http) { }
 

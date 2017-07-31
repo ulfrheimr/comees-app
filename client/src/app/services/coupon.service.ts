@@ -7,8 +7,11 @@ import { Coupon } from '../prots/coupon';
 
 @Injectable()
 export class CouponService {
-  private couponUrl = 'http://localhost:3000/coupons';
-  private refMiUrl = 'http://localhost:3001/phys_discounts';
+  // private couponUrl = 'http://localhost:3000/coupons';
+  // private refMiUrl = 'http://localhost:3001/phys_discounts';
+
+  private couponUrl = 'http://192.168.99.100:3000/coupons';
+  private refMiUrl = 'http://192.168.99.100:3001/phys_discounts';
 
   constructor(private http: Http) { }
 
@@ -30,7 +33,7 @@ export class CouponService {
 
         data = data[0];
 
-        
+
 
         if (data["categories"].indexOf(segment) == -1)
           throw "Este cupón no es aplicable a la categoría";

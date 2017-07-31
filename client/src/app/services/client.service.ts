@@ -9,7 +9,8 @@ import { Client } from '../prots/client';
 
 @Injectable()
 export class ClientService implements OnInit {
-  private uri = 'http://localhost:3000/clients';
+  private uri = 'http://192.168.99.100:3000/clients';
+  // private uri = 'http://localhost:3000/clients';
 
   constructor(
     private http: Http

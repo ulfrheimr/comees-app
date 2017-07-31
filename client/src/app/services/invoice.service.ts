@@ -6,7 +6,8 @@ import 'rxjs/add/operator/mergeMap';
 
 @Injectable()
 export class InvoiceService {
-  private uri = 'http://localhost:3000/invoices';
+  // private uri = 'http://localhost:3000/invoices';
+  private uri = 'http://192.168.99.100:3000/invoices';
   private paymentTypes = {
     "debit": "28",
     "credit": "04",

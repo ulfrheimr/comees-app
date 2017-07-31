@@ -5,8 +5,11 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class UsrService {
-  private uri = 'http://localhost:3000/usrs';
-  private usrUri = 'http://localhost:3000/login';
+  // private uri = 'http://localhost:3000/usrs';
+  // private usrUri = 'http://localhost:3000/login';
+
+  private uri = 'http://192.168.99.100:3000/usrs';
+  private usrUri = 'http://192.168.99.100:3000/login';
 
   constructor(
     private http: Http

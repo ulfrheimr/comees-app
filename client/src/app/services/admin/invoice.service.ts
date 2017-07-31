@@ -8,7 +8,8 @@ import { Invoice } from '../../prots/admin/invoice';
 
 @Injectable()
 export class InvoiceService implements OnInit {
-  private uri = 'http://localhost:3000/invoices';
+  // private uri = 'http://localhost:3000/invoices';
+  private uri = 'http://192.168.99.100:3000/invoices';
 
   constructor(
     private http: Http

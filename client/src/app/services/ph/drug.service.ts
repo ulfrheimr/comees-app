@@ -7,8 +7,11 @@ import { Drug } from '../../prots/ph/drug';
 
 @Injectable()
 export class DrugService {
-  private uri = 'http://localhost:3002/drugs';
-  private uriDrug = 'http://localhost:3002/stock';
+  // private uri = 'http://localhost:3002/drugs';
+  // private uriDrug = 'http://localhost:3002/stock';
+
+  private uri = 'http://192.168.99.100:3002/drugs';
+  private uriDrug = 'http://192.168.99.100:3002/stock';
 
   constructor(private http: Http) { }
 

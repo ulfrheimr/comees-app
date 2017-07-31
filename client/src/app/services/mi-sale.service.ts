@@ -11,7 +11,8 @@ import { UsrService } from './usr.service';
 
 @Injectable()
 export class MiSaleService {
-  private uri = 'http://localhost:3001/sales';
+  private uri = 'http://192.168.99.100:3001/sales';
+  // private uri = 'http://localhost:3001/sales';
 
   constructor(
     private http: Http,

@@ -3,7 +3,8 @@ FROM node
 WORKDIR /usr/app
 
 COPY ./. .
-RUN npm prune --production
+RUN npm install \
+    prune --production
 
 
 EXPOSE 3000
