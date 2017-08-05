@@ -5,11 +5,11 @@ import {Observable} from 'rxjs';
 import 'rxjs/add/operator/mergeMap';
 
 import { Invoice } from '../../prots/admin/invoice';
+import { config } from '../../config';
 
 @Injectable()
 export class InvoiceService implements OnInit {
-  // private uri = 'http://localhost:3000/invoices';
-  private uri = 'http://192.168.99.100:3000/invoices';
+  private uri = config.cc + '/invoices';
 
   constructor(
     private http: Http

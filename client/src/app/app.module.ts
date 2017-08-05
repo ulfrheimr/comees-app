@@ -12,6 +12,7 @@ import { ImportPurchase } from './ph/import-purchase.component';
 
 import { Mi } from './mi/mi.component';
 import { MiSalesComponent } from './mi/sales.component';
+import { MiExportComponent } from './mi/export.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
 
 import { InvoiceComponent } from './admin/invoices.component';
@@ -50,6 +51,7 @@ import { ClientService } from './services/client.service';
     ImportPurchase,
     Mi,
     MiSalesComponent,
+    MiExportComponent,
     PrintMiTicketComponent,
     Admin,
     Sales,

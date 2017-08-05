@@ -3,7 +3,7 @@ We send role as string 'cause on endpoint we make a json.parse
 curl
   -H 'Content-Type: application/json'
   -H 'Accept: application/json' -X PUT
-  -d '{"name":"Esmeralda","usr":"mi", "pass":"pass","role":"{\"mi\":\"sales\"}"}'
+  -d '{"name":"Esmeralda","usr":"adm", "pass":"pass","role":"{\"mi\":\"adm\", \"ph\":\"adm\"}"}'
   http://127.0.0.1:3000/usrs
 
 

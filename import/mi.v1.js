@@ -1,8 +1,12 @@
 var http = require('http');
 var querystring = require('querystring');
 var config = require('./config').srvr;
+var poor = require('./config').span_for_poor_servers;
 var capitalize = require('capitalize');
 
+var getIntervalPost = () => {
+  return Math.random() * 1000 * poor;
+}
 var i = {
   putCat: (c) => {
     return new Promise((resolve, reject) => {
@@ -60,36 +64,38 @@ var i = {
   },
   putMi: (m) => {
     return new Promise((resolve, reject) => {
-      var mi = querystring.stringify({
-        name: capitalize.words(m.name),
-        cat: m.cat,
-        price: m.price,
-        desc: capitalize.words(m.desc),
-        delivery: m.delivery,
-        sample: capitalize.words(m.sample)
-      });
-
-      var opts = {
-        host: config.mi.address,
-        port: config.mi.port,
-        path: '/mis',
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(mi)
-        }
-      };
-
-      var request = http.request(opts, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function(d) {
-          d = JSON.parse(d);
-          resolve(d)
+      setTimeout(function() {
+        var mi = querystring.stringify({
+          name: capitalize.words(m.name),
+          cat: m.cat,
+          price: m.price,
+          desc: capitalize.words(m.desc),
+          delivery: m.delivery,
+          sample: capitalize.words(m.sample)
         });
-      });
 
-      request.write(mi);
-      request.end();
+        var opts = {
+          host: config.mi.address,
+          port: config.mi.port,
+          path: '/mis',
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(mi)
+          }
+        };
+
+        var request = http.request(opts, function(res) {
+          res.setEncoding('utf8');
+          res.on('data', function(d) {
+            d = JSON.parse(d);
+            resolve(d)
+          });
+        });
+
+        request.write(mi);
+        request.end();
+      }, getIntervalPost());
     });
   }
 };

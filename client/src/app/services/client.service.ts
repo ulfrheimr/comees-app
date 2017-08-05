@@ -5,11 +5,12 @@ import {Observable} from 'rxjs';
 import 'rxjs/add/operator/mergeMap';
 
 import { Client } from '../prots/client';
+import { config } from '../config';
 
 
 @Injectable()
 export class ClientService implements OnInit {
-  private uri = 'http://192.168.99.100:3000/clients';
+  private uri = config.cc + '/clients';
   // private uri = 'http://localhost:3000/clients';
 
   constructor(

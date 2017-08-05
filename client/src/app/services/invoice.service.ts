@@ -3,11 +3,12 @@ import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/mergeMap';
+import { config } from '../config';
 
 @Injectable()
 export class InvoiceService {
   // private uri = 'http://localhost:3000/invoices';
-  private uri = 'http://192.168.99.100:3000/invoices';
+  private uri = config.cc + '/invoices';
   private paymentTypes = {
     "debit": "28",
     "credit": "04",
@@ -36,7 +37,7 @@ export class InvoiceService {
     if (!this.paymentTypes[paymentType])
       throw "Método de pago no permitido";
 
-      console.log(this.paymentTypes[paymentType])
+    console.log(this.paymentTypes[paymentType])
 
     var data = {
       id_sale: saleId,

@@ -9,6 +9,7 @@ import { ImportPurchase } from './ph/import-purchase.component';
 
 import { Mi } from './mi/mi.component';
 import { MiSalesComponent } from './mi/sales.component';
+import { MiExportComponent } from './mi/export.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
 
 import { InvoiceComponent } from './admin/invoices.component';
@@ -45,6 +46,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'sales', pathMatch: 'full' },
       { path: 'mi', redirectTo: 'sales', pathMatch: 'full' },
       { path: 'sales', component: MiSalesComponent },
+      { path: 'export', component: MiExportComponent },
       { path: 'client/:type/:id', component: ClientComponent },
       { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
     ]

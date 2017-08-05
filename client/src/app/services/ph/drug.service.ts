@@ -4,14 +4,15 @@ import {Headers, Http} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Drug } from '../../prots/ph/drug';
+import { config } from '../../config';
 
 @Injectable()
 export class DrugService {
   // private uri = 'http://localhost:3002/drugs';
   // private uriDrug = 'http://localhost:3002/stock';
 
-  private uri = 'http://192.168.99.100:3002/drugs';
-  private uriDrug = 'http://192.168.99.100:3002/stock';
+  private uri = config.ph + '/drugs';
+  private uriDrug = config.ph + '/stock';
 
   constructor(private http: Http) { }
 

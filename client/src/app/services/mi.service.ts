@@ -5,10 +5,11 @@ import 'rxjs/add/operator/toPromise';
 
 import {Mi} from '../prots/mi';
 
+import { config } from '../config';
+
 @Injectable()
 export class MiService {
-  private miUrl = 'http://192.168.99.100:3001/mis';
-  // private miUrl = 'http://localhost:3001/mis';
+  private miUrl = config.mi + '/mis';
 
   constructor(private http: Http) { }
 

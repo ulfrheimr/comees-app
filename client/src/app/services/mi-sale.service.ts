@@ -9,10 +9,11 @@ import { MiProduct } from '../prots/mi-product';
 
 import { UsrService } from './usr.service';
 
+import { config } from '../config';
+
 @Injectable()
 export class MiSaleService {
-  private uri = 'http://192.168.99.100:3001/sales';
-  // private uri = 'http://localhost:3001/sales';
+  private uri = config.mi + '/sales';
 
   constructor(
     private http: Http,

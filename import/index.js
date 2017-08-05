@@ -200,184 +200,202 @@ function getDrugs(drugs) {
 function addDrugsToPurchase(drugs, purchase) {
   return new Promise((resolve, reject) => {
 
-      async.map(drugs,
-          (item, callback) => {
-            imp.addDrug(item, purchase)
-              .then((r) => {
-                callback(null, {
-                  ok: r.ok,
-                  id: item.code
-                });
-              })
-              .catch((err) => reject(err));
-          },
-          (err, result) => {
-            if (err) reject(err);
-
-            console.log(result);
-
-            resolve(result);
-          }
-        );
-      });
-  }
-
-  function importDrugs(path, buy_place) {
-    var items = readFile(path)
-
-
-    getLabs([...new Set(items.map(i => capitalize.words(i["lab"])))])
-      .then((labs) => {
-        console.log("Correctly resolved labs \n");
-
-        getPress([...new Set(items.map(i => capitalize.words(i["pres"])))])
-          .then((press) => {
-            console.log("Correctly resolved press\n");
-
-            var backDrugs = {}
-
-            var drugs = items.map((drug) => {
-              return {
-                code: drug.code,
-                name: capitalize.words(drug.name),
-                substance: capitalize.words(drug.substance),
-                id_presentation: press[drug.pres],
-                dosage: drug.dosage,
-                qty: drug.qty,
-                id_lab: labs[drug.lab],
-                sale_price: drug.price,
-                max_price: isNaN(drug.max) ? 0 : drug.max,
-                cat: drug.cat ? 16 : 0,
-                ssa: drug.ssa,
-                desc: drug.desc,
-                stock: drug.stock,
-                follow: drug.follow
-              }
-            })
-
-
-            drugs.map((d) => {
-              backDrugs[d["code"]] = d
-            })
-
-            getDrugs(drugs)
-              .then((drugsStored) => {
-
-                imp.getBuyPlace(buy_place)
-                  .then((bp) => {
-                    console.log("Resolved buy place");
-                    console.log(bp);
-                    console.log("\n");
-
-                    imp.createPurchase(bp.id)
-                      .then((purchase) => {
-                        console.log("Purchase referred:");
-                        console.log(purchase);
-                        console.log("\n");
-
-                        addDrugsToPurchase(drugsStored, purchase.id)
-                          .then((result) => {
-                            result.map((r) => {
-                              var rd = backDrugs[r.id]
-                              console.log("Imported: " + rd["name"]);
-                            })
-                          })
-                          .catch((err) => console.log(err));
-                      })
-                      .catch((err) => console.log(err));
-                  })
-                  .catch((err) => console.log(err));
-              })
-              .catch((err) => {
-                console.log("Error importing");
-              });
+    async.map(drugs,
+      (item, callback) => {
+        imp.addDrug(item, purchase)
+          .then((r) => {
+            callback(null, {
+              ok: r.ok,
+              id: item.code
+            });
           })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  }
+          .catch((err) => reject(err));
+      },
+      (err, result) => {
+        if (err) reject(err);
 
-  // MIS
-  function readMis(path) {
-    var fileContents = fs.readFileSync(path);
-    var lines = fileContents.toString().split('\r');
+        console.log(result);
 
-    var items = lines
-      .filter(x => x != "")
-      .map((item) => {
-        var i = item.split(",");
+        resolve(result);
+      }
+    );
+  });
+}
 
-        return {
-          name: i[0].toLowerCase(),
-          cat: i[5].toLowerCase(),
-          price: i[7],
-          desc: i[1].toLowerCase(),
-          available: parseInt(i[8]) == 1,
-          sample: i[4].toLowerCase(),
-          delivery: i[2].toLowerCase()
-        };
-      })
-
-    return items;
-  }
-
-  function importMis(path) {
-    var items = readMis(path).slice(1);
-
-    items = items.filter(x => x.available);
-
-    getCats([...new Set(items.map(i => capitalize.words(i['cat'])))])
-      .then((catsDB) => {
-        console.log("Correctly resolved MI cats");
-
-        var diffItems = {};
-        var repeated = [];
-        items = items.filter(x => x.available);
-
-        items.map((x) => {
-          if (x.name in diffItems)
-            repeated.push(x);
-          else
-            diffItems[x.name] = x;
-        });
-
-        async.map(items,
-          (item, callback) => {
-            mi.putMi(item)
-              .then((res) => {
-                callback(null, res);
-              })
-              .catch((err) => {
-                console.log("There is an Error");
-                console.log(err)
-              })
-          },
-          (err, result) => {
-            if (err) console.log(err)
+function importDrugs(path, buy_place) {
+  var items = readFile(path)
 
 
-            console.log(result);
+  getLabs([...new Set(items.map(i => capitalize.words(i["lab"])))])
+    .then((labs) => {
+      console.log("Correctly resolved labs \n");
 
-            var res = result.map(x => x.ok)
-              .reduce((x, y) => x && y, true);
+      getPress([...new Set(items.map(i => capitalize.words(i["pres"])))])
+        .then((press) => {
+          console.log("Correctly resolved press\n");
 
-            if (res)
-              console.log("Everything is fine, you are able to kill yourself");
-            else {
-              console.log("Well, something is wrong");
-              console.log(res);
+          var backDrugs = {}
+
+          var drugs = items.map((drug) => {
+            return {
+              code: drug.code,
+              name: capitalize.words(drug.name),
+              substance: capitalize.words(drug.substance),
+              id_presentation: press[drug.pres],
+              dosage: drug.dosage,
+              qty: drug.qty,
+              id_lab: labs[drug.lab],
+              sale_price: drug.price,
+              max_price: isNaN(drug.max) ? 0 : drug.max,
+              cat: drug.cat ? 16 : 0,
+              ssa: drug.ssa,
+              desc: drug.desc,
+              stock: drug.stock,
+              follow: drug.follow
             }
-
-          });
-      })
-      .catch((err) => console.log(err));
-  }
+          })
 
 
+          drugs.map((d) => {
+            backDrugs[d["code"]] = d
+          })
+
+          getDrugs(drugs)
+            .then((drugsStored) => {
+
+              imp.getBuyPlace(buy_place)
+                .then((bp) => {
+                  console.log("Resolved buy place");
+                  console.log(bp);
+                  console.log("\n");
+
+                  imp.createPurchase(bp.id)
+                    .then((purchase) => {
+                      console.log("Purchase referred:");
+                      console.log(purchase);
+                      console.log("\n");
+
+                      addDrugsToPurchase(drugsStored, purchase.id)
+                        .then((result) => {
+                          result.map((r) => {
+                            var rd = backDrugs[r.id]
+                            console.log("Imported: " + rd["name"]);
+                          })
+                        })
+                        .catch((err) => console.log(err));
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => {
+              console.log("Error importing");
+            });
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+}
+
+// MIS
+function readMis(path) {
+  var fileContents = fs.readFileSync(path);
+  var lines = fileContents.toString().split('\r');
+
+  var items = lines
+    .filter(x => {
+      var value = x.split(";");
+
+      if (x == "")
+        return false;
+
+      if (!parseFloat(value[7])) {
+        console.log(x);
+        console.log("Couldn't be handled");
+        console.log("Valor " + value[7] + "\n");
+
+        return false;
+      }
+
+      return true;
+    })
+    .map((item) => {
+      var i = item.split(";");
+
+      return {
+        name: i[0].toLowerCase(),
+        cat: i[5].toLowerCase(),
+        price: i[7],
+        desc: i[1].toLowerCase(),
+        available: parseInt(i[8]) == 1,
+        sample: i[4].toLowerCase(),
+        delivery: i[2].toLowerCase()
+      };
+    })
+
+  return items;
+}
+
+function importMis(path) {
+  var items = readMis(path).slice(1);
 
 
-  // importMis('/Users/rrivera/Desktop/svc.csv')
-  importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
 
-  // importMis('/Users/ulfrheimr/Desktop/svc.csv')
-  // importDrugs('/Users/ulfrheimr/Desktop/lst.csv', "amsa");
+  getCats([...new Set(items.map(i => capitalize.words(i['cat'])))])
+    .then((catsDB) => {
+      console.log("Correctly resolved MI cats");
+
+      var diffItems = {};
+      var repeated = [];
+      items = items.filter(x => x.available);
+
+      console.log("Sending " + items.length + " MIs");
+
+      items.map((x) => {
+        if (x.name in diffItems)
+          repeated.push(x);
+        else
+          diffItems[x.name] = x;
+      });
+
+      async.map(items,
+        (item, callback) => {
+          mi.putMi(item)
+            .then((res) => {
+              callback(null, res);
+            })
+            .catch((err) => {
+              console.log("There is an Error");
+              console.log(err)
+            })
+        },
+        (err, result) => {
+          if (err) console.log(err)
+
+
+          console.log(result);
+
+          var oks = result.map(x => x.ok)
+          var res = oks.reduce((x, y) => x && y, true);
+          console.log("Received " + oks.length + " correct Mis");
+
+          if (res)
+            console.log("Everything is fine, you are able to kill yourself");
+          else {
+            console.log("Well, something is wrong");
+            console.log(res);
+          }
+
+        });
+    })
+    .catch((err) => console.log(err));
+}
+
+
+
+
+// importMis('/Users/rrivera/Desktop/svc.csv')
+// importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
+
+// importMis('/Users/ulfrheimr/Desktop/svc.csv')
+// importDrugs('/Users/ulfrheimr/Desktop/lst.csv', "amsa");

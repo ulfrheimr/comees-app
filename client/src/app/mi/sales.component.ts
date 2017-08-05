@@ -101,8 +101,6 @@ export class MiSalesComponent implements OnInit {
       return this.miHash[key];
     });
 
-    console.log(prods)
-
     this.saleTotal = prods
       .map((x) => x.price_discount)
       .reduce((x, y) => x + y, 0);

@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use('/', require('./routes'));
+app.use('/', require('./api.v.0/routes'));
 
 app.use(function(req, res, next) {
   var error = new Error("Not found");

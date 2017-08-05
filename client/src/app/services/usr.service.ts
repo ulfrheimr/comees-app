@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
+import { config } from '../config';
+
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class UsrService {
-  // private uri = 'http://localhost:3000/usrs';
-  // private usrUri = 'http://localhost:3000/login';
-
-  private uri = 'http://192.168.99.100:3000/usrs';
-  private usrUri = 'http://192.168.99.100:3000/login';
+  private uri = config.cc + '/usrs';
+  private usrUri = config.cc + '/login';
 
   constructor(
     private http: Http
@@ -54,9 +53,11 @@ export class UsrService {
     }
 
     return new Promise((resolve, reject) => {
+      console.log(this.usrUri)
       return this.http.post(this.usrUri, data, { headers: headers })
         .toPromise()
         .then(r => {
+          console.log(r)
           r = r.json().ok;
 
           if (r) {
