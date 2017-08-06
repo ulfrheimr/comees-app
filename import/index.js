@@ -339,8 +339,6 @@ function readMis(path) {
 function importMis(path) {
   var items = readMis(path).slice(1);
 
-
-
   getCats([...new Set(items.map(i => capitalize.words(i['cat'])))])
     .then((catsDB) => {
       console.log("Correctly resolved MI cats");
@@ -391,11 +389,11 @@ function importMis(path) {
     .catch((err) => console.log(err));
 }
 
+module.exports.init = function() {
+  console.log("Could");
+  // importMis('./svc.csv')
+  // importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
 
-
-
-// importMis('/Users/rrivera/Desktop/svc.csv')
-// importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
-
-// importMis('/Users/ulfrheimr/Desktop/svc.csv')
-// importDrugs('/Users/ulfrheimr/Desktop/lst.csv', "amsa");
+  // importMis('/Users/ulfrheimr/Desktop/svc.csv')
+  // importDrugs('/Users/ulfrheimr/Desktop/lst.csv', "amsa");
+}
