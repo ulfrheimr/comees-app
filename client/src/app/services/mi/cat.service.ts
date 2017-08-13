@@ -3,20 +3,20 @@ import {Headers, Http} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import {Mi} from '../prots/mi';
+import {Cat} from '../../prots/mi/cat';
 
-import { config } from '../config';
+import { config } from '../../config';
 
 @Injectable()
-export class MiService {
-  private miUrl = config.mi + '/mis';
+export class CatService {
+  private miUrl = config.mi + '/cats';
 
   constructor(private http: Http) { }
 
-  getMis(name: string): Promise<Mi[]> {
-    return this.http.get(this.miUrl + "?name=" + name)
+  getCats(): Promise<Cat[]> {
+    return this.http.get(this.miUrl)
       .toPromise()
-      .then(r => r.json().data as Mi)
+      .then(r => r.json().data as Cat)
       .catch(this.handleError);
   }
 

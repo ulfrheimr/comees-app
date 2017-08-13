@@ -82,11 +82,12 @@ function getCats(cats) {
     mi.getCats()
       .then((catsDB) => {
 
+
         async.map(cats,
           (c, callback) => {
+            c = c.toLowerCase().trim();
 
-            if (c.toLowerCase() in catsDB) {
-              c = c.toLowerCase()
+            if (c in catsDB) {
               callback(null, {
                 cat: c,
                 id: catsDB[c]
@@ -96,7 +97,7 @@ function getCats(cats) {
               mi.putCat(c)
                 .then((cat) => {
                   callback(null, {
-                    pres: cat["name"].toLowerCase(),
+                    cat: cat["name"],
                     id: cat["_id"]
                   });
                 })
@@ -107,11 +108,10 @@ function getCats(cats) {
           (err, results) => {
             if (err) reject(err);
 
-            console.log(results);
-
             var r = {}
             results.map((x) => {
-              r[x["name"]] = x["id"];
+
+              r[x["cat"]] = x["id"];
             })
 
             resolve(r);
@@ -321,7 +321,6 @@ function readMis(path) {
     })
     .map((item) => {
       var i = item.split(";");
-
       return {
         name: i[0].toLowerCase(),
         cat: i[5].toLowerCase(),
@@ -345,16 +344,24 @@ function importMis(path) {
 
       var diffItems = {};
       var repeated = [];
+      var diffCats = {};
       items = items.filter(x => x.available);
 
       console.log("Sending " + items.length + " MIs");
 
-      items.map((x) => {
-        if (x.name in diffItems)
-          repeated.push(x);
-        else
-          diffItems[x.name] = x;
-      });
+
+
+      items
+        .map((x) =>
+          x["cat"] = catsDB[x["cat"].toLowerCase().trim()]
+        )
+        .map((x) => {
+          if (x.name in diffItems)
+            repeated.push(x);
+          else
+            diffItems[x.name] = x;
+        });
+
 
       async.map(items,
         (item, callback) => {
@@ -391,7 +398,7 @@ function importMis(path) {
 
 module.exports.init = function() {
   console.log("Could");
-  // importMis('./svc.csv')
+  importMis('./svc.csv')
   // importDrugs('/Users/rrivera/Desktop/lst.csv', "amsa");
 
   // importMis('/Users/ulfrheimr/Desktop/svc.csv')

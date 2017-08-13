@@ -1,0 +1,124 @@
+<div class="top-container">
+
+
+  <div class="search-container">
+    <div>
+      <table>
+        <tr>
+          <td>
+            Buscar por nombre de estudio
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input [(ngModel)]="pageModel.hint" class="hint" (keyup.enter)="findMis()" placeholder="Estudio" />
+          </td>
+          <td class="right">
+            <p>¿No encuentras el estudio? Crea uno nuevo</p>
+            <button (click)="newMI()" class="waves-effect waves-light btn">Nuevo MI</button>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+  <br />
+  <div class="grid-container" *ngIf="!pageModel.addNewMi">
+    <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
+    </ag-grid-angular>
+  </div>
+
+  <hr />
+
+  <div *ngIf="selectedMi" class="container">
+    <div class="coMeEs_sentence">
+      Estudio seleccionado
+    </div>
+    <div class="selected_mi">
+      <table>
+        <tr>
+          <td class="info">Estudio:</td>
+          <td><input [(ngModel)]="selectedMi.name" /></td>
+        </tr>
+        <tr>
+          <td class="info">Descripción:</td>
+          <td><input [(ngModel)]="selectedMi.description" /></td>
+        </tr>
+        <tr>
+          <td class="info">Tiempo de entrega (DH):</td>
+          <td><input [(ngModel)]="selectedMi.delivery_time" /></td>
+        </tr>
+        <tr>
+          <td class="info">Categoría:</td>
+          <td>
+            <select [(ngModel)]="selectedMi.category._id">
+              <option *ngFor="let c of cats" [ngValue]="c._id" >{{c.name}}</option>
+            </select>
+          </td>
+        </tr>
+
+
+        <tr>
+          <td class="info">Tipo de muestra:</td>
+          <td><input [(ngModel)]="selectedMi.sample" /></td>
+        </tr>
+        <tr>
+          <td class="info">Precio: </td>
+          <td><input [(ngModel)]="selectedMi.price" /></td>
+        </tr>
+      </table>
+    </div>
+    <div class="right">
+      <button (click)="cancel()" class="waves-effect waves-light btn">Cancelar</button>
+      <button *ngIf="!pageModel.addNewMi" (click)="confirmMI()" class="waves-effect waves-light btn">Modificar</button>
+      <button *ngIf="pageModel.addNewMi" (click)="confirmMI()" class="waves-effect waves-light btn">Añadir</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirmación de modificación</h4>
+    <div>
+      Verifique que la información sea correcta
+      <div class="payment" *ngIf="selectedMi">
+        <table>
+          <tr>
+            <td class="info">Estudio:</td>
+            <td>{{selectedMi.name}}</td>
+          </tr>
+          <tr>
+            <td class="info">Descripción:</td>
+            <td>{{selectedMi.description}}</td>
+          </tr>
+          <tr>
+            <td class="info">Tiempo de entrega (DH):</td>
+            <td>{{selectedMi.delivery_time}}</td>
+          </tr>
+          <tr *ngIf="!pageModel.addNewMi">
+            <td class="info">Categoría:</td>
+            <td>{{selectedMi.category.name}}</td>
+          </tr>
+          <tr>
+            <td class="info">Tipo de muestra:</td>
+            <td>{{selectedMi.sample}}</td>
+          </tr>
+          <tr>
+            <td class="info">Precio: </td>
+            <td>{{selectedMi.price | number : '1.2-2'}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+
+    <a *ngIf="!pageModel.addNewMi" class="modal-action modal-close waves-effect waves-green btn-flat" (click)="modifyMI()">Confirmar</a>
+    <a *ngIf="pageModel.addNewMi" class="modal-action modal-close waves-effect waves-green btn-flat" (click)="addMi()">Agregar</a>
+    <a class="waves-effect waves-green btn-flat" >Cancelar</a>
+
+  </div>
+</div>

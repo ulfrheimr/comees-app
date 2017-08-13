@@ -106,3 +106,8 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
   box-sizing: content-box;
   transition: all 0.3s;
 }
+
+select {
+  display: inline !important;
+  width: 400px;
+}

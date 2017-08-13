@@ -97,16 +97,35 @@ var u = {
       })
       .catch((err) => res.status(500).send(err));
   },
+  getUsrInfo: (req, res) => {
+    findUsr({})
+      .then((r) => {
+        console.log(r);
+        r = r.map((x) => {
+          return {
+            "name": x.name,
+            "id": x._id,
+            "usr": x.usr
+          };
+        });
+
+        res.json({
+          ok: 1,
+          data: r
+        })
+      })
+      .catch((err) => res.status(500).send(err));
+  },
   getUsrs: (req, res) => {
     findUsr({})
       .then((r) => {
-        // r = r.map((x) => {
-        //   return {
-        //     name: x.name,
-        //     role: x.role,
-        //     usr: x.usr
-        //   }
-        // });
+        r = r.map((x) => {
+          return {
+            name: x.name,
+            role: x.role,
+            usr: x.usr
+          }
+        });
 
         res.json({
           ok: 1,

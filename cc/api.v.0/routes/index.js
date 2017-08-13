@@ -58,6 +58,9 @@ router.route('/usrs')
   .put(UsrController.putUsr)
   .get(UsrController.getUsrs);
 
+  router.route('/usrs_info')
+    .get(UsrController.getUsrInfo);
+
 router.route('/usrs/:id')
   // name, usr, pass, role
   .get(UsrController.getUsr);

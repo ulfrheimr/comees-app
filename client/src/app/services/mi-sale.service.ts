@@ -75,6 +75,22 @@ export class MiSaleService {
       .catch(this.handleError);
   }
 
+  getSales(init: string, end: string, usr: any): Promise<MiSale[]> {
+    console.log(usr == undefined)
+    let postUri: string;
+    return this.http.get(this.uri
+      + "?init=" + init
+      + "&end=" + end
+      + (usr ? "&usr=" + usr : ""))
+      .toPromise()
+      .then(r => {
+        let sales: MiSale[] = r.json().data as MiSale[];
+
+        return sales;
+      })
+      .catch(this.handleError);
+  }
+
   private convertMi(mi: any): any {
     var res = {
       sale_price: mi.sale_price,

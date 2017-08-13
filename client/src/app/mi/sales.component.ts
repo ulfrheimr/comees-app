@@ -8,7 +8,7 @@ import { CellComponent } from '../cell.component';
 
 import { Mi } from '../prots/mi';
 
-import { MiService } from '../services/mi.service';
+import { MiService } from '../services/mi/mi.service';
 import { CouponService } from '../services/coupon.service';
 import { MiSaleService } from '../services/mi-sale.service';
 
@@ -60,6 +60,9 @@ export class MiSalesComponent implements OnInit {
       {
         headerName: "Estudio",
         field: "name"
+      }, {
+        headerName: "Descripción",
+        field: "description"
       }, {
         headerName: "Precio",
         field: "price"

@@ -28,8 +28,7 @@ var addMi = (product, id) => {
       discount: product.discount
     }
 
-    console.log("MI ADD");
-    console.log(m["type_discount"]);
+
     if (m["type_discount"] == "ref_mi") {
       PhysController.getPhys({
           id: m.discount,
@@ -114,7 +113,7 @@ var s = {
       .catch((err) => res.status(500).send(err));
   },
   addMis: (req, res) => {
-    console.log("ADD");
+
     addMi({
         qty: req.body.qty,
         mi: req.body.mi,
@@ -135,6 +134,9 @@ var s = {
   getSales: (req, res) => {
     var init = req.query.init;
     var end = req.query.end;
+    var usrId = req.query.usr;
+
+    console.log(usrId);
     var query = {
       $and: [{
           timestamp: {
@@ -149,6 +151,10 @@ var s = {
         }
       ]
     }
+
+    if (usrId)
+      query["usr"] = usrId;
+
 
     findSales(query)
       .then((sales) => {

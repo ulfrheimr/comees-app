@@ -19,6 +19,27 @@ var saveMI = (mi) => {
   });
 }
 
+var modifyMI = (mi) => {
+  return new Promise((resolve, reject) => {
+    console.log(mi);
+    MI.findOneAndUpdate({
+      _id: mi._id
+    }, {
+      name: mi.name,
+      price: mi.price,
+      description: mi.description,
+      category: mi.category,
+      delivery_time: mi.delivery_time,
+      sample: mi.sample
+    }, {
+      upsert: true
+    }, function(err, m) {
+      if (err) reject(err);
+      return resolve(m);
+    });
+  });
+}
+
 var findMIs = (query) => {
   return new Promise((resolve, reject) => {
     MI.find(query)
@@ -31,7 +52,7 @@ var findMIs = (query) => {
   });
 }
 
-Promise.all([saveMI]).catch((error) => {
+Promise.all([saveMI, modifyMI, findMIs]).catch((error) => {
   console.log(error);
   return Promise.reject(error.message || error);
 });
@@ -51,6 +72,25 @@ var s = {
         res.json({
           ok: 1,
           message: "MI added"
+        });
+      })
+      .catch((err) => res.status(500).send(err));
+  },
+  modifyMI: (req, res) => {
+    var mi = {
+      _id: req.params.mi,
+      name: req.body.name,
+      price: req.body.price,
+      description: req.body.desc,
+      category: req.body.catId,
+      delivery_time: req.body.delivery,
+      sample: req.body.sample
+    }
+    modifyMI(mi)
+      .then((r) => {
+        res.json({
+          ok: 1,
+          data: r
         });
       })
       .catch((err) => res.status(500).send(err));

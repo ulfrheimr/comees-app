@@ -12,7 +12,7 @@ import { ImportPurchase } from './ph/import-purchase.component';
 
 import { Mi } from './mi/mi.component';
 import { MiSalesComponent } from './mi/sales.component';
-import { MiExportComponent } from './mi/export.component';
+import { MiSalesReportComponent } from './mi/sales-report.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
 
 import { InvoiceComponent } from './admin/invoices.component';
@@ -22,6 +22,7 @@ import { ClientComponent } from './cc/client.component';
 import { Sales } from './sales.component';
 
 import { Admin } from './admin/admin.component';
+import { ModifyMIComponent } from './admin/modify_mi.component';
 
 import { MUtils } from './utils';
 
@@ -41,6 +42,7 @@ import { MaterializeModule } from "angular2-materialize";
 import { UsrActivate } from './guard/usr-activate';
 import { UsrService } from './services/usr.service';
 import { ClientService } from './services/client.service';
+import { UsrInfoService } from './services/cc/usr-info.service';
 
 @NgModule({
   declarations: [
@@ -51,9 +53,10 @@ import { ClientService } from './services/client.service';
     ImportPurchase,
     Mi,
     MiSalesComponent,
-    MiExportComponent,
+    MiSalesReportComponent,
     PrintMiTicketComponent,
     Admin,
+    ModifyMIComponent,
     Sales,
     InvoiceComponent,
     AppComponent,
@@ -80,6 +83,7 @@ import { ClientService } from './services/client.service';
     UsrActivate,
     UsrService,
     ClientService,
+    UsrInfoService,
     MUtils],
   bootstrap: [AppComponent]
 })

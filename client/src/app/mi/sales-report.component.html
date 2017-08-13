@@ -1,0 +1,58 @@
+<div class="top-container">
+  <div class="search-container">
+    <div>
+      <table>
+        <tr>
+          <td>
+            <span class="enhaced">Usuario</span>
+          </td>
+          <td colspan="2">
+            <span>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.typeSearch" value="day" id="m-day" />
+              <label for="m-day">Del día</label>
+            </span>
+            <span>
+              <input name="paymentType" type="radio" [(ngModel)]="pageModel.typeSearch" value="period" id="m-period" />
+              <label for="m-period">Por periodo de tiempo</label>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <select *ngIf="usrs" [(ngModel)]="pageModel.usr">
+              <option *ngFor="let u of usrs" [ngValue]="u.id" >{{u.name}} - {{u.usr}}</option>
+            </select>
+          </td>
+          <td *ngIf="pageModel.typeSearch=='period'">
+            <input type="date" [(ngModel)]="pageModel.init" />
+          </td>
+          <td *ngIf="pageModel.typeSearch=='period'">
+            <input type="date" [(ngModel)]="pageModel.end" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+
+          </td>
+          <td>
+
+          </td>
+          <td>
+            <button (click)="search()" class="waves-effect waves-light btn">Buscar</button>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+  <br />
+
+  <div class="grid-container">
+    <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
+    </ag-grid-angular>
+  </div>
+
+  <div class="right">
+    <button (click)="report()" class="waves-effect waves-light btn">Reportar</button>
+  </div>
+</div>

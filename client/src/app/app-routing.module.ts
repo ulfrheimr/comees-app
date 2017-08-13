@@ -9,7 +9,7 @@ import { ImportPurchase } from './ph/import-purchase.component';
 
 import { Mi } from './mi/mi.component';
 import { MiSalesComponent } from './mi/sales.component';
-import { MiExportComponent } from './mi/export.component';
+import { MiSalesReportComponent } from './mi/sales-report.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
 
 import { InvoiceComponent } from './admin/invoices.component';
@@ -19,6 +19,7 @@ import { ClientComponent } from './cc/client.component';
 import { Sales } from './sales.component';
 
 import { Admin } from './admin/admin.component';
+import { ModifyMIComponent } from './admin/modify_mi.component';
 
 import { LoginComponent } from './login.component';
 
@@ -46,7 +47,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'sales', pathMatch: 'full' },
       { path: 'mi', redirectTo: 'sales', pathMatch: 'full' },
       { path: 'sales', component: MiSalesComponent },
-      { path: 'export', component: MiExportComponent },
+
       { path: 'client/:type/:id', component: ClientComponent },
       { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
     ]
@@ -75,8 +76,10 @@ const routes: Routes = [
       { path: 'ph/search-drug', component: SearchDrugComponent },
       { path: 'mi', redirectTo: 'mi/sales', pathMatch: 'full' },
       { path: 'mi/sales', component: MiSalesComponent },
+      { path: 'mi/sales-report', component: MiSalesReportComponent },
       { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
-      { path: 'admin/invoices', component: InvoiceComponent }
+      { path: 'admin/invoices', component: InvoiceComponent },
+      { path: 'admin/modify_mi', component: ModifyMIComponent }
     ]
   }
 ];
