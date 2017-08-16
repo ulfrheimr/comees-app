@@ -15,14 +15,14 @@ import { MiSalesComponent } from './mi/sales.component';
 import { MiSalesReportComponent } from './mi/sales-report.component';
 import { PrintMiTicketComponent } from './mi/print-ticket.component';
 
-import { InvoiceComponent } from './admin/invoices.component';
-
+import { PrintComponent } from './print.component';
 import { ClientComponent } from './cc/client.component';
 
 import { Sales } from './sales.component';
 
 import { Admin } from './admin/admin.component';
 import { ModifyMIComponent } from './admin/modify_mi.component';
+import { InvoiceComponent } from './admin/invoices.component';
 
 import { MUtils } from './utils';
 
@@ -32,6 +32,7 @@ import { CellComponent } from './cell.component';
 import { AddComponent } from './add.component';
 import { DeleteComponent } from './delete.component';
 import { StoredSale } from './ph/stored-sale';
+import { PassMi } from './pass-mi';
 
 import { Config } from './services/config';
 
@@ -59,6 +60,7 @@ import { UsrInfoService } from './services/cc/usr-info.service';
     ModifyMIComponent,
     Sales,
     InvoiceComponent,
+    PrintComponent,
     AppComponent,
     LoginComponent,
     ClientComponent,
@@ -78,7 +80,9 @@ import { UsrInfoService } from './services/cc/usr-info.service';
         DeleteComponent]
     )
   ],
-  providers: [StoredSale,
+  providers: [
+    PassMi,
+    StoredSale,
     Config,
     UsrActivate,
     UsrService,

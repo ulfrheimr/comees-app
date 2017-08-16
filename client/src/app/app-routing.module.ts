@@ -22,6 +22,7 @@ import { Admin } from './admin/admin.component';
 import { ModifyMIComponent } from './admin/modify_mi.component';
 
 import { LoginComponent } from './login.component';
+import { PrintComponent } from './print.component';
 
 import { UsrActivate } from './guard/usr-activate';
 
@@ -77,6 +78,7 @@ const routes: Routes = [
       { path: 'mi', redirectTo: 'mi/sales', pathMatch: 'full' },
       { path: 'mi/sales', component: MiSalesComponent },
       { path: 'mi/sales-report', component: MiSalesReportComponent },
+      { path: 'print', component: PrintComponent },
       { path: 'mi/print-ticket/:id', component: PrintMiTicketComponent },
       { path: 'admin/invoices', component: InvoiceComponent },
       { path: 'admin/modify_mi', component: ModifyMIComponent }

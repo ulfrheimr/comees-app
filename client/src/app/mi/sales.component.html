@@ -40,6 +40,7 @@
         </div>
         <br />
         <button (click)="confirmSale()" class="waves-effect waves-light btn">VENDER</button>
+        <button (click)="confirmPartial()" class="waves-effect waves-light btn">PAGO PARCIAL</button>
       </div>
 
     </div>
@@ -240,7 +241,7 @@
             </p>
           </div>
 
-          <div *ngIf="pageModel.paymentType == 'cash'">
+          <div *ngIf="pageModel.paymentType == 'cash' && !pageModel.isPartialPayment">
             <div>
               <div>
                 Importe recibido:
@@ -257,6 +258,23 @@
             </div>
           </div>
 
+          <div *ngIf="pageModel.isPartialPayment">
+            <div>
+              <div>
+                Importe parcial recibido:
+              </div>
+              <div class="sale-enhace">
+                $ <input [(ngModel)]="pageModel.partialPayment" class="hint amount sale-enhace" placeholder="Importe parcial" maxlength="5" />
+              </div>
+            </div>
+            <div>
+              Restante:
+            </div>
+            <div class="sale-enhace change">
+              $ {{remaining() | number : '1.2-2'}}
+            </div>
+          </div>
+
           <div *ngIf="pageModel.paymentType == 'credit' || pageModel.paymentType == 'debit'">
             Pago con tarjeta<br /> Si la venta se facturará será necesario capturar <span class="enhaced">los últimos 4 dígitos</span> de la tarjeta.
           </div>
@@ -269,7 +287,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <a class="waves-effect waves-green btn-flat" (click)="makeSale()">Vender</a>
     <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    <a *ngIf="!pageModel.isPartialPayment" class="waves-effect waves-green btn-flat" (click)="makeSale()">Vender</a>
+    <a *ngIf="pageModel.isPartialPayment" class="waves-effect waves-green btn-flat" (click)="partialPayment()">Realizar pago parcial</a>
   </div>
 </div>

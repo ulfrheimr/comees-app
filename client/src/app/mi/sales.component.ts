@@ -12,6 +12,8 @@ import { MiService } from '../services/mi/mi.service';
 import { CouponService } from '../services/coupon.service';
 import { MiSaleService } from '../services/mi-sale.service';
 
+import { PassMi } from '../pass-mi';
+
 import { UsrService } from '../services/usr.service';
 
 @Component({
@@ -34,7 +36,7 @@ export class MiSalesComponent implements OnInit {
   products: any[] = [];
   discount: number = 0;
   priceDiscount: number;
-  saleTotal: number = 0;
+  saleTotal: number;
 
   modalActions = new EventEmitter<string | MaterializeAction>();
 
@@ -45,7 +47,8 @@ export class MiSalesComponent implements OnInit {
     private couponService: CouponService,
     private miSaleService: MiSaleService,
     private usrService: UsrService,
-    private router: Router
+    private router: Router,
+    private passMi: PassMi
   ) {
     this.initializePageModel();
   }
@@ -95,7 +98,9 @@ export class MiSalesComponent implements OnInit {
       amount: 0.0,
       paymentType: "cash",
       allowAdd: true,
-      amountError: undefined
+      amountError: undefined,
+      isPartialPayment: false,
+      partialPayment: 0
     }
   }
 
@@ -171,19 +176,29 @@ export class MiSalesComponent implements OnInit {
   }
 
   removeMi(id: string): void {
-    console.log(id)
     delete this.miHash[id];
 
     this.setProducts();
   }
 
+  remaining(): number {
+    if (!parseFloat(this.pageModel.partialPayment)) {
+      this.pageModel.amountError = "Importe no válido";
+      return;
+    }
+
+    if (parseFloat(this.pageModel.partialPayment) > this.getTotalDiscount()) {
+      this.pageModel.amountError = "El importe es mayor para solo hacer pago parcial, realice la venta";
+      return;
+    }
+
+    return this.getTotalDiscount() - parseFloat(this.pageModel.partialPayment);
+  }
+
   addToSale(): void {
-    console.log("DISC")
-    console.log(this.pageModel.discountType)
     let priceDiscount: number = this.priceDiscount == undefined ? this.selectedMi.price : this.priceDiscount
     priceDiscount = parseFloat(priceDiscount.toFixed(2))
 
-    console.log(this.selectedMi.priceDiscount)
     if (this.miHash[this.selectedMi._id]) {
 
       this.miHash[this.selectedMi._id]["qty"] += 1;
@@ -213,11 +228,31 @@ export class MiSalesComponent implements OnInit {
     this.selectedMi = mi;
   }
 
+  partialPayment() {
+    this.closeModal();
+
+    var url = this.router.url.split('/');
+    let routeUrl: string = url.slice(1, 2).reduce((x, y) => x + "/" + y, "");
+
+    this.passMi._type = "mi";
+    this.passMi.mis = this.products;
+    this.passMi.registerPayment = parseFloat(this.pageModel.partialPayment);
+
+    this.router.navigate(['.' + routeUrl, "print"])
+  }
+
   confirmSale(): void {
     this.pageModel.toConfirm = true;
   }
 
+  confirmPartial(): void {
+    this.pageModel.isPartialPayment = true;
+
+    this.showPayment();
+  }
+
   confirmPayment(): void {
+    this.pageModel.isPartialPayment = false;
     this.pageModel.toPayment = true;
   }
 
@@ -276,6 +311,7 @@ export class MiSalesComponent implements OnInit {
   showPayment(): void {
     this.modalActions.emit({ action: "modal", params: ['open'] });
   }
+
   closeModal() {
     this.modalActions.emit({ action: "modal", params: ['close'] });
   }

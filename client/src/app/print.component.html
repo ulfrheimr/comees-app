@@ -1,0 +1,151 @@
+<div class="top-container">
+  <div>
+    Impresión
+  </div>
+
+  <div class="container">
+    <div *ngIf="pageModel.ready" id="ticket">
+      <div class="ticket-container">
+        <div class="main-span-ticket">
+          <div class="logo-container">
+            <img class="logo" src="/assets/images/logo.png" />
+            <br />
+            <p class="enhaced-ticket bold">
+              {{getAsset("name")}}
+              <br /> <br />
+            </p>
+          </div>
+
+          <div class="top-container" *ngIf="getAsset('local')">
+            {{getAsset("local").address}}<br /> CP: {{getAsset("local").cp}}<br /> tels: {{getAsset("local").tel}}
+            <br />
+          </div>
+          <hr />
+
+          <div class="right">
+            <span class="enhaced-ticket">{{timestamp | date: 'dd/MM/yyyy hh:mm' }}</span>
+          </div>
+
+          <div>
+            <table class="client-opts">
+              <tr>
+                <td class="bold">
+                  Cliente:
+                </td>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <td class="bold">
+                  Pago:
+                </td>
+                <td>
+
+                </td>
+              </tr>
+              <tr>
+                <td class="bold">
+                  Cajero:
+                </td>
+                <td>
+                  {{getUsr()}}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br />
+          <hr />
+          <table class="sale">
+            <thead>
+              <td class="col1">
+                {{getFields().f1}}
+              </td>
+              <td class="col2">
+                {{getFields().f2}}<br />{{getFields().f4}}
+              </td>
+              <td class="col3 bold">
+                {{getFields().f3}}<br />{{getFields().f5}}
+              </td>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of poolToPrint">
+                <td class="qty-container">
+                  {{m.f1}}
+                </td>
+                <td class="mi-container">
+                  {{m.f2}}<br /> <br /> {{m.f4}}
+                </td>
+                <td class="price-container">
+                  {{m.f3}}<br /> <br /> {{m.f5}}
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+          <div class="totals right">
+            <div>
+              <hr />
+              <table>
+                <tr>
+                  <td>
+                    TOTAL:
+                  </td>
+                  <td>
+                    <span class="enhaced bold">$ {{getTotal1()}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    A CUENTA:
+                  </td>
+                  <td>
+                    <span class="enhaced bold">$ {{getTotal2()}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    RESTANTE:
+                  </td>
+                  <td>
+                    <span class="enhaced bold">$ {{getTotal3()}}</span>
+                  </td>
+                </tr>
+              </table>
+              <hr />
+            </div>
+          </div>
+
+          <hr />
+          <div class="slogan enhaced-ticket">
+            "Queremos darte el servicio que mereces a un precio justo."
+          </div>
+          <br />
+          <div class="slogan enhaced-ticket">
+            Gracias por su compra
+          </div>
+          <br /><br />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <button (click)="print()" class="waves-effect waves-light btn">Imprimir</button>
+  </div>
+
+</div>
+
+<div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+  <div class="modal-content">
+    <h4>Confirmación </h4>
+    <div>
+      CONFIRMACION
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="endProcess()">Terminar proceso</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="print()">Reintentar</a>
+  </div>
+</div>

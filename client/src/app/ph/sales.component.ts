@@ -137,7 +137,6 @@ export class PhSalesComponent implements OnInit {
     }
 
     if (hasItems) {
-      console.log(this.storedSale.sale)
       let id: string = this.storedSale.sale["code"];
       setTimeout(() => {
         this.findDrug(id);
