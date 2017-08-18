@@ -29,6 +29,9 @@
     <ag-grid-angular #agGrid style="width: 100%; height: 200px;" class="ag-fresh" [gridOptions]="gridOptions">
     </ag-grid-angular>
   </div>
+  <div class="rigth">
+    <button (click)="export()" class="waves-effect waves-light btn">Exportar estudios</button>
+  </div>
 
   <hr />
 
@@ -118,7 +121,7 @@
 
     <a *ngIf="!pageModel.addNewMi" class="modal-action modal-close waves-effect waves-green btn-flat" (click)="modifyMI()">Confirmar</a>
     <a *ngIf="pageModel.addNewMi" class="modal-action modal-close waves-effect waves-green btn-flat" (click)="addMi()">Agregar</a>
-    <a class="waves-effect waves-green btn-flat" >Cancelar</a>
+    <a class="waves-effect waves-green btn-flat">Cancelar</a>
 
   </div>
 </div>
