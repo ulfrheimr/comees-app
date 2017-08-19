@@ -12,7 +12,7 @@ services:
       - "3000:3000"
     depends_on:
       - data
-    restart: always
+    restart: unless-stopped
   ph:
     container_name:
       "ph"
@@ -25,7 +25,7 @@ services:
       - "3002:3002"
     depends_on:
       - data
-    restart: always
+    restart: unless-stopped
   client:
     container_name:
       "client"
@@ -36,7 +36,7 @@ services:
     command:        ng serve --host 0.0.0.0 --public 192.168.99.100:8085
     ports:
       - "8085:8085"
-    restart: always
+    restart: unless-stopped
   mi:
     container_name:
       "mi"
@@ -50,19 +50,8 @@ services:
     depends_on:
       - data
     restart: always
-  imp:
-    container_name:
-      "imp"
-    build:
-      context:      ./import
-    image:
-      "mi"
-    command:        node index.js
-    ports:
-      - "2999:2999"
-    tty: true
   data:
     image:          mongo
     ports:
       - "27017:27017"
-    restart: always
+    restart: unless-stopped
