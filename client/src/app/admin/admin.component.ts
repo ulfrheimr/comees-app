@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 
 import { MaterializeAction } from 'angular2-materialize';
+import {MdButtonModule} from '@angular/material';
+
+
 
 import { UsrService } from '../services/usr.service';
 
@@ -36,7 +39,7 @@ export class Admin implements OnInit {
   }
 
   getUsr(): void {
-    this.user = this.usrService.get()["usr"];
+    this.user = this.usrService.get()["name"];
   }
 
   changePass(): void {

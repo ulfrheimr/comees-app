@@ -95,12 +95,12 @@ export class MiSalesComponent implements OnInit {
       notFoundDiscount: null,
       toConfirm: false,
       toPayment: false,
-      amount: 0.0,
+      amount: undefined,
       paymentType: "cash",
       allowAdd: true,
       amountError: undefined,
       isPartialPayment: false,
-      partialPayment: 0
+      partialPayment: undefined
     }
   }
 

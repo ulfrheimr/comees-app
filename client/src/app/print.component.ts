@@ -25,6 +25,7 @@ export class PrintComponent implements OnInit {
   timestamp;
   total1: number;
   poolToPrint: any[];
+  noPrints: number = 0;
 
   modalActions = new EventEmitter<string | MaterializeAction>();
 
@@ -44,7 +45,7 @@ export class PrintComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   private handleError(error: any): Promise<any> {
@@ -89,17 +90,17 @@ export class PrintComponent implements OnInit {
     return this.passMi.fields;
   }
 
-  getUsr():any{
-    console.log(this.usrService.get())
-    return this.usrService.get();
+  getUsr(): any {
+    return this.usrService.get()["name"];
   }
 
   endProcess(): void {
+    console.log("END")
     this.modalActions.emit({ action: "modal", params: ['close'] });
 
     var url = this.router.url.split('/');
-    let routeUrl: string = url.slice(1, url.length - 2).reduce((x, y) => x + "/" + y, "");
-    this.router.navigate(['.' + routeUrl])
+    let routeUrl: string = url.slice(1, url.length - 1).reduce((x, y) => x + "/" + y, "");
+    this.router.navigate(['.' + routeUrl + "/mi"])
   }
 
   getTotal1(): string {
@@ -122,7 +123,13 @@ export class PrintComponent implements OnInit {
     return res.toFixed(2);
   }
 
+  tryPrint(): void {
+    this.noPrints = 0;
+    this.print();
+  }
+
   print(): void {
+    this.noPrints += 1;
     this.modalActions.emit({ action: "modal", params: ['open'] });
     let printContents, popupWin;
     printContents = document.getElementById('ticket').innerHTML;

@@ -14,6 +14,8 @@ import { MiSaleService } from '../services/mi-sale.service';
 
 import { Config } from '../services/config';
 
+import { UsrService } from '../services/usr.service';
+
 @Component({
   selector: 'print-mi-ticket',
   templateUrl: './print-ticket.component.html',
@@ -30,6 +32,7 @@ export class PrintMiTicketComponent implements OnInit {
   hasDiscount: boolean = false;
   paymentModel: any;
   saleTotals: any;
+  noPrints: number = 0;
   paymentTypes: any = {
     "cash": "Efectivo",
     "debit": "Tarjeta de débito",
@@ -44,7 +47,8 @@ export class PrintMiTicketComponent implements OnInit {
     private location: Location,
     private config: Config,
     private router: Router,
-    private utils: MUtils
+    private utils: MUtils,
+    private usrService: UsrService
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +70,10 @@ export class PrintMiTicketComponent implements OnInit {
     return Promise.reject(error.message || error);
   }
 
+  getUsr(): any {
+    return this.usrService.get()["name"];
+  }
+
   private getSale(): void {
     this.activatedRoute.params
       .switchMap((params: Params) => {
@@ -73,6 +81,7 @@ export class PrintMiTicketComponent implements OnInit {
           .then(x => {
 
             this.sale = x
+            console.log(x)
             this.saleTotals = this.getSaleTotals(x);
           })
           .catch(this.handleError)
@@ -82,14 +91,16 @@ export class PrintMiTicketComponent implements OnInit {
 
   getSaleTotals(sale): any {
     return sale.mis.map((x) => {
-      var cat = (x.cat || 0) / 100;
+      var cat = 0.16;
+      var subtotal = x.sale_price * (1 - cat)
+
 
       return {
-        cat: x.price_discount * cat * x.qty,
-        subtotal: x.sale_price * x.qty * (1 - cat),
-        saving: (x.sale_price - x.price_discount) * x.qty,
-        total: x.sale_price * x.qty,
-        total_disc: x.price_discount * x.qty,
+        cat: x.sale_price - subtotal,
+        subtotal: subtotal,
+        saving: (x.sale_price - x.price_discount),
+        total: x.sale_price,
+        total_disc: x.price_discount,
         qty: x.qty
       };
     });
@@ -153,7 +164,13 @@ export class PrintMiTicketComponent implements OnInit {
     this.router.navigate(['.' + routeUrl])
   }
 
+  tryPrint(): void {
+    this.noPrints = 0;
+    this.print();
+  }
+
   print(): void {
+    this.noPrints += 1;
     this.modalActions.emit({ action: "modal", params: ['open'] });
     let printContents, popupWin;
     printContents = document.getElementById('ticket').innerHTML;

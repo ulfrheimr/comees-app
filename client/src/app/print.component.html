@@ -134,6 +134,8 @@
   <div class="right">
     <button (click)="print()" class="waves-effect waves-light btn">Imprimir</button>
   </div>
+  <br />
+  <br />
 
 </div>
 
@@ -141,11 +143,12 @@
   <div class="modal-content">
     <h4>Confirmación </h4>
     <div>
-      CONFIRMACION
+      Si el ticket se imprimió correctamente oprima Continuar para imprimir una segunda copia o, en su caso, Terminar proceso. Si el ticker no se imprimió correctamente oprima Reintentar.
     </div>
   </div>
   <div class="modal-footer">
-    <a class="waves-effect waves-green btn-flat" (click)="endProcess()">Terminar proceso</a>
-    <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="print()">Reintentar</a>
+    <a *ngIf="noPrints == 1" class="waves-effect waves-green btn-flat" (click)="print()">Continuar</a>
+    <a *ngIf="noPrints == 2" class="waves-effect waves-green btn-flat" (click)="endProcess()">Terminar proceso</a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="tryPrint()">Reintentar</a>
   </div>
 </div>

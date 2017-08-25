@@ -29,8 +29,7 @@ export class UsrService {
         sessionStorage.setItem("usr", d["usr"])
         sessionStorage.setItem("role", d["role"])
         sessionStorage.setItem("id", d["id"])
-
-        console.log(d)
+        sessionStorage.setItem("name", d["name"])
 
         return d;
       })
@@ -53,15 +52,12 @@ export class UsrService {
     }
 
     return new Promise((resolve, reject) => {
-      console.log(this.usrUri)
       return this.http.post(this.usrUri, data, { headers: headers })
         .toPromise()
         .then(r => {
-          console.log(r)
           r = r.json().ok;
 
           if (r) {
-            console.log(usr)
             this.getUsr(usr)
               .then(u => resolve(u))
           } else
@@ -77,7 +73,8 @@ export class UsrService {
     return {
       usr: sessionStorage.getItem("usr"),
       role: sessionStorage.getItem("role"),
-      id: sessionStorage.getItem("id")
+      id: sessionStorage.getItem("id"),
+      name: sessionStorage.getItem("name")
     }
   }
 }

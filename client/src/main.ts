@@ -8,6 +8,8 @@ import { HttpModule } from '@angular/http';
 import { UsrService } from './app/services/usr.service';
 import { MUtils } from './app/utils';
 
+import 'hammerjs';
+
 if (environment.production) {
   enableProdMode();
 }

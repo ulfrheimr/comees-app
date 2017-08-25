@@ -1,8 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+
+import { MdCardModule } from '@angular2-material/card';
+import { MdButtonModule } from '@angular2-material/button';
+import { MdIconModule } from '@angular2-material/icon';
+import { MdIconRegistry } from '@angular2-material/icon';
+import { MdCoreModule, MdMenuModule } from '@angular/material';
+
 import { HttpModule } from '@angular/http';
-import {AgGridModule} from "ag-grid-angular/main";
+import { AgGridModule } from "ag-grid-angular/main";
 
 import { Ph } from './ph/ph.component';
 import { PhSalesComponent } from './ph/sales.component';
@@ -36,7 +44,7 @@ import { PassMi } from './pass-mi';
 
 import { Config } from './services/config';
 
-import {AppRoutingModule} from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
 import { MaterializeModule } from "angular2-materialize";
 
@@ -69,10 +77,19 @@ import { UsrInfoService } from './services/cc/usr-info.service';
     DeleteComponent,
   ],
   imports: [
+    //Aungular
     BrowserModule,
-    AppRoutingModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    // Material Design
+    MdCoreModule,
+    MdCardModule,
+    MdButtonModule,
+    MdIconModule,
+    MdMenuModule,
+    AppRoutingModule,
+
     MaterializeModule,
     AgGridModule.withComponents(
       [CellComponent,
@@ -81,6 +98,7 @@ import { UsrInfoService } from './services/cc/usr-info.service';
     )
   ],
   providers: [
+    MdIconRegistry,
     PassMi,
     StoredSale,
     Config,
