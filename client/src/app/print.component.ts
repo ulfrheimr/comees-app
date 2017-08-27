@@ -95,7 +95,6 @@ export class PrintComponent implements OnInit {
   }
 
   endProcess(): void {
-    console.log("END")
     this.modalActions.emit({ action: "modal", params: ['close'] });
 
     var url = this.router.url.split('/');

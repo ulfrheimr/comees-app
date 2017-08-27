@@ -1,9 +1,8 @@
 import { Component, Input, OnInit, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MaterializeAction } from 'angular2-materialize';
-import {MdButtonModule} from '@angular/material';
-
-
+import { MdButtonModule } from '@angular/material';
 
 import { UsrService } from '../services/usr.service';
 
@@ -21,6 +20,7 @@ export class Admin implements OnInit {
 
   constructor(
     private usrService: UsrService,
+    private router: Router
   ) {
 
   }
@@ -47,6 +47,12 @@ export class Admin implements OnInit {
 
     } else
       this.pageModel.error = "Las contraseñas no concuerdan";
+  }
+
+  goTo(path: string) {
+    var url = this.router.url.split('/').slice(0, 2).join("/");
+
+    this.router.navigate(['.' + url + "/" + path])
   }
 
   viewSettings(): void {

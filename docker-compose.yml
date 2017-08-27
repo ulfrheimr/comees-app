@@ -13,19 +13,6 @@ services:
     depends_on:
       - data
     restart: unless-stopped
-  ph:
-    container_name:
-      "ph"
-    build:
-      context:      ./ph
-    image:
-      "ph"
-    command:        node index.js
-    ports:
-      - "3002:3002"
-    depends_on:
-      - data
-    restart: unless-stopped
   client:
     container_name:
       "client"
@@ -49,7 +36,20 @@ services:
       - "3001:3001"
     depends_on:
       - data
-    restart: always
+    restart: unless-stopped
+  ph:
+    container_name:
+      "ph"
+    build:
+      context:      ./ph
+    image:
+      "ph"
+    command:        node index.js
+    ports:
+      - "3002:3002"
+    depends_on:
+      - data
+    restart: unless-stopped
   data:
     image:          mongo
     ports:

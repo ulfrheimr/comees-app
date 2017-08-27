@@ -16,6 +16,9 @@ export class Mi {
   }
 
   goTo(path: string): void {
-    this.router.navigate([path])
+    var url = this.router.url.split('/').slice(0, 1).join("/");
+    console.log('.' + url + "/" + path)
+
+    this.router.navigate(['.' + url + "/" + path])
   }
 }

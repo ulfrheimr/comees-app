@@ -7,18 +7,7 @@
   </div>
 </div>
 
-
 <div class="top-submenu">
-  <a class="item" routerLink="mi/sales">Estudios</a>
-  <a class="item" routerLink="ph/sales">Farmacia</a>
-  <a class="item" routerLink="mi/sales-report">Reporte Ventas Estudios</a>
-  <a class="item" routerLink="admin/invoices">Facturación</a>
-  <a class="item" routerLink="admin/modify_mi">Modificar de estudios</a>
-</div>
-<div>
-  <router-outlet></router-outlet>
-</div>
-<!-- <div class="top-submenu">
   <div class="item">
     <button class="menu-toggler" md-menu-item [mdMenuTriggerFor]="menuMi">
       <span>Estudios</span>
@@ -46,6 +35,16 @@
     </md-menu>
   </div>
   <div class="item">
+    <button class="menu-toggler" md-menu-item [mdMenuTriggerFor]="menuPh">
+      <span>Consulta médica</span>
+    </button>
+    <md-menu #menuPh="mdMenu">
+      <button md-menu-item (click)="goTo('')">
+        <span>Ventas</span>
+      </button>
+    </md-menu>
+  </div>
+  <div class="item">
     <button class="menu-toggler" md-menu-item [mdMenuTriggerFor]="menuAdm">
       <span>Administración</span>
     </button>
@@ -55,7 +54,10 @@
       </button>
     </md-menu>
   </div>
-</div> -->
+</div>
+<div>
+  <router-outlet></router-outlet>
+</div>
 
 <div id="modal1" class="modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
   <div class="modal-content">

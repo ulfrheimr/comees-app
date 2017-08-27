@@ -27,6 +27,7 @@
     "@angular2-material/card": "^2.0.0-alpha.8-3",
     "@angular2-material/core": "^2.0.0-alpha.8-3",
     "@angular2-material/icon": "^2.0.0-alpha.8-3",
+    "@types/hammerjs": "^2.0.35",
     "ag-grid": "^11.0.0",
     "ag-grid-angular": "^11.0.0",
     "angular2-csv": "^0.2.3",

@@ -2,8 +2,16 @@
   <h4>Estudios de gabinete</h4>
 </div>
 <div class="top-submenu">
-  <a class="item" routerLink="/mi/sales">Ventas</a>
-  <a class="item" routerLink="/mi/export">Reporte de ventas</a>
+  <div class="item">
+    <button class="menu-toggler" md-menu-item [mdMenuTriggerFor]="menuMi">
+      <span>Estudios</span>
+    </button>
+    <md-menu #menuMi="mdMenu">
+      <button md-menu-item (click)="goTo('mi/sales')">
+        <span>Ventas</span>
+      </button>
+    </md-menu>
+  </div>
 </div>
 
 <div>

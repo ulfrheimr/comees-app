@@ -7,16 +7,11 @@
 
 .top-submenu .item {
   display: inline-block;
-
+  color: #fff;
   font-weight: bold;
   text-decoration: none;
   min-width: 100px;
   text-align: center;
-}
-
-.top-submenu .item * {
-  background-color: #125996;
-  color: #fff;
   text-transform: uppercase;
 }
 
